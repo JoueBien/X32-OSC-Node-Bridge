@@ -1,5 +1,16 @@
-React-TypeScript-Electron sample with Create React App and Electron Builder
+
+X32 OSC Node Bridge
 ===========================================================================
+An electron app to communicate with an X32 - this is a play ground not production code. Initially a meter bridge and then an FX controller.
+
+The code base is based on [React-TypeScript-Electron sample with Create React App and Electron Builder](https://github.com/yhirose/react-typescript-electron-sample-with-create-react-app-and-electron-builder).
+
+Last installed with node `16.17.0`. Requires python 3.6.0 and C/C++ compiler (Windows build tools or xCode) as there are packages that need to be recompiled with node-gyp.
+
+The OSC class is side loaded into electron which is not production safe - this may be changed later down the line.
+
+## React-TypeScript-Electron sample with Create React App and Electron Builder
+
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) with `--template typescript`option.
 
