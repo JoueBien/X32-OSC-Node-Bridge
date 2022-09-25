@@ -16,7 +16,7 @@ const Container = styled.div`
 
 export const MeterScreen: FC = () => {
   // Global State
-  const { chanelMeterArgs, bussMeterArgs } = useContext(X32Context)
+  const { chanelMeterArgs, bussMeterArgs, masterMeterArgs } = useContext(X32Context)
 
   // Calc
   const ch1to8 = chanelMeterArgs.slice(0,8) as ARG_8
@@ -36,8 +36,9 @@ export const MeterScreen: FC = () => {
     <MeterBridgeChannels channelArgs={ch25to32} label="Channels 25-32" channelLabels={["25", "26", "27", "28", "29", "30", "31","32"]} />
   </MeterBridgeBar>
   <MeterBridgeBar>
-    <MeterBridgeChannels channelArgs={buss1to8} label="Out 1-8" channelLabels={["1", "2", "3", "4", "5", "6", "7","8"]} />
-    <MeterBridgeChannels channelArgs={buss9to16} label="Out 9-16" channelLabels={["9", "10", "11", "12", "13", "14", "15","16"]} />
+    <MeterBridgeChannels channelArgs={buss1to8} label="Buss 1-8" channelLabels={["1", "2", "3", "4", "5", "6", "7","8"]} />
+    <MeterBridgeChannels channelArgs={buss9to16} label="Buss 9-16" channelLabels={["9", "10", "11", "12", "13", "14", "15","16"]} />
+    <MeterBridgeChannels channelArgs={masterMeterArgs} label="Matrix 1-6 & Master L/R" channelLabels={["MX1", "MX2", "MX3", "MX4", "MX5", "MX6", "L","R"]} />
   </MeterBridgeBar>
   </Container>
   
