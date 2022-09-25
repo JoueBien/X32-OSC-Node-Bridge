@@ -4,7 +4,6 @@ import styled from "styled-components"
 // Comps
 import { MeterBridgeChannels } from "../components/meterBridge/MeterBridgeChannels"
 import { MeterBridgeBar } from "../components/meterBridge/MeterBridgeBar"
-import { ConnectForm } from "../components/ConnectForm"
 import { X32Context } from "../contexts/X32Context"
 import { ARG_8 } from "../types/args"
 
@@ -40,7 +39,6 @@ export const MeterScreen: FC = () => {
     <MeterBridgeChannels channelArgs={buss1to8} label="Out 1-8" channelLabels={["1", "2", "3", "4", "5", "6", "7","8"]} />
     <MeterBridgeChannels channelArgs={buss9to16} label="Out 9-16" channelLabels={["9", "10", "11", "12", "13", "14", "15","16"]} />
   </MeterBridgeBar>
-  <ConnectForm />
   </Container>
   
 }

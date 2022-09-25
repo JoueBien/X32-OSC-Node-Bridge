@@ -1,13 +1,18 @@
 import React from "react"
 import ReactDOM from "react-dom/client"
+import "rsuite/dist/rsuite.css"
 import "./styles/index.css"
+
 import App from "./screens/_App"
 import reportWebVitals from "./helpers/default/reportWebVitals"
+import { X32ContextProvider } from "./contexts/X32Context"
 
 const root = ReactDOM.createRoot(document.getElementById("root")!)
 root.render(
   <React.StrictMode>
-    <App />
+    <X32ContextProvider>
+      <App />
+    </X32ContextProvider>
   </React.StrictMode>
 )
 
