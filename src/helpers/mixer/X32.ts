@@ -99,12 +99,17 @@ export default class X32 {
   }
 
   async subscribe({ address, args, onMessage }: SubscribeFuncParams) {
+
     if (this.connected) {
       // Set up the message
       this.udpPort?.on("message", onMessage as any)
       // Set up the repeats
       const interval = setInterval(() => {
-        console.log("Request Continue")
+        if (this.connected) {
+        console.log("Request Continue", address)
+        // @ts-ignore
+          this.request({ address:"/renew"})
+        }
       }, 10000)
       // Start the first request
       await delay(500)
@@ -126,8 +131,6 @@ export default class X32 {
     if (onMessage) {
       this.udpPort?.off("message", onMessage)
     }
-      
-    
   }
 
   // Close the connection if exists
@@ -143,7 +146,7 @@ export default class X32 {
 
   // Send message to server
   request({ address, args }: RequestFuncParams) {
-    console.log("@X32->request", address, args, this.udpPort)
+    // console.log("@X32->request", address, args, this.udpPort)
     this.udpPort?.send({
       address,
       args: args || [],

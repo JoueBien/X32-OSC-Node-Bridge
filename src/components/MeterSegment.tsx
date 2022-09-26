@@ -26,7 +26,7 @@ const TheMeterSegment = styled.div<StyleProps>`
   flex-direction: row;
   justify-content: space-between;
 
-  width: 45px;
+  width: 40px;
   height: ${(props) => props?.halfHeight ? "10px" : "20px" };
   background: #282c34;
 
@@ -37,7 +37,7 @@ const TheMeterSegment = styled.div<StyleProps>`
   .light {
     position: relative;
     flex-shrink: 0;
-    width: 18px;
+    width: 16px;
     height: ${(props) => props?.halfHeight ? "10px" : "20px" };
 
     border-radius: 6px;
@@ -47,7 +47,7 @@ const TheMeterSegment = styled.div<StyleProps>`
       background: ${(props) => props?.color || "green"};
       content: " ";
       position: absolute;
-      width: 18px;
+      width: 16px;
       /* height: 20px; */
       height: ${(props) => props?.halfHeight ? "10px" : "20px" };
       top: 0px;
@@ -59,7 +59,7 @@ const TheMeterSegment = styled.div<StyleProps>`
       background: ${(props) => props?.color || "green"};
       content: " ";
       position: absolute;
-      width: 18px;
+      width: 16px;
       /* height: 20px; */
       height: ${(props) => props?.halfHeight ? "10px" : "20px" };
       top: 0px;

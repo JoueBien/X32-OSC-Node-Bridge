@@ -7,17 +7,22 @@ import styled from "styled-components"
 const Container = styled.div`
   display: flex;
   flex-direction: row;
-  width: fit-content;
+  /* width: fit-content; */
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
 `
 
 // Defs
-type Props = {}
+type Props = {
+  className?: string
+}
 
 export const MeterBridgeBar: FC<PropsWithChildren & Props> = ({
-  children,
+  children, className
 }) => {
   // ..
-  return <Container className="MeterBridgeBar">
+  return <Container className={`MeterBridgeBar ${className || ""}`}>
     {children}
   </Container>
 }

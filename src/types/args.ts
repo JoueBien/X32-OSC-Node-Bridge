@@ -32,6 +32,34 @@ export type ARG_32 = [
   number,
   number
 ]
+
+export type ARG_2 = [
+  number,
+  number
+]
+
+export type ARG_3 = [
+  number,
+  number,
+  number
+]
+
+export type ARG_4 = [
+  number,
+  number,
+  number,
+  number
+]
+
+export type ARG_6 = [
+  number,
+  number,
+  number,
+  number,
+  number,
+  number
+]
+
 export type ARG_8 = [
   number,
   number,

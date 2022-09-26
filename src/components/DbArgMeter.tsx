@@ -8,6 +8,7 @@ import { points, point18, MeterPoints } from "../helpers/mixer/db"
 // Styles
 const MeterContainer = styled.div`
   label {
+    margin-left: -2px;
     text-align: center;
     width: 100%;
     display: block;
@@ -22,12 +23,18 @@ type Props = {
   points?: MeterPoints
   halfHeight?: boolean
   label?: string
+  hidden?: boolean
 }
 
 const DbArgMeter: FC<Props> = (props) => {
   // Props
-  const { arg, points, halfHeight, label } = props
+  const { arg, points, halfHeight, label, hidden } = props
   const thePoints = points || []
+
+  // Dirty way of hiding this
+  if (hidden) {
+    return null
+  }
 
   // ..
   return (
