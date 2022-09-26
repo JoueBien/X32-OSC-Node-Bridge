@@ -107,12 +107,14 @@ export default class X32 {
       const interval = setInterval(() => {
         if (this.connected) {
         console.log("Request Continue", address)
-        // @ts-ignore
-          this.request({ address:"/renew"})
+        // this.request({ address, args })
+          this.request({ address: "/renew", args: [
+            {"type": "s", "value": address},
+          ]})
         }
-      }, 10000)
+      }, 10000-200)
       // Start the first request
-      await delay(500)
+      // await delay(100)
       this.request({ address, args })
 
 
