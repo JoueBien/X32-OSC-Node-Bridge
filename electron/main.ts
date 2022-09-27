@@ -8,6 +8,7 @@ function createWindow() {
   const win = new BrowserWindow({
     width: 800,
     height: 600,
+    title: "X32 OSC Node Bridge",
     webPreferences: {
       // contextIsolation: false,
       preload: path.join(__dirname, "preload.js"),
