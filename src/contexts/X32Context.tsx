@@ -16,6 +16,8 @@ type X32ContextState = {
   disconnect: () => void
   chanelMeterArgs: ARG_32
   bussMeterArgs: ARG_32,
+  auxArgs: ARG_16,
+  fxArgs: ARG_32,
 }
 
 export const X32Context = createContext<X32ContextState>({
@@ -25,6 +27,8 @@ export const X32Context = createContext<X32ContextState>({
   disconnect: () => {},
   chanelMeterArgs: [...ARRAY_32],
   bussMeterArgs: [...ARRAY_32],
+  auxArgs: [...ARRAY_16],
+  fxArgs: [...ARRAY_32],
 })
 
 export const X32ContextProvider: FC<PropsWithChildren & X32ContextProps> = (defaultState) => {
@@ -37,9 +41,13 @@ export const X32ContextProvider: FC<PropsWithChildren & X32ContextProps> = (defa
   // Post gain meters for channels 1-32
   const [chanelMeterArgs, _setChanelMeterArgs] = useState<ARG_32>([...ARRAY_32])
   const [bussMeterArgs, _setBussMeterArgs] = useState<ARG_32>([...ARRAY_32])
+  const [auxArgs, _auxArgsArgs] = useState<ARG_16>([...ARRAY_16])
+  const [fxArgs, _fxArgsArgs] = useState<ARG_32>([...ARRAY_32])
 
   const setChanelMeterArgs = useDebouncedCallback(_setChanelMeterArgs, 1000/60)
   const setBussMeterArgs = useDebouncedCallback(_setBussMeterArgs, 1000/60)
+  const auxArgsArgs = useDebouncedCallback(_auxArgsArgs, 1000/60)
+  const fxArgsArgs = useDebouncedCallback(_fxArgsArgs, 1000/60)
 
   const [subToMeter1, setSubToMeter1] = useAsyncSetState<IntervalReference>({} as IntervalReference)
   const [subToMeter2, setSubToMeter2] = useAsyncSetState<IntervalReference>({} as IntervalReference)
@@ -112,6 +120,8 @@ export const X32ContextProvider: FC<PropsWithChildren & X32ContextProps> = (defa
         connected,
         chanelMeterArgs,
         bussMeterArgs,
+        auxArgs,
+        fxArgs,
         // masterMeterArgs,
         // masterCenterMeterArg,
         // Mutations

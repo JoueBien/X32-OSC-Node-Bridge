@@ -13,7 +13,10 @@ const Container = styled.div`
   width: fit-content;
 
   &+ .MeterBridgeChannels {
-    margin-left: 8px;
+    margin-left: 46px;
+  }
+  &.half + .MeterBridgeChannels {
+    margin-left: 21.5px;
   }
   
   .meter-group {
@@ -76,14 +79,15 @@ type Props = {
   channelLabels?: ChannelLabels8
   channelArgs?: ARG_8 | ARG_6 | ARG_4 | ARG_3 | ARG_2
   size?: 8 | 6 | 4 | 3 | 2 | 0
+  className?: string
 }
 
 export const MeterBridgeChannels: FC<Props> = ({
-  label, channelLabels, channelArgs, size = 8
+  label, channelLabels, channelArgs, className, size = 8
 }) => {
 
   // ..
-  return <Container className="MeterBridgeChannels">
+  return <Container className={`MeterBridgeChannels ${className ||''}`}>
     <div className="meter-group">
       <DbArgMeter hidden={!(size >= 1)} arg={(channelArgs?.[0] || 0) as number} points={MBM7CL_POINTS} halfHeight={true} label={channelLabels?.[0]}/>
       <DbArgMeter hidden={!(size >= 2)} arg={(channelArgs?.[1] || 0) as number} points={MBM7CL_POINTS} halfHeight={true} label={channelLabels?.[1]}/>

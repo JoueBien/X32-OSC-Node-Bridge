@@ -1,12 +1,13 @@
 // Libs
 import { FC } from "react"
 import styled from "styled-components"
-import MeterSegment from "./MeterSegment"
+import MeterSegment from "./meterSegments.tsx/MeterSegment"
 // Comps
 import { points, point18, MeterPoints } from "../helpers/mixer/db"
 
 // Styles
 const MeterContainer = styled.div`
+  width: 46px;
   label {
     margin-left: -2px;
     text-align: center;

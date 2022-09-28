@@ -9,16 +9,14 @@ import { ConnectScreen } from "./ConnectScreen"
 
 // Style
 const ScreenContainer = styled.div`
-  width: calc(100% - 32px);
-  margin: auto;
-  padding-top: 16px;
-  padding-bottom: 16px;
-
-
+  width: 1920px;
+  
   .topNav {
     margin-bottom: 15px;
     .rs-nav-item {
-      font-size: 20px;
+      /* font-size: 20px; */
+      font-size: 10px;
+      padding: 5px;
     }
 
     .rs-nav-item:not(.rs-nav-item-active) {
@@ -55,7 +53,6 @@ function App() {
       {(activeKey === "bridge") && <>
         <MeterScreen />
       </>}
-      
     </ScreenContainer>
   )
 }

@@ -2,8 +2,10 @@
 import { FC } from "react"
 import styled from "styled-components"
 // Comps
-import { MeterBridgeAllChannels } from "../components/MeterBridgeAllChannels"
-import { MeterBridgeAllBus } from "../components/MeterBridgeAllBus"
+import { MeterBridgeAllChannels } from "../components/meterBridgeAll/MeterBridgeAllChannels"
+import { MeterBridgeAllBus } from "../components/meterBridgeAll/MeterBridgeAllBus"
+import { MeterBridgeAllFx } from "../components/meterBridgeAll/MeterBridgeAllFx"
+import { MeterBridgeAllAux } from "../components/meterBridgeAll/MeterBridgeAllAux"
 
 // Styles
 const Container = styled.div`
@@ -12,7 +14,7 @@ const Container = styled.div`
   flex-direction: column;
 
   .MeterBridgeBar + .MeterBridgeBar {
-    margin-top: 32px;
+    margin-top: 24px;
   }
 `
 
@@ -22,6 +24,8 @@ export const MeterScreen: FC = () => {
   return <Container>
     <MeterBridgeAllChannels />
     <MeterBridgeAllBus />
+    <MeterBridgeAllFx />
+    <MeterBridgeAllAux />
   </Container>
   
 }

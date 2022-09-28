@@ -20,13 +20,16 @@ type StyleProps = {
   halfHeight?: boolean
 }
 
+const lightSize = "16px"
+const totalWidth = "40px"
+
 // Styles
 const TheMeterSegment = styled.div<StyleProps>`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 
-  width: 40px;
+  width: ${totalWidth};
   height: ${(props) => props?.halfHeight ? "10px" : "20px" };
   background: #282c34;
 
@@ -37,7 +40,7 @@ const TheMeterSegment = styled.div<StyleProps>`
   .light {
     position: relative;
     flex-shrink: 0;
-    width: 16px;
+    width: ${lightSize};
     height: ${(props) => props?.halfHeight ? "10px" : "20px" };
 
     border-radius: 6px;
@@ -47,7 +50,7 @@ const TheMeterSegment = styled.div<StyleProps>`
       background: ${(props) => props?.color || "green"};
       content: " ";
       position: absolute;
-      width: 16px;
+      width: ${lightSize};
       /* height: 20px; */
       height: ${(props) => props?.halfHeight ? "10px" : "20px" };
       top: 0px;
@@ -59,7 +62,7 @@ const TheMeterSegment = styled.div<StyleProps>`
       background: ${(props) => props?.color || "green"};
       content: " ";
       position: absolute;
-      width: 16px;
+      width: ${lightSize};
       /* height: 20px; */
       height: ${(props) => props?.halfHeight ? "10px" : "20px" };
       top: 0px;

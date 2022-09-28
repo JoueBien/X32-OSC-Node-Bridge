@@ -7,10 +7,10 @@ import styled from "styled-components"
 const Container = styled.div`
   display: flex;
   flex-direction: row;
-  /* width: fit-content; */
-  width: 100%;
+  width: calc(35 * 53px);
   display: flex;
   justify-content: flex-start;
+  align-items: center;
 `
 
 // Defs

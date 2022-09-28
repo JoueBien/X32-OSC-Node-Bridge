@@ -2,10 +2,10 @@
 import { FC, useContext } from "react"
 import styled from "styled-components"
 // Comps
-import { MeterBridgeChannels } from "./meterBridge/MeterBridgeChannels"
-import { MeterBridgeBar } from "./meterBridge/MeterBridgeBar"
-import { X32Context } from "../contexts/X32Context"
-import { ARG_2, ARG_6, ARG_8 } from "../types/args"
+import { MeterBridgeChannels } from "../meterBridge/MeterBridgeChannels"
+import { MeterBridgeBar } from "../meterBridge/MeterBridgeBar"
+import { X32Context } from "../../contexts/X32Context"
+import { ARG_2, ARG_6, ARG_8 } from "../../types/args"
 
 export const MeterBridgeAllChannels: FC = () => {
   // Global State
