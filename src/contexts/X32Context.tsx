@@ -51,14 +51,24 @@ export const X32ContextProvider: FC<PropsWithChildren & X32ContextProps> = (defa
 
   const [subToMeter1, setSubToMeter1] = useAsyncSetState<IntervalReference>({} as IntervalReference)
   const [subToMeter2, setSubToMeter2] = useAsyncSetState<IntervalReference>({} as IntervalReference)
+  const [subToMeter3, setSubToMeter3] = useAsyncSetState<IntervalReference>({} as IntervalReference)
+  const [subToMeter4, setSubToMeter4] = useAsyncSetState<IntervalReference>({} as IntervalReference)
+
 
   // Functions
   const disconnect = async () => {
     await setConnected(false)
     connection1.unsubscribe(subToMeter1)
     setSubToMeter1({})
+
     connection1.unsubscribe(subToMeter2)
     setSubToMeter2({})
+
+    connection1.unsubscribe(subToMeter3)
+    setSubToMeter3({})
+
+    connection1.unsubscribe(subToMeter4)
+    setSubToMeter4({})
     connection1.disconnect()
   }
 
@@ -102,6 +112,43 @@ export const X32ContextProvider: FC<PropsWithChildren & X32ContextProps> = (defa
         },
       })
     )
+
+    // Syb to the AUX Send and Ret
+    setSubToMeter3(
+      await connection1?.subscribe({
+        address: "/meters/3",
+        args:[
+          {"type": "s", "value": "/meters/3"},
+          {"type": "i", "value": 50}
+        ],
+        onMessage: (message, timeTag, info) => {
+          if (message.address === "/meters/3") {
+            const unit8ArrayValues3 = message.args[0].value as Uint8Array
+            const arrayValues3 = argUint8ArrayToArray(unit8ArrayValues3) as ARG_16
+            setAuxArgs(arrayValues3)
+          }
+        },
+      })
+    )
+
+    // Syb to the AUX Send and Ret
+    setSubToMeter4(
+      await connection1?.subscribe({
+        address: "/meters/9",
+        args:[
+          {"type": "s", "value": "/meters/9"},
+          {"type": "i", "value": 50}
+        ],
+        onMessage: (message, timeTag, info) => {
+          if (message.address === "/meters/9") {
+            const unit8ArrayValues4 = message.args[0].value as Uint8Array
+            const arrayValues4 = argUint8ArrayToArray(unit8ArrayValues4) as ARG_32
+            setAfxArgs(arrayValues4)
+          }
+        },
+      })
+    )
+
   }
   
   // When refresh or app close we should clean up
