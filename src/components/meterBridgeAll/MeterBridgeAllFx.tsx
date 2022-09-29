@@ -24,13 +24,13 @@ export const MeterBridgeAllFx: FC = () => {
 
   // ..
   return <MeterBridgeBar>
-    <MeterBridgeChannels className="half" channelArgs={fx1} size={4} label="Fx In/out 1" channelLabels={["In L", "In R", "Out L", "Out R", undefined, undefined, undefined, undefined]} />
-    <MeterBridgeChannels className="half" channelArgs={fx2} size={4} label="Fx In/out 2" channelLabels={["In L", "In R", "Out L", "Out R", undefined, undefined, undefined, undefined]} />
-    <MeterBridgeChannels className="half" channelArgs={fx3} size={4} label="Fx In/out 3" channelLabels={["In L", "In R", "Out L", "Out R", undefined, undefined, undefined, undefined]} />
-    <MeterBridgeChannels className="half" channelArgs={fx4} size={4} label="Fx In/out 4" channelLabels={["In L", "In R", "Out L", "Out R", undefined, undefined, undefined, undefined]} />
-    <MeterBridgeChannels className="half" channelArgs={fx5} size={4} label="Fx In/out 5" channelLabels={["In L", "In R", "Out L", "Out R", undefined, undefined, undefined, undefined]} />
-    <MeterBridgeChannels className="half" channelArgs={fx6} size={4} label="Fx In/out 6" channelLabels={["In L", "In R", "Out L", "Out R", undefined, undefined, undefined, undefined]} />
-    <MeterBridgeChannels className="half" channelArgs={fx7} size={4} label="Fx In/out 7" channelLabels={["In L", "In R", "Out L", "Out R", undefined, undefined, undefined, undefined]} />
-    <MeterBridgeChannels className="half" channelArgs={fx8} size={4} label="Fx In/out 8" channelLabels={["In L", "In R", "Out L", "Out R", undefined, undefined, undefined, undefined]} />
+    <MeterBridgeChannels className="quarter" channelArgs={fx1} size={4} label="Fx In/out 1" channelLabels={["In L", "In R", "Out L", "Out R", undefined, undefined, undefined, undefined]} />
+    <MeterBridgeChannels className="quarter" channelArgs={fx2} size={4} label="Fx In/out 2" channelLabels={["In L", "In R", "Out L", "Out R", undefined, undefined, undefined, undefined]} />
+    <MeterBridgeChannels className="quarter" channelArgs={fx3} size={4} label="Fx In/out 3" channelLabels={["In L", "In R", "Out L", "Out R", undefined, undefined, undefined, undefined]} />
+    <MeterBridgeChannels className="quarter" channelArgs={fx4} size={4} label="Fx In/out 4" channelLabels={["In L", "In R", "Out L", "Out R", undefined, undefined, undefined, undefined]} />
+    <MeterBridgeChannels className="quarter" channelArgs={fx5} size={4} label="Fx In/out 5" channelLabels={["In L", "In R", "Out L", "Out R", undefined, undefined, undefined, undefined]} />
+    <MeterBridgeChannels className="quarter" channelArgs={fx6} size={4} label="Fx In/out 6" channelLabels={["In L", "In R", "Out L", "Out R", undefined, undefined, undefined, undefined]} />
+    <MeterBridgeChannels className="quarter" channelArgs={fx7} size={4} label="Fx In/out 7" channelLabels={["In L", "In R", "Out L", "Out R", undefined, undefined, undefined, undefined]} />
+    <MeterBridgeChannels className="quarter" channelArgs={fx8} size={4} label="Fx In/out 8" channelLabels={["In L", "In R", "Out L", "Out R", undefined, undefined, undefined, undefined]} />
   </MeterBridgeBar>  
 }

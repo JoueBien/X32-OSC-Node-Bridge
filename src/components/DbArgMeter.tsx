@@ -7,14 +7,25 @@ import { points, point18, MeterPoints } from "../helpers/mixer/db"
 
 // Styles
 const MeterContainer = styled.div`
-  width: 46px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: 50px;
+  border-left: 1px solid white;
+  border-right: 1px solid white;
+
+  & + .DbArgMeter {
+    border-left: 1px solid transparent;
+  }
+
   label {
-    margin-left: -2px;
     text-align: center;
     width: 100%;
     display: block;
     padding-bottom: 9px;
     font-weight: 600;
+    font-size: 13px;
   }
 `
 

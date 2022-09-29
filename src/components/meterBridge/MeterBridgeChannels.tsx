@@ -12,28 +12,23 @@ const Container = styled.div`
   flex-direction: column;
   width: fit-content;
 
-  &+ .MeterBridgeChannels {
-    margin-left: 46px;
+  & + .MeterBridgeChannels {
+    margin-left: 50px;
   }
   &.half + .MeterBridgeChannels {
-    margin-left: 21.5px;
+    margin-left: 25px;
+  }
+  &.quarter + .MeterBridgeChannels {
+    margin-left: 12.5px;
   }
   
   .meter-group {
     display: flex;
     flex-direction: row;
-
-    border-left: 1px solid white;
-    padding-left: 4px;
-
-    .DbArgMeter {
-      border-right: 1px solid white;
-      padding-right: 4px;
-
-      &+ .DbArgMeter {
-        margin-left: 8px;
+    /* .DbArgMeter {
+      & + .DbArgMeter {
       }
-    }
+    } */
   }
 
   .meter-group-label {
