@@ -5,20 +5,14 @@
  * https://github.com/colinbdclark/osc.js/issues/145
  */
 // Libs
-import { type } from "os";
-import { ArgumentWithMetadataShape, FullTimeTag } from "../../types/osc";
-import { delay } from "../time"
-import {
-  UDPPort,
-  UDPPortInstance,
-  OptionalMessage,
-  Message,
-  Argument,
-} from "./osc"
+import { ArgumentWithMetadataShape, FullTimeTag } from "../../types/osc"
+import { UDPPort, UDPPortInstance, OptionalMessage, Message } from "./osc"
 
 export type ConnectParams = { mixerIp: string; debug?: boolean }
 
-export type RequestFuncParams = OptionalMessage<ArgumentWithMetadataShape<any>> | Message<ArgumentWithMetadataShape<any>>
+export type RequestFuncParams =
+  | OptionalMessage<ArgumentWithMetadataShape<any>>
+  | Message<ArgumentWithMetadataShape<any>>
 export type RequestFunc = ({ address, args }: RequestFuncParams) => void
 
 export type UnSubscribeFunc = () => void
@@ -27,22 +21,27 @@ export type IntervalReference = {
   onMessage?: any
 }
 
-export type OnMessageFunc = (message: Message<ArgumentWithMetadataShape<any>>, timeTag: FullTimeTag, info: any) => void
+export type OnMessageFunc = (
+  message: Message<ArgumentWithMetadataShape<any>>,
+  timeTag: FullTimeTag,
+  info: any
+) => void
 
-export type SubscribeFuncParams = RequestFuncParams & { onMessage: OnMessageFunc }
+export type SubscribeFuncParams = RequestFuncParams & {
+  onMessage: OnMessageFunc
+}
 export type SubscribeFunc = ({
   address,
   args,
   onMessage,
 }: SubscribeFuncParams) => Promise<IntervalReference | undefined>
 
-
 export default class X32 {
   udpPort?: UDPPortInstance
   connected: boolean = false
 
   // Do nothing when created
-  constructor() {}
+  // constructor() {}
 
   connect(params: ConnectParams) {
     return new Promise<boolean>((resolve) => {
@@ -88,45 +87,42 @@ export default class X32 {
             resolve(true)
           }
         })
-        // Request info 
+        // Request info
         this.request({
           address: "/info",
         })
       })
-
-
     })
   }
 
   async subscribe({ address, args, onMessage }: SubscribeFuncParams) {
-
     if (this.connected) {
       // Set up the message
       this.udpPort?.on("message", onMessage as any)
       // Set up the repeats
       const interval = setInterval(() => {
         if (this.connected) {
-        console.log("Request Continue", address)
-        // this.request({ address, args })
-          this.request({ address: "/renew", args: [
-            {"type": "s", "value": address},
-          ]})
+          console.log("Request Continue", address)
+          // this.request({ address, args })
+          this.request({
+            address: "/renew",
+            args: [{ type: "s", value: address }],
+          })
         }
-      }, 10000-200)
+      }, 10000 - 200)
       // Start the first request
       // await delay(100)
       this.request({ address, args })
 
-
       return {
         interval,
-        onMessage
+        onMessage,
       }
     }
     return {} as IntervalReference
   }
 
-  unsubscribe({interval, onMessage }: IntervalReference) {
+  unsubscribe({ interval, onMessage }: IntervalReference) {
     if (interval) {
       clearInterval(interval)
     }

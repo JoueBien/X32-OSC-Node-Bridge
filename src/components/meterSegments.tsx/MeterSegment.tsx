@@ -30,7 +30,7 @@ const TheMeterSegment = styled.div<StyleProps>`
   justify-content: space-between;
 
   width: ${totalWidth};
-  height: ${(props) => props?.halfHeight ? "10px" : "20px" };
+  height: ${(props) => (props?.halfHeight ? "10px" : "20px")};
   background: #282c34;
 
   & + .MeterSegment {
@@ -41,7 +41,7 @@ const TheMeterSegment = styled.div<StyleProps>`
     position: relative;
     flex-shrink: 0;
     width: ${lightSize};
-    height: ${(props) => props?.halfHeight ? "10px" : "20px" };
+    height: ${(props) => (props?.halfHeight ? "10px" : "20px")};
 
     border-radius: 6px;
     overflow: hidden;
@@ -52,7 +52,7 @@ const TheMeterSegment = styled.div<StyleProps>`
       position: absolute;
       width: ${lightSize};
       /* height: 20px; */
-      height: ${(props) => props?.halfHeight ? "10px" : "20px" };
+      height: ${(props) => (props?.halfHeight ? "10px" : "20px")};
       top: 0px;
       left: 0px;
       opacity: 0.3;
@@ -64,14 +64,14 @@ const TheMeterSegment = styled.div<StyleProps>`
       position: absolute;
       width: ${lightSize};
       /* height: 20px; */
-      height: ${(props) => props?.halfHeight ? "10px" : "20px" };
+      height: ${(props) => (props?.halfHeight ? "10px" : "20px")};
       top: 0px;
       left: 0px;
     }
   }
 
   span {
-    line-height: ${(props) => props?.halfHeight ? "10px" : "20px" };
+    line-height: ${(props) => (props?.halfHeight ? "10px" : "20px")};
     color: white;
     font-size: 12px;
   }
@@ -124,7 +124,11 @@ const MeterSegment: FC<Props> = (props) => {
 
   // ..
   return (
-    <TheMeterSegment className="MeterSegment" color={color} halfHeight={halfHeight}>
+    <TheMeterSegment
+      className="MeterSegment"
+      color={color}
+      halfHeight={halfHeight}
+    >
       <div className="light">
         <div className="reflector" />
         <div

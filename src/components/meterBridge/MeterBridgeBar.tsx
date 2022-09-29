@@ -19,11 +19,13 @@ type Props = {
 }
 
 export const MeterBridgeBar: FC<PropsWithChildren & Props> = ({
-  children, className
+  children,
+  className,
 }) => {
   // ..
-  return <Container className={`MeterBridgeBar ${className || ""}`}>
-    {children}
-  </Container>
+  return (
+    <Container className={`MeterBridgeBar ${className || ""}`}>
+      {children}
+    </Container>
+  )
 }
-

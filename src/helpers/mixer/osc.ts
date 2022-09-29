@@ -1,8 +1,5 @@
-// @ts-ignore
-
-
 import type { OSCTransport } from "../../types/osc-transports"
-import type { OSC, Argument, Message, ArgumentType } from "../../types/osc"
+import type { OSC, Argument, ArgumentType } from "../../types/osc"
 export type { OSCTransport, Port } from "../../types/osc-transports"
 export type {
   Argument,
@@ -11,8 +8,6 @@ export type {
   OptionalMessage,
 } from "../../types/osc"
 
-// @ts-ignore
-// import jsOsc from "osc"
 
 type OscType = OSCTransport & OSC
 

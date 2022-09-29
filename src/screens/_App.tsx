@@ -1,7 +1,7 @@
 // Libs
 import styled from "styled-components"
 import Nav from "rsuite/Nav"
-// Comps 
+// Comps
 import "../styles/App.css"
 import { MeterScreen } from "./MeterScreen"
 import { useState } from "react"
@@ -10,7 +10,7 @@ import { ConnectScreen } from "./ConnectScreen"
 // Style
 const ScreenContainer = styled.div`
   width: 1920px;
-  
+
   .topNav {
     margin-bottom: 15px;
     .rs-nav-item {
@@ -36,23 +36,31 @@ const ScreenContainer = styled.div`
 `
 
 function App() {
-
   // Local State
   const [activeKey, setActiveKey] = useState<string>("setup")
 
   // ..
   return (
     <ScreenContainer className="ScreenContainer">
-      <Nav appearance="subtle" className="topNav" activeKey={activeKey} onSelect={setActiveKey}>
+      <Nav
+        appearance="subtle"
+        className="topNav"
+        activeKey={activeKey}
+        onSelect={setActiveKey}
+      >
         <Nav.Item eventKey="setup">Setup</Nav.Item>
         <Nav.Item eventKey="bridge">Bridge</Nav.Item>
       </Nav>
-      {(activeKey === "setup") && <>
-        <ConnectScreen />
-      </>}
-      {(activeKey === "bridge") && <>
-        <MeterScreen />
-      </>}
+      {activeKey === "setup" && (
+        <>
+          <ConnectScreen />
+        </>
+      )}
+      {activeKey === "bridge" && (
+        <>
+          <MeterScreen />
+        </>
+      )}
     </ScreenContainer>
   )
 }

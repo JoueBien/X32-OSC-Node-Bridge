@@ -39,7 +39,8 @@
     "electron:dev": "concurrently \"cross-env BROWSER=none npm start\" \"wait-on http://localhost:3000 && tsc -p electron -w\" \"wait-on http://localhost:3000 && tsc -p electron && electron .\"",
     "electron:build": "npm run build && tsc -p electron && electron-builder",
     "eject": "react-scripts eject",
-    "lint": "eslint --ext .tsx,.ts ."
+    "lint": "eslint --ext .tsx,.ts .",
+    "fix": "eslint --fix --ext .tsx,.ts ."
   },
   "build": {
     "buildDependenciesFromSource": true,

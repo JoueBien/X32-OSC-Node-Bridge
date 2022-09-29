@@ -21,13 +21,13 @@ const Container = styled.div`
 `
 
 export const MeterScreen: FC = () => {
-
   // ..
-  return <Container>
-    <MeterBridgeAllChannels />
-    <MeterBridgeAllBus />
-    <MeterBridgeAllFx />
-    <MeterBridgeAllAux />
-  </Container>
-  
+  return (
+    <Container>
+      <MeterBridgeAllChannels />
+      <MeterBridgeAllBus />
+      <MeterBridgeAllFx />
+      <MeterBridgeAllAux />
+    </Container>
+  )
 }

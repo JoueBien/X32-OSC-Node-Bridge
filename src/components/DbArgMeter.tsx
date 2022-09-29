@@ -3,7 +3,7 @@ import { FC } from "react"
 import styled from "styled-components"
 import MeterSegment from "./meterSegments.tsx/MeterSegment"
 // Comps
-import { points, point18, MeterPoints } from "../helpers/mixer/db"
+import { MeterPoints } from "../helpers/mixer/db"
 
 // Styles
 const MeterContainer = styled.div`
@@ -51,19 +51,41 @@ const DbArgMeter: FC<Props> = (props) => {
   // ..
   return (
     <MeterContainer className="DbArgMeter">
-      {(label) && <>
-        <label>{label}</label>
-      </>}
-      <MeterSegment label="Clip" color="red" isOn={(arg || 0) === 1} halfHeight={halfHeight} />
+      {label && (
+        <>
+          <label>{label}</label>
+        </>
+      )}
+      <MeterSegment
+        label="Clip"
+        color="red"
+        isOn={(arg || 0) === 1}
+        halfHeight={halfHeight}
+      />
       {thePoints.map((point, index) => {
         if (point.fs === -Infinity || point.fs === 0) {
           return null
         }
-        const min = thePoints[index+1].arg
+        const min = thePoints[index + 1].arg
         const max = thePoints[index].arg
-        return <MeterSegment key={point.fs} label={`${point.fs}`} arg={arg} min={min} max={max} halfHeight={halfHeight} color={point.fs <= -18 ? "green" : "#FFBF00"} />
+        return (
+          <MeterSegment
+            key={point.fs}
+            label={`${point.fs}`}
+            arg={arg}
+            min={min}
+            max={max}
+            halfHeight={halfHeight}
+            color={point.fs <= -18 ? "green" : "#FFBF00"}
+          />
+        )
       })}
-      <MeterSegment label="∞" color="green" isOn={(arg || 0) > 0} halfHeight={halfHeight} />
+      <MeterSegment
+        label="∞"
+        color="green"
+        isOn={(arg || 0) > 0}
+        halfHeight={halfHeight}
+      />
     </MeterContainer>
   )
 }

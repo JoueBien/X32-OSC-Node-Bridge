@@ -5,7 +5,7 @@ import { useDebouncedCallback } from "use-debounce"
 // Comps
 import X32, { IntervalReference } from "../helpers/mixer/X32"
 import { argUint8ArrayToArray } from "../helpers/mixer/cast"
-import { ARG_16, ARG_32, ARG_8, ARRAY_16, ARRAY_32, ARRAY_8 } from "../types/args"
+import { ARG_16, ARG_32, ARRAY_16, ARRAY_32 } from "../types/args"
 
 // Defs
 type X32ContextProps = {}
@@ -36,18 +36,18 @@ export const X32ContextProvider: FC<PropsWithChildren & X32ContextProps> = (defa
   const { children } = defaultState
 
   // State
-  const [connection1, setConnection1] = useState<X32>(new X32())
+  const [connection1, _setConnection1] = useState<X32>(new X32())
   const [connected, setConnected] = useAsyncSetState<boolean>(false)
   // Post gain meters for channels 1-32
   const [chanelMeterArgs, _setChanelMeterArgs] = useState<ARG_32>([...ARRAY_32])
   const [bussMeterArgs, _setBussMeterArgs] = useState<ARG_32>([...ARRAY_32])
-  const [auxArgs, _auxArgsArgs] = useState<ARG_16>([...ARRAY_16])
-  const [fxArgs, _fxArgsArgs] = useState<ARG_32>([...ARRAY_32])
+  const [auxArgs, _setAuxArgs] = useState<ARG_16>([...ARRAY_16])
+  const [fxArgs, _setAfxArgs] = useState<ARG_32>([...ARRAY_32])
 
   const setChanelMeterArgs = useDebouncedCallback(_setChanelMeterArgs, 1000/60)
   const setBussMeterArgs = useDebouncedCallback(_setBussMeterArgs, 1000/60)
-  const auxArgsArgs = useDebouncedCallback(_auxArgsArgs, 1000/60)
-  const fxArgsArgs = useDebouncedCallback(_fxArgsArgs, 1000/60)
+  const setAuxArgs = useDebouncedCallback(_setAuxArgs, 1000/60)
+  const setAfxArgs = useDebouncedCallback(_setAfxArgs, 1000/60)
 
   const [subToMeter1, setSubToMeter1] = useAsyncSetState<IntervalReference>({} as IntervalReference)
   const [subToMeter2, setSubToMeter2] = useAsyncSetState<IntervalReference>({} as IntervalReference)

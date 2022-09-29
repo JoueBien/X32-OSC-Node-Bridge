@@ -5,7 +5,6 @@
  * https://github.com/colinbdclark/osc.js/issues/145
  */
 // Libs
-console.log("hi")
 let { UDPPort } = require('osc')
 
 module.exports = class X32 {
