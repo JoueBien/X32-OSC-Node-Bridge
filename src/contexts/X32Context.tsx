@@ -20,7 +20,7 @@ type X32ContextState = {
   fxArgs: ARG_32,
 }
 
-const METER_TICK_RATE = 90
+const METER_TICK_RATE = 3
 const UI_TICK_RATE = 1000/25
 
 export const X32Context = createContext<X32ContextState>({
@@ -81,14 +81,17 @@ export const X32ContextProvider: FC<PropsWithChildren & X32ContextProps> = (defa
     await setConnected(res)
     // Subscribe to the channels
     setSubToMeter1(
-      await connection1?.subscribe({
-        address: "/meters/1",
-        args:[
+      await connection1?.batchSubscribe({
+        address: "/custommeters1",
+        args: [
+          {"type":"s","value":"/custommeters1"},
           {"type": "s", "value": "/meters/1"},
-          {"type": "i", "value": METER_TICK_RATE}
+          {"type" :"i", "value": 0},
+          {"type" :"i", "value": 0}, 
+          {"type" :"i", "value": METER_TICK_RATE}
         ],
         onMessage: (message, timeTag, info) => {
-          if (message.address === "/meters/1") {
+          if (message.address === "/custommeters1") {
             const unit8ArrayValues = message.args[0].value as Uint8Array
             const arrayValues = argUint8ArrayToArray(unit8ArrayValues) as ARG_32
             setChanelMeterArgs(arrayValues)
@@ -99,15 +102,17 @@ export const X32ContextProvider: FC<PropsWithChildren & X32ContextProps> = (defa
 
     // Syb to the bus 1-16 and matrix and master L/R/C
     setSubToMeter2(
-      await connection1?.subscribe({
-        address: "/meters/2",
-        args:[
+      await connection1?.batchSubscribe({
+        address: "/custommeters2",
+        args: [
+          {"type":"s","value":"/custommeters2"},
           {"type": "s", "value": "/meters/2"},
-          {"type": "i", "value": METER_TICK_RATE}
+          {"type" :"i", "value": 0},
+          {"type" :"i", "value": 0}, 
+          {"type" :"i", "value": METER_TICK_RATE}
         ],
         onMessage: (message, timeTag, info) => {
-          
-          if (message.address === "/meters/2") {
+          if (message.address === "/custommeters2") {
             const unit8ArrayValues2 = message.args[0].value as Uint8Array
             const arrayValues2 = argUint8ArrayToArray(unit8ArrayValues2) as ARG_32
             setBussMeterArgs(arrayValues2)
@@ -118,14 +123,17 @@ export const X32ContextProvider: FC<PropsWithChildren & X32ContextProps> = (defa
 
     // Syb to the AUX Send and Ret
     setSubToMeter3(
-      await connection1?.subscribe({
-        address: "/meters/3",
-        args:[
+      await connection1?.batchSubscribe({
+        address: "/custommeters3",
+        args: [
+          {"type":"s","value":"/custommeters3"},
           {"type": "s", "value": "/meters/3"},
-          {"type": "i", "value": METER_TICK_RATE}
+          {"type" :"i", "value": 0},
+          {"type" :"i", "value": 0}, 
+          {"type" :"i", "value": METER_TICK_RATE}
         ],
         onMessage: (message, timeTag, info) => {
-          if (message.address === "/meters/3") {
+          if (message.address === "/custommeters3") {
             const unit8ArrayValues3 = message.args[0].value as Uint8Array
             const arrayValues3 = argUint8ArrayToArray(unit8ArrayValues3) as ARG_16
             setAuxArgs(arrayValues3)
@@ -136,14 +144,17 @@ export const X32ContextProvider: FC<PropsWithChildren & X32ContextProps> = (defa
 
     // Syb to the AUX Send and Ret
     setSubToMeter4(
-      await connection1?.subscribe({
-        address: "/meters/9",
-        args:[
+      await connection1?.batchSubscribe({
+        address: "/custommeters9",
+        args: [
+          {"type":"s","value":"/custommeters9"},
           {"type": "s", "value": "/meters/9"},
-          {"type": "i", "value": METER_TICK_RATE}
+          {"type" :"i", "value": 0},
+          {"type" :"i", "value": 0}, 
+          {"type" :"i", "value": METER_TICK_RATE}
         ],
         onMessage: (message, timeTag, info) => {
-          if (message.address === "/meters/9") {
+          if (message.address === "/custommeters9") {
             const unit8ArrayValues4 = message.args[0].value as Uint8Array
             const arrayValues4 = argUint8ArrayToArray(unit8ArrayValues4) as ARG_32
             setAfxArgs(arrayValues4)

@@ -122,6 +122,33 @@ export default class X32 {
     return {} as IntervalReference
   }
 
+  async batchSubscribe({ address, args, onMessage }: SubscribeFuncParams) {
+    if (this.connected) {
+      // Set up the message
+      this.udpPort?.on("message", onMessage as any)
+      // Set up the repeats
+      const interval = setInterval(() => {
+        if (this.connected) {
+          console.log("Request Continue", address)
+          // this.request({ address, args })
+          this.request({
+            address: "/renew",
+            args: [{ type: "s", value: address }],
+          })
+        }
+      }, 10000 - 200)
+      // Start the first request
+      // await delay(100)
+      this.request({ address:"/batchsubscribe", args })
+
+      return {
+        interval,
+        onMessage,
+      }
+    }
+    return {} as IntervalReference
+  }
+
   unsubscribe({ interval, onMessage }: IntervalReference) {
     if (interval) {
       clearInterval(interval)
