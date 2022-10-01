@@ -6,6 +6,7 @@
  */
 // Libs
 import { ArgumentWithMetadataShape, FullTimeTag } from "../../types/osc"
+import { delay } from "../time";
 import { UDPPort, UDPPortInstance, OptionalMessage, Message } from "./osc"
 
 export type ConnectParams = { mixerIp: string; debug?: boolean }
@@ -109,9 +110,9 @@ export default class X32 {
             args: [{ type: "s", value: address }],
           })
         }
-      }, 10000 - 200)
+      }, 5000)
       // Start the first request
-      // await delay(100)
+      await delay(200)
       this.request({ address, args })
 
       return {
@@ -136,9 +137,9 @@ export default class X32 {
             args: [{ type: "s", value: address }],
           })
         }
-      }, 10000 - 200)
+      }, 5000)
       // Start the first request
-      // await delay(100)
+      await delay(200)
       this.request({ address:"/batchsubscribe", args })
 
       return {
