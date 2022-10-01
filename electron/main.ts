@@ -18,6 +18,7 @@ function createWindow() {
       enableRemoteModule: true,
     },
   })
+  win.setMinimizable(false)
 
   if (app.isPackaged) {
     // 'build/index.html'

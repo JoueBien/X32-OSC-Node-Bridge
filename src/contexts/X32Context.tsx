@@ -20,7 +20,7 @@ type X32ContextState = {
   fxArgs: ARG_32,
 }
 
-const METER_TICK_RATE = 3
+const METER_TICK_RATE = 2
 const UI_TICK_RATE = 1000/60
 
 export const X32Context = createContext<X32ContextState>({
