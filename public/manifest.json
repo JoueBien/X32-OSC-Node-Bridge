@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Node Bridge",
+  "name": "X32 OSC Node Bridge",
   "icons": [
     {
       "src": "favicon.ico",
