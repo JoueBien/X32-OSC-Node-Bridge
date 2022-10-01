@@ -20,6 +20,9 @@ type X32ContextState = {
   fxArgs: ARG_32,
 }
 
+const METER_TICK_RATE = 90
+const UI_TICK_RATE = 1000/25
+
 export const X32Context = createContext<X32ContextState>({
   // mixer: undefined,
   connected: false,
@@ -44,10 +47,10 @@ export const X32ContextProvider: FC<PropsWithChildren & X32ContextProps> = (defa
   const [auxArgs, _setAuxArgs] = useState<ARG_16>([...ARRAY_16])
   const [fxArgs, _setAfxArgs] = useState<ARG_32>([...ARRAY_32])
 
-  const setChanelMeterArgs = useDebouncedCallback(_setChanelMeterArgs, 1000/30)
-  const setBussMeterArgs = useDebouncedCallback(_setBussMeterArgs, 1000/30)
-  const setAuxArgs = useDebouncedCallback(_setAuxArgs, 1000/30)
-  const setAfxArgs = useDebouncedCallback(_setAfxArgs, 1000/30)
+  const setChanelMeterArgs = useDebouncedCallback(_setChanelMeterArgs, UI_TICK_RATE)
+  const setBussMeterArgs = useDebouncedCallback(_setBussMeterArgs, UI_TICK_RATE)
+  const setAuxArgs = useDebouncedCallback(_setAuxArgs, UI_TICK_RATE)
+  const setAfxArgs = useDebouncedCallback(_setAfxArgs, UI_TICK_RATE)
 
   const [subToMeter1, setSubToMeter1] = useAsyncSetState<IntervalReference>({} as IntervalReference)
   const [subToMeter2, setSubToMeter2] = useAsyncSetState<IntervalReference>({} as IntervalReference)
@@ -82,7 +85,7 @@ export const X32ContextProvider: FC<PropsWithChildren & X32ContextProps> = (defa
         address: "/meters/1",
         args:[
           {"type": "s", "value": "/meters/1"},
-          {"type": "i", "value": 50}
+          {"type": "i", "value": METER_TICK_RATE}
         ],
         onMessage: (message, timeTag, info) => {
           if (message.address === "/meters/1") {
@@ -100,7 +103,7 @@ export const X32ContextProvider: FC<PropsWithChildren & X32ContextProps> = (defa
         address: "/meters/2",
         args:[
           {"type": "s", "value": "/meters/2"},
-          {"type": "i", "value": 50}
+          {"type": "i", "value": METER_TICK_RATE}
         ],
         onMessage: (message, timeTag, info) => {
           
@@ -119,7 +122,7 @@ export const X32ContextProvider: FC<PropsWithChildren & X32ContextProps> = (defa
         address: "/meters/3",
         args:[
           {"type": "s", "value": "/meters/3"},
-          {"type": "i", "value": 50}
+          {"type": "i", "value": METER_TICK_RATE}
         ],
         onMessage: (message, timeTag, info) => {
           if (message.address === "/meters/3") {
@@ -137,7 +140,7 @@ export const X32ContextProvider: FC<PropsWithChildren & X32ContextProps> = (defa
         address: "/meters/9",
         args:[
           {"type": "s", "value": "/meters/9"},
-          {"type": "i", "value": 50}
+          {"type": "i", "value": METER_TICK_RATE}
         ],
         onMessage: (message, timeTag, info) => {
           if (message.address === "/meters/9") {
