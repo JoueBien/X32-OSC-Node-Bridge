@@ -1,25 +1,16 @@
 // Libs
-import { FC, useContext, useState } from "react"
+import { FC, useContext } from "react"
 import styled from "styled-components"
 import Button from "rsuite/Button"
 import Input from "rsuite/Input"
 // Comps
 import { X32Context } from "../contexts/X32Context"
 import { ConnectFormContext } from "../contexts/ConnectFormContext"
+import { connectionScreenStyles } from "./connectionScreenStyles"
 
 // Styles
 const Container = styled.div`
-  .form-item {
-    max-width: 400px;
-  }
-
-  .form-item + .form-item {
-    margin-top: 15px;
-  }
-
-  button + button {
-    margin-left: 15px;
-  }
+  ${connectionScreenStyles}
 `
 // Defs
 type Props = {}
@@ -27,39 +18,80 @@ type Props = {}
 export const ConnectScreen: FC<Props> = () => {
   // Global State
   const { connect, disconnect, connected } = useContext(X32Context)
-  const { settings, setIp } = useContext(ConnectFormContext)
+  const { settings, canSubmit, storedIps, removeIp, addIp, setIp, errors } =
+    useContext(ConnectFormContext)
   const { ip } = settings
-  // Local State
-  // const [ip, setIp] = useState<string>("192.168.0.30")
 
+  // Functions
   const onConnect = () => {
     connect({ mixerIp: ip, debug: true })
   }
 
   return (
     <Container className="ConnectScreen">
-      <div className="form-item">
-        <label htmlFor="ip">X32 IP Address</label>
-        {/* value="192.168.0.30" */}
-        <Input id="ip" defaultValue={ip} onChange={setIp} />
+      {/* The Connection form */}
+      <div className="form">
+        <h1> Connection </h1>
+        <div className="form-item">
+          <label htmlFor="ip">X32 IP Address</label>
+          <Input id="ip" value={ip} onChange={setIp} />
+          <div className="error" role="alert">
+            {errors?.ip || ""}
+          </div>
+        </div>
+        <div className="form-item">
+          <Button
+            id="connect"
+            appearance="ghost"
+            color="green"
+            disabled={connected === true && canSubmit === false}
+            onClick={onConnect}
+          >
+            Connect
+          </Button>
+          <Button
+            id="disconnect"
+            appearance="ghost"
+            color="orange"
+            disabled={connected !== true}
+            onClick={disconnect}
+          >
+            Disconnect
+          </Button>
+          <Button
+            id="save"
+            appearance="ghost"
+            disabled={canSubmit === false}
+            onClick={() => addIp(ip)}
+          >
+            Store
+          </Button>
+        </div>
       </div>
-      <div className="form-item">
-        <Button
-          id="connect"
-          appearance="ghost"
-          disabled={connected === true}
-          onClick={onConnect}
-        >
-          Connect
-        </Button>
-        <Button
-          id="disconnect"
-          appearance="ghost"
-          disabled={connected !== true}
-          onClick={disconnect}
-        >
-          Disconnect
-        </Button>
+      {/* The recall for Ip addresses */}
+      <div className="recall">
+        <h1> Stored Ip Addresses </h1>
+        {storedIps.storedIps.map((ipAddress, index) => {
+          return (
+            <div className="ip-address" key={`storedIps-${index}`}>
+              <Button
+                className="recall-button"
+                appearance="ghost"
+                onClick={() => setIp(ipAddress)}
+              >
+                {ipAddress}
+              </Button>
+              <Button
+                className="remove"
+                appearance="ghost"
+                color="orange"
+                onClick={() => removeIp(ipAddress)}
+              >
+                Remove
+              </Button>
+            </div>
+          )
+        })}
       </div>
     </Container>
   )
