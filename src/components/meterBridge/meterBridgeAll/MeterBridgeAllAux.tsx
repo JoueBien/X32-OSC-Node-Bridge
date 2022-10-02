@@ -2,10 +2,10 @@
 import { FC, useContext } from "react"
 
 // Comps
-import { MeterBridgeChannels } from "../meterBridge/MeterBridgeChannels"
-import { MeterBridgeBar } from "../meterBridge/MeterBridgeBar"
-import { X32Context } from "../../contexts/X32Context"
-import { ARG_6, ARG_8 } from "../../types/args"
+import { DbArgMeterWithLabel } from "../../meters/DbArgMeter/DbArgMeterWithLabel"
+import { MeterBridgeBar } from "../MeterBridgeBar"
+import { X32Context } from "../../../contexts/X32Context"
+import { ARG_6, ARG_8 } from "../../../types/args"
 
 export const MeterBridgeAllAux: FC = () => {
   // Global State
@@ -18,13 +18,13 @@ export const MeterBridgeAllAux: FC = () => {
   // ..
   return (
     <MeterBridgeBar>
-      <MeterBridgeChannels
+      <DbArgMeterWithLabel
         channelArgs={auxSends}
         size={6}
         label="Aux Sends 1-6"
         channelLabels={["1", "2", "3", "4", "5", "6", undefined, undefined]}
       />
-      <MeterBridgeChannels
+      <DbArgMeterWithLabel
         channelArgs={auxReturns}
         label="Aux Returns 1-8"
         channelLabels={["1", "2", "3", "4", "5", "6", "7", "8"]}

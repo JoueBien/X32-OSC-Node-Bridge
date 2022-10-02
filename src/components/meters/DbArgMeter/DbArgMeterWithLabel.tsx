@@ -2,9 +2,9 @@
 import { FC } from "react"
 import styled from "styled-components"
 // Comps
-import { MBM7CL_POINTS } from "../../helpers/mixer/db"
-import { ARG_2, ARG_3, ARG_4, ARG_6, ARG_8 } from "../../types/args"
-import DbArgMeter from "../DbArgMeter"
+import { MBM7CL_POINTS } from "../../../helpers/mixer/db"
+import { ARG_2, ARG_3, ARG_4, ARG_6, ARG_8 } from "../../../types/args"
+import DbArgMeter from "./DbArgMeter"
 
 // Styles
 const Container = styled.div`
@@ -12,13 +12,13 @@ const Container = styled.div`
   flex-direction: column;
   width: fit-content;
 
-  & + .MeterBridgeChannels {
+  & + .DbArgMeterWithLabel {
     margin-left: 50px;
   }
-  &.half + .MeterBridgeChannels {
+  &.half + .DbArgMeterWithLabel {
     margin-left: 25px;
   }
-  &.quarter + .MeterBridgeChannels {
+  &.quarter + .DbArgMeterWithLabel {
     margin-left: 12.5px;
   }
 
@@ -83,7 +83,7 @@ type Props = {
   className?: string
 }
 
-export const MeterBridgeChannels: FC<Props> = ({
+export const DbArgMeterWithLabel: FC<Props> = ({
   label,
   channelLabels,
   channelArgs,
@@ -92,7 +92,7 @@ export const MeterBridgeChannels: FC<Props> = ({
 }) => {
   // ..
   return (
-    <Container className={`MeterBridgeChannels ${className || ""}`}>
+    <Container className={`DbArgMeterWithLabel ${className || ""}`}>
       <div className="meter-group">
         <DbArgMeter
           hidden={!(size >= 1)}

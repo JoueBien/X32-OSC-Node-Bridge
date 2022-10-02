@@ -2,10 +2,10 @@
 import { FC, useContext } from "react"
 
 // Comps
-import { MeterBridgeChannels } from "../meterBridge/MeterBridgeChannels"
-import { MeterBridgeBar } from "../meterBridge/MeterBridgeBar"
-import { X32Context } from "../../contexts/X32Context"
-import { ARG_4 } from "../../types/args"
+import { DbArgMeterWithLabel } from "../../meters/DbArgMeter/DbArgMeterWithLabel"
+import { MeterBridgeBar } from "../MeterBridgeBar"
+import { X32Context } from "../../../contexts/X32Context"
+import { ARG_4 } from "../../../types/args"
 
 export const MeterBridgeAllFx: FC = () => {
   // Global State
@@ -24,7 +24,7 @@ export const MeterBridgeAllFx: FC = () => {
   // ..
   return (
     <MeterBridgeBar>
-      <MeterBridgeChannels
+      <DbArgMeterWithLabel
         className="quarter"
         channelArgs={fx1}
         size={4}
@@ -40,7 +40,7 @@ export const MeterBridgeAllFx: FC = () => {
           undefined,
         ]}
       />
-      <MeterBridgeChannels
+      <DbArgMeterWithLabel
         className="quarter"
         channelArgs={fx2}
         size={4}
@@ -56,7 +56,7 @@ export const MeterBridgeAllFx: FC = () => {
           undefined,
         ]}
       />
-      <MeterBridgeChannels
+      <DbArgMeterWithLabel
         className="quarter"
         channelArgs={fx3}
         size={4}
@@ -72,7 +72,7 @@ export const MeterBridgeAllFx: FC = () => {
           undefined,
         ]}
       />
-      <MeterBridgeChannels
+      <DbArgMeterWithLabel
         className="quarter"
         channelArgs={fx4}
         size={4}
@@ -88,7 +88,7 @@ export const MeterBridgeAllFx: FC = () => {
           undefined,
         ]}
       />
-      <MeterBridgeChannels
+      <DbArgMeterWithLabel
         className="quarter"
         channelArgs={fx5}
         size={4}
@@ -104,7 +104,7 @@ export const MeterBridgeAllFx: FC = () => {
           undefined,
         ]}
       />
-      <MeterBridgeChannels
+      <DbArgMeterWithLabel
         className="quarter"
         channelArgs={fx6}
         size={4}
@@ -120,7 +120,7 @@ export const MeterBridgeAllFx: FC = () => {
           undefined,
         ]}
       />
-      <MeterBridgeChannels
+      <DbArgMeterWithLabel
         className="quarter"
         channelArgs={fx7}
         size={4}
@@ -136,7 +136,7 @@ export const MeterBridgeAllFx: FC = () => {
           undefined,
         ]}
       />
-      <MeterBridgeChannels
+      <DbArgMeterWithLabel
         className="quarter"
         channelArgs={fx8}
         size={4}

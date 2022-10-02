@@ -2,10 +2,10 @@
 import { FC, useContext } from "react"
 
 // Comps
-import { MeterBridgeChannels } from "../meterBridge/MeterBridgeChannels"
-import { MeterBridgeBar } from "../meterBridge/MeterBridgeBar"
-import { X32Context } from "../../contexts/X32Context"
-import { ARG_8 } from "../../types/args"
+import { DbArgMeterWithLabel } from "../../meters/DbArgMeter/DbArgMeterWithLabel"
+import { MeterBridgeBar } from "../MeterBridgeBar"
+import { X32Context } from "../../../contexts/X32Context"
+import { ARG_8 } from "../../../types/args"
 
 export const MeterBridgeAllChannels: FC = () => {
   // Global State
@@ -20,22 +20,22 @@ export const MeterBridgeAllChannels: FC = () => {
   // ..
   return (
     <MeterBridgeBar>
-      <MeterBridgeChannels
+      <DbArgMeterWithLabel
         channelArgs={ch1to8}
         label="Channels 1-8"
         channelLabels={["1", "2", "3", "4", "5", "6", "7", "8"]}
       />
-      <MeterBridgeChannels
+      <DbArgMeterWithLabel
         channelArgs={ch9to16}
         label="Channels 9-16"
         channelLabels={["9", "10", "11", "12", "13", "14", "15", "16"]}
       />
-      <MeterBridgeChannels
+      <DbArgMeterWithLabel
         channelArgs={ch17to24}
         label="Channels 17-24"
         channelLabels={["17", "18", "19", "20", "21", "22", "23", "24"]}
       />
-      <MeterBridgeChannels
+      <DbArgMeterWithLabel
         channelArgs={ch25to32}
         label="Channels 25-32"
         channelLabels={["25", "26", "27", "28", "29", "30", "31", "32"]}

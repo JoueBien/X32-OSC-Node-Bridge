@@ -1,10 +1,10 @@
 // Lib
 import { FC, useContext } from "react"
 // Comps
-import { MeterBridgeChannels } from "../meterBridge/MeterBridgeChannels"
-import { MeterBridgeBar } from "../meterBridge/MeterBridgeBar"
-import { X32Context } from "../../contexts/X32Context"
-import { ARG_3, ARG_6, ARG_8 } from "../../types/args"
+import { DbArgMeterWithLabel } from "../../meters/DbArgMeter/DbArgMeterWithLabel"
+import { MeterBridgeBar } from "../MeterBridgeBar"
+import { X32Context } from "../../../contexts/X32Context"
+import { ARG_3, ARG_6, ARG_8 } from "../../../types/args"
 
 export const MeterBridgeAllBus: FC = () => {
   // Global State
@@ -19,18 +19,18 @@ export const MeterBridgeAllBus: FC = () => {
   // ..
   return (
     <MeterBridgeBar>
-      <MeterBridgeChannels
+      <DbArgMeterWithLabel
         channelArgs={buss1to8}
         label="Buss 1-8"
         channelLabels={["1", "2", "3", "4", "5", "6", "7", "8"]}
       />
-      <MeterBridgeChannels
+      <DbArgMeterWithLabel
         channelArgs={buss9to16}
         label="Buss 9-16"
         channelLabels={["9", "10", "11", "12", "13", "14", "15", "16"]}
       />
       <div style={{ width: "100%" }} />
-      <MeterBridgeChannels
+      <DbArgMeterWithLabel
         channelArgs={matrix1to6}
         size={6}
         label="Matrix 1-6"
@@ -45,7 +45,7 @@ export const MeterBridgeAllBus: FC = () => {
           undefined,
         ]}
       />
-      <MeterBridgeChannels
+      <DbArgMeterWithLabel
         channelArgs={masterLRM}
         size={3}
         label="Master"

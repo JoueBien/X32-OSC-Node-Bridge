@@ -1,9 +1,9 @@
 // Libs
 import { FC } from "react"
 import styled from "styled-components"
-import MeterSegment from "./meterSegments.tsx/MeterSegment"
+import MeterSegment from "./MeterSegment"
 // Comps
-import { MeterPoints } from "../helpers/mixer/db"
+import { MeterPoints } from "../../../helpers/mixer/db"
 
 // Styles
 const MeterContainer = styled.div`
