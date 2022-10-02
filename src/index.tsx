@@ -6,13 +6,16 @@ import "./styles/index.css"
 import App from "./screens/_App"
 import reportWebVitals from "./helpers/default/reportWebVitals"
 import { X32ContextProvider } from "./contexts/X32Context"
+import { ConnectFormProvider } from "./contexts/ConnectFormContext"
 
 const root = ReactDOM.createRoot(document.getElementById("root")!)
 root.render(
   <React.StrictMode>
-    <X32ContextProvider>
-      <App />
-    </X32ContextProvider>
+    <ConnectFormProvider>
+      <X32ContextProvider>
+        <App />
+      </X32ContextProvider>
+    </ConnectFormProvider>
   </React.StrictMode>
 )
 

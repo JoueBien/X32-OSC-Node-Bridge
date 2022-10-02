@@ -29,6 +29,7 @@
     "typescript": "^4.7.3",
     "use-async-setstate": "^0.1.1",
     "use-debounce": "^8.0.4",
+    "usehooks-ts": "^2.7.2",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
