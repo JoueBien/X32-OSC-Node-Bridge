@@ -7,7 +7,7 @@
 // const BASE_RANGE = range(0, 200)
 
 // Cast an array of 8 bytes into 32 bytes
-export function uint8ArrayToArray(uint8array: Uint8Array): number[] {
+export function uint8ArrayToFloat32Array(uint8array: Uint8Array): number[] {
   // // uint8 array with 2 floats inside, 1.0 and -1.0
   // // uint8array = new Uint8Array([63, 128, 0, 0, 128 + 63, 128, 0, 0]);
   // const numberOfFloats = (uint8array.byteLength / 4)
@@ -26,7 +26,20 @@ export function uint8ArrayToArray(uint8array: Uint8Array): number[] {
 }
 
 // Pull the number of returned values off the front so we get correct values
-export function argUint8ArrayToArray(uint8array: Uint8Array): number[] {
+export function argUint8ArrayToFloat32Array(uint8array: Uint8Array): number[] {
   // Remove the length number from the front
-  return uint8ArrayToArray(uint8array.slice(4))
+  return uint8ArrayToFloat32Array(uint8array.slice(4))
+}
+
+export function uint8ArrayToInt32Array (uint8array: Uint8Array): number[] {
+  const ints = new Int32Array(
+    uint8array.buffer,
+    uint8array.byteOffset,
+    uint8array.byteLength / 4
+  )
+  return Array.from(ints)
+}
+
+export function argUint8ArrayToInt32Array (uint8array: Uint8Array): number[] {
+  return uint8ArrayToInt32Array(uint8array.slice(4))
 }

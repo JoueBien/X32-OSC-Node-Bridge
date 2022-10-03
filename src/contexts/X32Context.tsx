@@ -4,7 +4,7 @@ import { useAsyncSetState } from "use-async-setstate";
 import { useDebouncedCallback } from "use-debounce"
 // Comps
 import X32, { IntervalReference } from "../helpers/mixer/X32"
-import { argUint8ArrayToArray } from "../helpers/mixer/cast"
+import { argUint8ArrayToFloat32Array } from "../helpers/mixer/cast"
 import { ARG_16, ARG_32, ARRAY_16, ARRAY_32 } from "../types/args"
 
 // Defs
@@ -93,7 +93,7 @@ export const X32ContextProvider: FC<PropsWithChildren & X32ContextProps> = (defa
         onMessage: (message, timeTag, info) => {
           if (message.address === "/custommeters1") {
             const unit8ArrayValues = message.args[0].value as Uint8Array
-            const arrayValues = argUint8ArrayToArray(unit8ArrayValues) as ARG_32
+            const arrayValues = argUint8ArrayToFloat32Array(unit8ArrayValues) as ARG_32
             setChanelMeterArgs(arrayValues)
           }
         },
@@ -114,7 +114,7 @@ export const X32ContextProvider: FC<PropsWithChildren & X32ContextProps> = (defa
         onMessage: (message, timeTag, info) => {
           if (message.address === "/custommeters2") {
             const unit8ArrayValues2 = message.args[0].value as Uint8Array
-            const arrayValues2 = argUint8ArrayToArray(unit8ArrayValues2) as ARG_32
+            const arrayValues2 = argUint8ArrayToFloat32Array(unit8ArrayValues2) as ARG_32
             setBussMeterArgs(arrayValues2)
           }
         },
@@ -135,7 +135,7 @@ export const X32ContextProvider: FC<PropsWithChildren & X32ContextProps> = (defa
         onMessage: (message, timeTag, info) => {
           if (message.address === "/custommeters3") {
             const unit8ArrayValues3 = message.args[0].value as Uint8Array
-            const arrayValues3 = argUint8ArrayToArray(unit8ArrayValues3) as ARG_16
+            const arrayValues3 = argUint8ArrayToFloat32Array(unit8ArrayValues3) as ARG_16
             setAuxArgs(arrayValues3)
           }
         },
@@ -156,7 +156,7 @@ export const X32ContextProvider: FC<PropsWithChildren & X32ContextProps> = (defa
         onMessage: (message, timeTag, info) => {
           if (message.address === "/custommeters9") {
             const unit8ArrayValues4 = message.args[0].value as Uint8Array
-            const arrayValues4 = argUint8ArrayToArray(unit8ArrayValues4) as ARG_32
+            const arrayValues4 = argUint8ArrayToFloat32Array(unit8ArrayValues4) as ARG_32
             setAfxArgs(arrayValues4)
           }
         },
