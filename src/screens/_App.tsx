@@ -4,8 +4,10 @@ import Nav from "rsuite/Nav"
 // Comps
 import "../styles/App.css"
 import { MeterScreen } from "./MeterScreen"
-import { useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { ConnectScreen } from "./ConnectScreen"
+import { FxScreen } from "./FxScreen"
+import { X32Context } from "../contexts/X32Context"
 
 // Style
 const ScreenContainer = styled.div`
@@ -36,8 +38,15 @@ const ScreenContainer = styled.div`
 `
 
 function App() {
-  // Local State
+  // Global State
   const [activeKey, setActiveKey] = useState<string>("setup")
+  const { startMeters, stopMeters } = useContext(X32Context) 
+
+  // When looking at the bridge we show the bridge
+  useEffect(() => {
+    if (activeKey === "bridge") { startMeters(); } 
+    else { stopMeters(); }
+  }, [activeKey])
 
   // ..
   return (
@@ -50,6 +59,7 @@ function App() {
       >
         <Nav.Item eventKey="setup">Setup</Nav.Item>
         <Nav.Item eventKey="bridge">Bridge</Nav.Item>
+        <Nav.Item eventKey="fx">Fx</Nav.Item>
       </Nav>
       {activeKey === "setup" && (
         <>
@@ -59,6 +69,12 @@ function App() {
       {activeKey === "bridge" && (
         <>
           <MeterScreen />
+        </>
+      )}
+
+      {activeKey === "fx" && (
+        <>
+          <FxScreen />
         </>
       )}
     </ScreenContainer>

@@ -46,7 +46,6 @@ export default class X32 {
 
   connect(params: ConnectParams) {
     return new Promise<boolean>((resolve) => {
-      console.log("params", params)
       const { mixerIp, debug } = params
       // Make sure we don't re-open on top
       this.disconnect()
@@ -166,7 +165,6 @@ export default class X32 {
       // Start the first request
       await delay(200)
       this.request({ address:"/formatsubscribe", args })
-
       return {
         interval,
         onMessage,

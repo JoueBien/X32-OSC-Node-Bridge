@@ -44,7 +44,7 @@ export const ConnectScreen: FC<Props> = () => {
             id="connect"
             appearance="ghost"
             color="green"
-            disabled={connected === true && canSubmit === false}
+            disabled={connected === true || canSubmit !== true}
             onClick={onConnect}
           >
             Connect
