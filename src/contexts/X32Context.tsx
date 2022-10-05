@@ -4,6 +4,7 @@ import { useAsyncSetState } from "use-async-setstate";
 import { useDebouncedCallback } from "use-debounce"
 // Comps
 import X32, { IntervalReference } from "../helpers/mixer/X32"
+import X32Sub from "../helpers/mixer/X32Sub"
 import { argUint8ArrayToFloat32Array } from "../helpers/mixer/cast"
 import { ARG_16, ARG_32, ARRAY_16, ARRAY_32 } from "../types/args"
 
@@ -49,7 +50,7 @@ export const X32ContextProvider: FC<PropsWithChildren & X32ContextProps> = (defa
   const { children } = defaultState
 
   // State
-  const [connection1, _setConnection1] = useState<X32>(new X32())
+  const [connection1, _setConnection1] = useState<X32Sub>(new X32Sub())
   const [connected, setConnected] = useAsyncSetState<boolean>(false)
   // Post gain meters for channels 1-32
   const [chanelMeterArgs, _setChanelMeterArgs] = useState<ARG_32>([...ARRAY_32])
@@ -76,77 +77,108 @@ export const X32ContextProvider: FC<PropsWithChildren & X32ContextProps> = (defa
   }
 
   const startMeters = async () => {
-    // Subscribe to the channels
-    await setSubToMeter1(
-      await connection1?.batchSubscribe({
-        address: "/custommeters1",
-        args: [
-          {"type":"s","value":"/custommeters1"},
-          {"type": "s", "value": "/meters/1"},
-          ...METER_TIMING_ARS,
-        ],
-        onMessage: (message, timeTag, info) => {
-          if (message.address === "/custommeters1") {
-            const arrayValues = argUint8ArrayToFloat32Array(message.args[0].value as Uint8Array) as ARG_32
-            setChanelMeterArgs(arrayValues)
-          }
-        },
-      })
-    )
+    const subs = await connection1.startListenMeters([
+      (message, timeTag, info) => {
+        if (message.address === "/custommeters1") {
+          const arrayValues = argUint8ArrayToFloat32Array(message.args[0].value as Uint8Array) as ARG_32
+          setChanelMeterArgs(arrayValues)
+        }
+      },
+      (message, timeTag, info) => {
+        if (message.address === "/custommeters2") {
+          const arrayValues2 = argUint8ArrayToFloat32Array(message.args[0].value as Uint8Array) as ARG_32
+          setBussMeterArgs(arrayValues2)
+        }
+      },
+      (message, timeTag, info) => {
+        if (message.address === "/custommeters3") {
+          const arrayValues3 = argUint8ArrayToFloat32Array(message.args[0].value as Uint8Array) as ARG_16
+          setAuxArgs(arrayValues3)
+        }
+      },
+      (message, timeTag, info) => {
+        if (message.address === "/custommeters9") {
+          const arrayValues4 = argUint8ArrayToFloat32Array(message.args[0].value as Uint8Array) as ARG_32
+          setAfxArgs(arrayValues4)
+        }
+      },
+    ])
 
-    // Syb to the bus 1-16 and matrix and master L/R/C
-    await setSubToMeter2(
-      await connection1?.batchSubscribe({
-        address: "/custommeters2",
-        args: [
-          {"type":"s","value":"/custommeters2"},
-          {"type": "s", "value": "/meters/2"},
-          ...METER_TIMING_ARS,
-        ],
-        onMessage: (message, timeTag, info) => {
-          if (message.address === "/custommeters2") {
-            const arrayValues2 = argUint8ArrayToFloat32Array(message.args[0].value as Uint8Array) as ARG_32
-            setBussMeterArgs(arrayValues2)
-          }
-        },
-      })
-    )
+    setSubToMeter1(subs[0])
+    setSubToMeter2(subs[1])
+    setSubToMeter3(subs[2])
+    setSubToMeter4(subs[3])
+    // // Subscribe to the channels
+    // setSubToMeter1(
+    //   await connection1?.batchSubscribe({
+    //     address: "/custommeters1",
+    //     args: [
+    //       {"type":"s","value":"/custommeters1"},
+    //       {"type": "s", "value": "/meters/1"},
+    //       ...METER_TIMING_ARS,
+    //     ],
+    //     onMessage: (message, timeTag, info) => {
+    //       if (message.address === "/custommeters1") {
+    //         const arrayValues = argUint8ArrayToFloat32Array(message.args[0].value as Uint8Array) as ARG_32
+    //         setChanelMeterArgs(arrayValues)
+    //       }
+    //     },
+    //   })
+    // )
 
-    // Syb to the AUX Send and Ret
-    await setSubToMeter3(
-      await connection1?.batchSubscribe({
-        address: "/custommeters3",
-        args: [
-          {"type":"s","value":"/custommeters3"},
-          {"type": "s", "value": "/meters/3"},
-          ...METER_TIMING_ARS,
-        ],
-        onMessage: (message, timeTag, info) => {
-          if (message.address === "/custommeters3") {
-            const arrayValues3 = argUint8ArrayToFloat32Array(message.args[0].value as Uint8Array) as ARG_16
-            setAuxArgs(arrayValues3)
-          }
-        },
-      })
-    )
+    // // Syb to the bus 1-16 and matrix and master L/R/C
+    // setSubToMeter2(
+    //   await connection1?.batchSubscribe({
+    //     address: "/custommeters2",
+    //     args: [
+    //       {"type":"s","value":"/custommeters2"},
+    //       {"type": "s", "value": "/meters/2"},
+    //       ...METER_TIMING_ARS,
+    //     ],
+    //     onMessage: (message, timeTag, info) => {
+    //       if (message.address === "/custommeters2") {
+    //         const arrayValues2 = argUint8ArrayToFloat32Array(message.args[0].value as Uint8Array) as ARG_32
+    //         setBussMeterArgs(arrayValues2)
+    //       }
+    //     },
+    //   })
+    // )
 
-    // Syb to the AUX Send and Ret
-    await setSubToMeter4(
-      await connection1?.batchSubscribe({
-        address: "/custommeters9",
-        args: [
-          {"type":"s","value":"/custommeters9"},
-          {"type": "s", "value": "/meters/9"},
-          ...METER_TIMING_ARS,
-        ],
-        onMessage: (message, timeTag, info) => {
-          if (message.address === "/custommeters9") {
-            const arrayValues4 = argUint8ArrayToFloat32Array(message.args[0].value as Uint8Array) as ARG_32
-            setAfxArgs(arrayValues4)
-          }
-        },
-      })
-    )
+    // // Syb to the AUX Send and Ret
+    // setSubToMeter3(
+    //   await connection1?.batchSubscribe({
+    //     address: "/custommeters3",
+    //     args: [
+    //       {"type":"s","value":"/custommeters3"},
+    //       {"type": "s", "value": "/meters/3"},
+    //       ...METER_TIMING_ARS,
+    //     ],
+    //     onMessage: (message, timeTag, info) => {
+    //       if (message.address === "/custommeters3") {
+    //         const arrayValues3 = argUint8ArrayToFloat32Array(message.args[0].value as Uint8Array) as ARG_16
+    //         setAuxArgs(arrayValues3)
+    //       }
+    //     },
+    //   })
+    // )
+
+    // // Syb to the AUX Send and Ret
+    // setSubToMeter4(
+    //   await connection1?.batchSubscribe({
+    //     address: "/custommeters9",
+    //     args: [
+    //       {"type":"s","value":"/custommeters9"},
+    //       {"type": "s", "value": "/meters/9"},
+    //       ...METER_TIMING_ARS,
+    //     ],
+    //     onMessage: (message, timeTag, info) => {
+    //       if (message.address === "/custommeters9") {
+    //         const arrayValues4 = argUint8ArrayToFloat32Array(message.args[0].value as Uint8Array) as ARG_32
+    //         setAfxArgs(arrayValues4)
+    //       }
+    //     },
+    //   })
+    // )
   }
 
   const disconnect = async () => {

@@ -40,12 +40,15 @@ const ScreenContainer = styled.div`
 function App() {
   // Global State
   const [activeKey, setActiveKey] = useState<string>("setup")
-  const { startMeters, stopMeters } = useContext(X32Context) 
+  const { startMeters, stopMeters, } = useContext(X32Context) 
 
   // When looking at the bridge we show the bridge
   useEffect(() => {
+    // We need to stop all
+    stopMeters();
+    // Then start which ever one we need
     if (activeKey === "bridge") { startMeters(); } 
-    else { stopMeters(); }
+
   }, [activeKey])
 
   // ..

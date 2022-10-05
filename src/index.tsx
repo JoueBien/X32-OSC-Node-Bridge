@@ -1,6 +1,6 @@
 import React from "react"
 import ReactDOM from "react-dom/client"
-import "rsuite/dist/rsuite.css"
+import "rsuite/dist/rsuite.min.css"
 import "./styles/index.css"
 
 import App from "./screens/_App"
