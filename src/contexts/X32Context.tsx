@@ -5,8 +5,9 @@ import { useDebouncedCallback } from "use-debounce"
 // Comps
 import X32, { IntervalReference } from "../helpers/mixer/X32"
 import X32Sub from "../helpers/mixer/X32Sub"
-import { argUint8ArrayToFloat32Array } from "../helpers/mixer/cast"
-import { ARG_16, ARG_32, ARRAY_16, ARRAY_32 } from "../types/args"
+import { argUint8ArrayToFloat32Array, argUint8ArrayToInt32Array } from "../helpers/mixer/cast"
+import { ARG_16, ARG_32, ARG_8, ARRAY_16, ARRAY_32 } from "../types/args"
+import { FX_UNIT_NUMBER } from "../types/fxTypes";
 
 // Defs
 type X32ContextProps = {}
@@ -21,16 +22,14 @@ type X32ContextState = {
   fxArgs: ARG_32,
   stopMeters: () => Promise<void>
   startMeters: () => Promise<void>
+  fxTypeArgs: ARG_8,
+  stopFxs: () => Promise<void>
+  startFxs: () => Promise<void>
+  setFxType: (unit: FX_UNIT_NUMBER, fxType: number) => void
 }
 
-const METER_TICK_RATE = 2
 const UI_TICK_RATE = 1000/60
 
-const METER_TIMING_ARS = [
-  {"type" :"i", "value": 0},
-  {"type" :"i", "value": 0}, 
-  {"type" :"i", "value": METER_TICK_RATE}
-]
 
 export const X32Context = createContext<X32ContextState>({
   // mixer: undefined,
@@ -43,6 +42,10 @@ export const X32Context = createContext<X32ContextState>({
   fxArgs: [...ARRAY_32],
   stopMeters: async () => {},
   startMeters: async () => {},
+  fxTypeArgs: [0,0,0,0,0,0,0,0],
+  stopFxs: async () => {},
+  startFxs: async () => {},
+  setFxType: () => {},
 })
 
 export const X32ContextProvider: FC<PropsWithChildren & X32ContextProps> = (defaultState) => {
@@ -68,7 +71,40 @@ export const X32ContextProvider: FC<PropsWithChildren & X32ContextProps> = (defa
   const [subToMeter3, setSubToMeter3] = useAsyncSetState<IntervalReference>({} as IntervalReference)
   const [subToMeter4, setSubToMeter4] = useAsyncSetState<IntervalReference>({} as IntervalReference)
 
+  // Fx TYpes
+  const [fxTypeArgs, _setFxTypeArgs] = useState<ARG_8>([0,0,0,0,0,0,0,0])
+  const setFxTypeArgs = useDebouncedCallback(_setFxTypeArgs, UI_TICK_RATE)
+  const [subToFxArgs1, setSubToFxArgs1] = useAsyncSetState<IntervalReference>({} as IntervalReference)
+
+  // Requests
+  const setFxType = (unit: FX_UNIT_NUMBER, fxType: number) => connection1.setFxType(unit, fxType)
+
   // Functions
+  const stopFxs = async () => {
+    connection1.unsubscribe(subToFxArgs1); setSubToFxArgs1({})
+    connection1.unsubscribe(subToMeter4); setSubToMeter4({})
+  }
+
+  const startFxs = async () => {
+    const subs = await connection1.startListenFx([
+      (message, timeTag, info) => {
+        if (message.address === "/customfxtypes") {
+          const arrayValues = argUint8ArrayToInt32Array(message.args[0].value as Uint8Array) as ARG_8
+          setFxTypeArgs(arrayValues)
+        }
+      },
+      (message, timeTag, info) => {
+        if (message.address === "/custommeters9") {
+          const arrayValues4 = argUint8ArrayToFloat32Array(message.args[0].value as Uint8Array) as ARG_32
+          setAfxArgs(arrayValues4)
+        }
+      },
+    ])
+    setSubToFxArgs1(subs[0])
+    setSubToMeter4(subs[1])
+  }
+
+
   const stopMeters = async () => {
     connection1.unsubscribe(subToMeter1); setSubToMeter1({})
     connection1.unsubscribe(subToMeter2); setSubToMeter2({})
@@ -108,82 +144,12 @@ export const X32ContextProvider: FC<PropsWithChildren & X32ContextProps> = (defa
     setSubToMeter2(subs[1])
     setSubToMeter3(subs[2])
     setSubToMeter4(subs[3])
-    // // Subscribe to the channels
-    // setSubToMeter1(
-    //   await connection1?.batchSubscribe({
-    //     address: "/custommeters1",
-    //     args: [
-    //       {"type":"s","value":"/custommeters1"},
-    //       {"type": "s", "value": "/meters/1"},
-    //       ...METER_TIMING_ARS,
-    //     ],
-    //     onMessage: (message, timeTag, info) => {
-    //       if (message.address === "/custommeters1") {
-    //         const arrayValues = argUint8ArrayToFloat32Array(message.args[0].value as Uint8Array) as ARG_32
-    //         setChanelMeterArgs(arrayValues)
-    //       }
-    //     },
-    //   })
-    // )
-
-    // // Syb to the bus 1-16 and matrix and master L/R/C
-    // setSubToMeter2(
-    //   await connection1?.batchSubscribe({
-    //     address: "/custommeters2",
-    //     args: [
-    //       {"type":"s","value":"/custommeters2"},
-    //       {"type": "s", "value": "/meters/2"},
-    //       ...METER_TIMING_ARS,
-    //     ],
-    //     onMessage: (message, timeTag, info) => {
-    //       if (message.address === "/custommeters2") {
-    //         const arrayValues2 = argUint8ArrayToFloat32Array(message.args[0].value as Uint8Array) as ARG_32
-    //         setBussMeterArgs(arrayValues2)
-    //       }
-    //     },
-    //   })
-    // )
-
-    // // Syb to the AUX Send and Ret
-    // setSubToMeter3(
-    //   await connection1?.batchSubscribe({
-    //     address: "/custommeters3",
-    //     args: [
-    //       {"type":"s","value":"/custommeters3"},
-    //       {"type": "s", "value": "/meters/3"},
-    //       ...METER_TIMING_ARS,
-    //     ],
-    //     onMessage: (message, timeTag, info) => {
-    //       if (message.address === "/custommeters3") {
-    //         const arrayValues3 = argUint8ArrayToFloat32Array(message.args[0].value as Uint8Array) as ARG_16
-    //         setAuxArgs(arrayValues3)
-    //       }
-    //     },
-    //   })
-    // )
-
-    // // Syb to the AUX Send and Ret
-    // setSubToMeter4(
-    //   await connection1?.batchSubscribe({
-    //     address: "/custommeters9",
-    //     args: [
-    //       {"type":"s","value":"/custommeters9"},
-    //       {"type": "s", "value": "/meters/9"},
-    //       ...METER_TIMING_ARS,
-    //     ],
-    //     onMessage: (message, timeTag, info) => {
-    //       if (message.address === "/custommeters9") {
-    //         const arrayValues4 = argUint8ArrayToFloat32Array(message.args[0].value as Uint8Array) as ARG_32
-    //         setAfxArgs(arrayValues4)
-    //       }
-    //     },
-    //   })
-    // )
   }
 
   const disconnect = async () => {
     await setConnected(false)
     await stopMeters()
+    await stopFxs()
     connection1.disconnect()
   }
 
@@ -214,6 +180,10 @@ export const X32ContextProvider: FC<PropsWithChildren & X32ContextProps> = (defa
         disconnect,
         startMeters,
         stopMeters,
+        fxTypeArgs,
+        startFxs,
+        stopFxs,
+        setFxType,
       }}
     >
       {children}
