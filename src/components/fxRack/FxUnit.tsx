@@ -29,6 +29,7 @@ const Container = styled.div`
   }
 
   .fx-unit-inner {
+    display: flex;
     width: 100%;
   }
 `
@@ -64,8 +65,8 @@ export const FxUnit: FC<Props> = ({
       <SelectPicker size="sm" value={fxTypeArg || 0} data={fxOptions} style={{ width: "100%" }} cleanable={false} onChange={onChangeOption} />
     </div>
     <div className="fx-unit-inner">
-    <WaveDesigner />
-      {availableFx?.[fxTypeArg || 0] === "Wave Designer" && <WaveDesigner /> }
+      <WaveDesigner />
+      {/* {availableFx?.[fxTypeArg || 0] === "Wave Designer" && <WaveDesigner /> } */}
     </div>
   </Container>
 }
