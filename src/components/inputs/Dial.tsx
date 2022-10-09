@@ -49,6 +49,7 @@ type Props = {
   max?: number // The max number
   onChange?: (value: number) => void // What to do when changed
   totalTravelDeg?: number // The total deg that to swing to/from
+  rotationDeg?: number // The rotation of the dial to start with
   backgroundColor?: string
 } & PropsWithChildren
 
@@ -60,6 +61,7 @@ export const Dial: FC<Props> = ({
   max = 1,
   onChange,
   totalTravelDeg,
+  rotationDeg = 0, 
   children,
   backgroundColor,
 }) => {
@@ -147,6 +149,7 @@ export const Dial: FC<Props> = ({
         width: size || "60px",
         height: size || "60px",
         background: backgroundColor,
+        transform: `rotate(${rotationDeg}deg)`,
       }}
     >
       <div
@@ -157,7 +160,9 @@ export const Dial: FC<Props> = ({
           transform: `rotate(${deg}deg)`,
         }}
       />
-      <div className="value">
+      <div className="value" style={{
+        transform: `rotate(${rotationDeg * -1}deg)`,
+      }}>
         {/* {deg} */}
         {/* <br/> */}
         {children || value}

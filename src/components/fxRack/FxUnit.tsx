@@ -8,6 +8,8 @@ import { MBM7CL_POINTS } from "../../helpers/mixer/db"
 import { ARG_4 } from "../../types/args"
 import { fxLabelsToOptions, FX_LABELS_1_4_TYPE, FX_LABELS_5_8_TYPE, FX_UNIT_NUMBER } from "../../types/fxTypes"
 import DbArgMeterST from "../meters/DbArgMeter/DbArgMeterST"
+import { DualGuitarAmp } from "./fxUnits/DualGuitarAmp"
+import { DualLeisureCompressor } from "./fxUnits/DualLeisureCompressor"
 import { WaveDesigner } from "./fxUnits/WaveDesigner"
 
 // Styles
@@ -65,7 +67,9 @@ export const FxUnit: FC<Props> = ({
       <SelectPicker size="sm" value={fxTypeArg || 0} data={fxOptions} style={{ width: "100%" }} cleanable={false} onChange={onChangeOption} />
     </div>
     <div className="fx-unit-inner">
-      <WaveDesigner />
+      {/* <WaveDesigner /> */}
+      {/* <DualGuitarAmp /> */}
+      <DualLeisureCompressor />
       {/* {availableFx?.[fxTypeArg || 0] === "Wave Designer" && <WaveDesigner /> } */}
     </div>
   </Container>

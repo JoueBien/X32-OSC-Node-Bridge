@@ -15,6 +15,14 @@ export function stepBy1 (previousValue: number, direction: Direction): number {
   }
 }
 
+export function stepByNegative1 (previousValue: number, direction: Direction): number {
+  if (direction === Step.up) {
+    return previousValue + 1
+  } else {
+    return previousValue - 1
+  }
+}
+
 export function stepBy001 (previousValue: number, direction: Direction): number {
   if (direction === Step.up) {
     // return (previousValue + 0.001)

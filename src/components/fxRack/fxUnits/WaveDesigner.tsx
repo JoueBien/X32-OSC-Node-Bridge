@@ -39,7 +39,7 @@ export const WaveDesigner = () => {
 
   // ..
   return (
-    <Container>
+    <Container className="WaveDesigner">
       {/* WaveDesigner Wave designer */}
       <div className="side">
         <div className="name">
