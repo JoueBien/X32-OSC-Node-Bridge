@@ -6,7 +6,7 @@ import { useDebouncedCallback } from "use-debounce"
 import X32, { IntervalReference } from "../helpers/mixer/X32"
 import X32Sub from "../helpers/mixer/X32Sub"
 import { argUint8ArrayToFloat32Array, argUint8ArrayToInt32Array } from "../helpers/mixer/cast"
-import { ARG_16, ARG_32, ARG_8, ARRAY_16, ARRAY_32 } from "../types/args"
+import { ARG_16, ARG_32, ARG_64, ARG_8, ARRAY_16, ARRAY_32, ARRAY_64 } from "../types/args"
 import { FX_UNIT_NUMBER } from "../types/fxTypes";
 
 // Defs
@@ -26,6 +26,14 @@ type X32ContextState = {
   stopFxs: () => Promise<void>
   startFxs: () => Promise<void>
   setFxType: (unit: FX_UNIT_NUMBER, fxType: number) => void
+  fxArgs1: ARG_64
+  fxArgs2: ARG_64
+  fxArgs3: ARG_64
+  fxArgs4: ARG_64
+  fxArgs5: ARG_64
+  fxArgs6: ARG_64
+  fxArgs7: ARG_64
+  fxArgs8: ARG_64
 }
 
 const UI_TICK_RATE = 1000/60
@@ -46,6 +54,14 @@ export const X32Context = createContext<X32ContextState>({
   stopFxs: async () => {},
   startFxs: async () => {},
   setFxType: () => {},
+  fxArgs1: ARRAY_64,
+  fxArgs2: ARRAY_64,
+  fxArgs3: ARRAY_64,
+  fxArgs4: ARRAY_64,
+  fxArgs5: ARRAY_64,
+  fxArgs6: ARRAY_64,
+  fxArgs7: ARRAY_64,
+  fxArgs8: ARRAY_64,
 })
 
 export const X32ContextProvider: FC<PropsWithChildren & X32ContextProps> = (defaultState) => {
@@ -74,19 +90,52 @@ export const X32ContextProvider: FC<PropsWithChildren & X32ContextProps> = (defa
   // Fx TYpes
   const [fxTypeArgs, _setFxTypeArgs] = useState<ARG_8>([0,0,0,0,0,0,0,0])
   const setFxTypeArgs = useDebouncedCallback(_setFxTypeArgs, UI_TICK_RATE)
+  const [subToFxTypeArgs, setSubToFxTypeArgs] = useAsyncSetState<IntervalReference>({} as IntervalReference)
+  
   const [subToFxArgs1, setSubToFxArgs1] = useAsyncSetState<IntervalReference>({} as IntervalReference)
+  const [subToFxArgs2, setSubToFxArgs2] = useAsyncSetState<IntervalReference>({} as IntervalReference)
+  const [subToFxArgs3, setSubToFxArgs3] = useAsyncSetState<IntervalReference>({} as IntervalReference)
+  const [subToFxArgs4, setSubToFxArgs4] = useAsyncSetState<IntervalReference>({} as IntervalReference)
+  const [subToFxArgs5, setSubToFxArgs5] = useAsyncSetState<IntervalReference>({} as IntervalReference)
+  const [subToFxArgs6, setSubToFxArgs6] = useAsyncSetState<IntervalReference>({} as IntervalReference)
+  const [subToFxArgs7, setSubToFxArgs7] = useAsyncSetState<IntervalReference>({} as IntervalReference)
+  const [subToFxArgs8, setSubToFxArgs8] = useAsyncSetState<IntervalReference>({} as IntervalReference)
+
+  const [fxArgs1, setFxArgs1] = useAsyncSetState<ARG_64>(ARRAY_64)
+  const [fxArgs2, setFxArgs2] = useAsyncSetState<ARG_64>(ARRAY_64)
+  const [fxArgs3, setFxArgs3] = useAsyncSetState<ARG_64>(ARRAY_64)
+  const [fxArgs4, setFxArgs4] = useAsyncSetState<ARG_64>(ARRAY_64)
+  const [fxArgs5, setFxArgs5] = useAsyncSetState<ARG_64>(ARRAY_64)
+  const [fxArgs6, setFxArgs6] = useAsyncSetState<ARG_64>(ARRAY_64)
+  const [fxArgs7, setFxArgs7] = useAsyncSetState<ARG_64>(ARRAY_64)
+  const [fxArgs8, setFxArgs8] = useAsyncSetState<ARG_64>(ARRAY_64)
+
 
   // Requests
   const setFxType = (unit: FX_UNIT_NUMBER, fxType: number) => connection1.setFxType(unit, fxType)
 
   // Functions
   const stopFxs = async () => {
-    connection1.unsubscribe(subToFxArgs1); setSubToFxArgs1({})
+    connection1.unsubscribe(subToFxTypeArgs); setSubToFxTypeArgs({})
     connection1.unsubscribe(subToMeter4); setSubToMeter4({})
+    connection1.unsubscribe(subToFxArgs1); setSubToFxArgs1({})
+    connection1.unsubscribe(subToFxArgs2); setSubToFxArgs2({})
+    connection1.unsubscribe(subToFxArgs3); setSubToFxArgs3({})
+    connection1.unsubscribe(subToFxArgs4); setSubToFxArgs4({})
+    connection1.unsubscribe(subToFxArgs5); setSubToFxArgs5({})
+    connection1.unsubscribe(subToFxArgs6); setSubToFxArgs6({})
+    connection1.unsubscribe(subToFxArgs7); setSubToFxArgs7({})
+    connection1.unsubscribe(subToFxArgs8); setSubToFxArgs8({})
   }
 
   const startFxs = async () => {
-    const subs = await connection1.startListenFx([
+    const [
+      sub1, sub2, 
+      subA1, subA2, 
+      subA3, subA4, 
+      subA5, subA6, 
+      subA7, subA8, 
+    ] = await connection1.startListenFx([
       (message, timeTag, info) => {
         if (message.address === "/customfxtypes") {
           const arrayValues = argUint8ArrayToInt32Array(message.args[0].value as Uint8Array) as ARG_8
@@ -99,9 +148,67 @@ export const X32ContextProvider: FC<PropsWithChildren & X32ContextProps> = (defa
           setAfxArgs(arrayValues4)
         }
       },
+      (message, timeTag, info) => {
+        if (message.address === "/customfxargs1") {
+          // Do Stuff here
+          const arrayValues = argUint8ArrayToFloat32Array(message.args[0].value as Uint8Array) as ARG_64
+          setFxArgs1(arrayValues)
+          // console.log("/customfxargs1", message)
+        }
+      },
+      (message, timeTag, info) => {
+        if (message.address === "/customfxargs2") {
+          // Do Stuff here
+          // console.log("message", message)
+        }
+      },
+      (message, timeTag, info) => {
+        if (message.address === "/customfxargs3") {
+          // Do Stuff here
+          // console.log("message", message)
+        }
+      },
+      (message, timeTag, info) => {
+        if (message.address === "/customfxargs4") {
+          // Do Stuff here
+          // console.log("message", message)
+        }
+      },
+      (message, timeTag, info) => {
+        if (message.address === "/customfxargs5") {
+          // Do Stuff here
+          // console.log("message", message)
+        }
+      },
+      (message, timeTag, info) => {
+        if (message.address === "/customfxargs6") {
+          // Do Stuff here
+          // console.log("message", message)
+        }
+      },
+      (message, timeTag, info) => {
+        if (message.address === "/customfxargs7") {
+          // Do Stuff here
+          // console.log("message", message)
+        }
+      },
+      (message, timeTag, info) => {
+        if (message.address === "/customfxargs8") {
+          // Do Stuff here
+          // console.log("message", message)
+        }
+      },
     ])
-    setSubToFxArgs1(subs[0])
-    setSubToMeter4(subs[1])
+    setSubToFxTypeArgs(sub1)
+    setSubToMeter4(sub2)
+    setSubToFxArgs1(subA1)
+    setSubToFxArgs2(subA2)
+    setSubToFxArgs3(subA3)
+    setSubToFxArgs4(subA4)
+    setSubToFxArgs5(subA5)
+    setSubToFxArgs6(subA6)
+    setSubToFxArgs7(subA7)
+    setSubToFxArgs8(subA8)
   }
 
 
@@ -184,6 +291,14 @@ export const X32ContextProvider: FC<PropsWithChildren & X32ContextProps> = (defa
         startFxs,
         stopFxs,
         setFxType,
+        fxArgs1,
+        fxArgs2,
+        fxArgs3,
+        fxArgs4,
+        fxArgs5,
+        fxArgs6,
+        fxArgs7,
+        fxArgs8,
       }}
     >
       {children}

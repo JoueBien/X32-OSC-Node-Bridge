@@ -195,7 +195,7 @@ export default class X32 {
 
   // Send message to server
   request({ address, args }: RequestFuncParams) {
-    // console.log("@X32->request", address, args, this.udpPort)
+    console.log("@X32->request", address, args)
     this.udpPort?.send({
       address,
       args: args || [],
