@@ -41,6 +41,14 @@ export function stepBy01 (previousValue: number, direction: Direction): number {
   }
 }
 
+export function stepBy02 (previousValue: number, direction: Direction): number {
+  if (direction === Step.up) {
+    // return (previousValue + 0.01)
+    return (previousValue * 1000 + 20) / 1000
+  } else {
+    return (previousValue * 1000 - 20) / 1000
+  }
+}
 
 export function stepBy025 (previousValue: number, direction: Direction): number {
   if (direction === Step.up) {
@@ -60,3 +68,11 @@ export function stepByDbPlusMinus24InHalfSteps (previousValue: number, direction
   }
 }
 
+export function stepByDbNeg18ToPos6HalfSteps (previousValue: number, direction: Direction): number {
+  // 1000000000000000000/48 = -18/+6 in 0.5 steps
+  if (direction === Step.up) {
+    return (previousValue * 1000000000000000000 + 20833333333333332) / 1000000000000000000
+  } else {
+    return (previousValue * 1000000000000000000 - 20833333333333332) / 1000000000000000000
+  }
+}

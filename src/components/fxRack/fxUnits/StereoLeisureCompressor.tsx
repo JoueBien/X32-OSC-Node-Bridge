@@ -8,6 +8,7 @@ import { FX_UNIT_NUMBER } from "../../../types/fxTypes"
 import { Dial } from "../../inputs/Dial"
 import { colors } from "../../../styles/index"
 
+
 const Container = styled.div`
   width: 100%;
   display: flex;
@@ -37,6 +38,7 @@ const Container = styled.div`
 
   .side + .side {
     border-top: 4px solid  ${colors.background};
+    background: ${colors.background};
   }
 `
 
@@ -45,18 +47,13 @@ type Props = {
   fxUnit: FX_UNIT_NUMBER
 }
 
-export const DualLeisureCompressor: FC<Props> = ({ fxArgs, fxUnit }) => {
+export const StereoLeisureCompressor: FC<Props> = ({ fxArgs, fxUnit }) => {
   // Props
   const value1 = fxArgs?.[0] || 0
   const value2 = fxArgs?.[1] || 0
   const value3 = fxArgs?.[2] || 0
   const value4 = fxArgs?.[3] || 0
   const value5 = fxArgs?.[4] || 0
-  const value6 = fxArgs?.[5] || 0
-  const value7 = fxArgs?.[6] || 0
-  const value8 = fxArgs?.[7] || 0
-  const value9 = fxArgs?.[8] || 0
-  const value10 = fxArgs?.[9] || 0
 
   // Global State
   const { setFxParam } = useContext(X32Context)
@@ -70,11 +67,11 @@ export const DualLeisureCompressor: FC<Props> = ({ fxArgs, fxUnit }) => {
 
   // ..
   return (
-    <Container className="DualLeisureCompressor">
+    <Container className="StereoLeisureCompressor">
       {/* WaveDesigner Wave designer */}
       <div className="side">
         <div className="name">
-          Dual Leisure Compressor <b>L</b>
+          Stereo Leisure Compressor <b>L/R</b>
         </div>
         <div className="controls">
           <Dial
@@ -146,75 +143,6 @@ export const DualLeisureCompressor: FC<Props> = ({ fxArgs, fxUnit }) => {
         </div>
       </div>
       <div className="side">
-        <div className="name">
-          Dual Leisure Compressor <b>R</b>
-        </div>
-        <div className="controls">
-          <Dial
-            size="40px"
-            backgroundColor="#124912"
-            value={value6 > 0 ? 1 : 0}
-            step={stepBy1}
-            min={1}
-            max={0}
-            rotationDeg={180 + 45}
-            totalTravelDeg={-90}
-            valueFormatter={argToOnOff}
-            onChange={(value) => {
-              onChange(6, value)
-            }}
-          />
-          <Dial
-            backgroundColor={"#49121f"}
-            value={value7}
-            step={stepBy02}
-            min={0}
-            max={1}
-            totalTravelDeg={270}
-            valueFormatter={argToPosPercentageNoSymbol}
-            onChange={(value) => {
-              onChange(7, value)
-            }}
-          />
-          <Dial
-            value={value8}
-            step={stepBy02}
-            min={0}
-            max={1}
-            totalTravelDeg={270}
-            valueFormatter={argToPosPercentageNoSymbol}
-            onChange={(value) => {
-              onChange(8, value)
-            }}
-          />
-          <Dial
-            size="50px"
-            backgroundColor={"#49121f"}
-            value={value10}
-            step={stepByDbNeg18ToPos6HalfSteps}
-            min={0}
-            max={1}
-            totalTravelDeg={270}
-            valueFormatter={argToNeg18Pos6}
-            onChange={(value) => {
-              onChange(10, value)
-            }}
-          />
-          <Dial
-            size="40px"
-            backgroundColor="#493c12"
-            value={value9 > 0 ? 1 : 0}
-            step={stepBy1}
-            min={1}
-            max={0}
-            rotationDeg={-90}
-            totalTravelDeg={-180}
-            valueFormatter={argToLimitCompress}
-            onChange={(value) => {
-              onChange(9, value)
-            }}
-          />
-        </div>
       </div>
     </Container>
   )

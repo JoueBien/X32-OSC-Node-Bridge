@@ -73,7 +73,7 @@ export const StereoGuitarAmp: FC<Props> = ({ fxArgs, fxUnit }) => {
     <Container className="StereoGuitarAmp">
       <div className="side">
         <div className="name">
-          Guitar Amp <b>L/R</b>
+          Stereo Guitar Amp <b>L/R</b>
         </div>
         <div className="controls">
           <Dial
