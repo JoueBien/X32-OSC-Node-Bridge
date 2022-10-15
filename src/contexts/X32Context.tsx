@@ -34,6 +34,7 @@ type X32ContextState = {
   fxArgs6: ARG_64
   fxArgs7: ARG_64
   fxArgs8: ARG_64
+  setFxParam: (unit: FX_UNIT_NUMBER, fxParamIndex: number, value: number) => void
 }
 
 const UI_TICK_RATE = 1000/60
@@ -62,6 +63,7 @@ export const X32Context = createContext<X32ContextState>({
   fxArgs6: ARRAY_64,
   fxArgs7: ARRAY_64,
   fxArgs8: ARRAY_64,
+  setFxParam: () => {}
 })
 
 export const X32ContextProvider: FC<PropsWithChildren & X32ContextProps> = (defaultState) => {
@@ -113,6 +115,7 @@ export const X32ContextProvider: FC<PropsWithChildren & X32ContextProps> = (defa
 
   // Requests
   const setFxType = (unit: FX_UNIT_NUMBER, fxType: number) => connection1.setFxType(unit, fxType)
+  const setFxParam  = (unit: FX_UNIT_NUMBER, fxParamIndex: number, value: number) => connection1.setFxParam(unit, fxParamIndex, value)
 
   // Functions
   const stopFxs = async () => {
@@ -153,7 +156,7 @@ export const X32ContextProvider: FC<PropsWithChildren & X32ContextProps> = (defa
           // Do Stuff here
           const arrayValues = argUint8ArrayToFloat32Array(message.args[0].value as Uint8Array) as ARG_64
           setFxArgs1(arrayValues)
-          // console.log("/customfxargs1", message)
+          console.log("/customfxargs1", arrayValues)
         }
       },
       (message, timeTag, info) => {
@@ -299,6 +302,7 @@ export const X32ContextProvider: FC<PropsWithChildren & X32ContextProps> = (defa
         fxArgs6,
         fxArgs7,
         fxArgs8,
+        setFxParam,
       }}
     >
       {children}

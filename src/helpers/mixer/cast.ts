@@ -43,3 +43,37 @@ export function uint8ArrayToInt32Array (uint8array: Uint8Array): number[] {
 export function argUint8ArrayToInt32Array (uint8array: Uint8Array): number[] {
   return uint8ArrayToInt32Array(uint8array.slice(4))
 }
+
+export function floatToFixed3 (value: number) {
+  return Number(value.toFixed(3))
+}
+
+export function floatToFixed1 (value: number) {
+  return Number(value.toFixed(1))
+}
+
+export function argToPosNegPercentage (value: number): string {
+  // 0-0.5 is negative %
+  // 0.5-1 is positive %
+  return `${parseInt(`${((value * 100) - 50) * 2}`, 10)}%`
+}
+
+export function argToPosNeg24 (value: number): string {
+  // 0-0.5 is negative %
+  // 0.5-1 is positive %
+  let strValue: string = `${floatToFixed1(((value * 48) - 24))}`
+  strValue = strValue.includes(".") ? strValue : `${strValue}.0`
+
+  return `${strValue}dB`
+}
+
+
+export function argToAmpValue (value: number): string {
+  // 0-0.5 is negative %
+  // 0.5-1 is positive %
+  return `${floatToFixed1(value*10)}`
+}
+
+export function argToOnOff (value: number): string {
+  return (value > 0.5) ? "On" : "Off"
+}

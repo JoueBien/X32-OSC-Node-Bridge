@@ -31,7 +31,7 @@ export default class X32Sub extends X32 {
     this.request({
       address: `/fx/${unit}/par/${intTo2PaddedArgString(fxParamIndex)}`,
       args: [
-        {"type" :"i", "value": value}
+        {"type" :"f", "value": value}
       ],
     })
   }

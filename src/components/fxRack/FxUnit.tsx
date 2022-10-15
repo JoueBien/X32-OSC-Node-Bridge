@@ -5,7 +5,7 @@ import styled from "styled-components"
 import { X32Context } from "../../contexts/X32Context"
 // Comps
 import { MBM7CL_POINTS } from "../../helpers/mixer/db"
-import { ARG_4 } from "../../types/args"
+import { ARG_4, ARG_64 } from "../../types/args"
 import {
   fxLabelsToOptions,
   FX_LABELS_1_4_TYPE,
@@ -46,6 +46,8 @@ type Props = {
   fxTypeArg?: number
   availableFx?: (FX_LABELS_1_4_TYPE | FX_LABELS_5_8_TYPE)[]
   channelArgs?: ARG_4
+  fxArgs?: ARG_64
+  
 }
 
 export const FxUnit: FC<Props> = ({
@@ -53,6 +55,7 @@ export const FxUnit: FC<Props> = ({
   channelArgs,
   fxUnit,
   availableFx,
+  fxArgs
 }) => {
   // Local State
   const [fxOptions, _setFxOptions] = useState(
@@ -119,7 +122,8 @@ export const FxUnit: FC<Props> = ({
           {/* <WaveDesigner /> */}
           {/* <DualGuitarAmp /> */}
           {/* <DualLeisureCompressor /> */}
-          {availableFx?.[localFxTypeArg || 0] === "Wave Designer" && <WaveDesigner /> }
+          {availableFx?.[localFxTypeArg || 0] === "Wave Designer" && <WaveDesigner fxUnit={fxUnit} fxArgs={fxArgs} /> }
+          {availableFx?.[localFxTypeArg || 0] === "Dual Guitar Amp" && <DualGuitarAmp fxUnit={fxUnit} fxArgs={fxArgs} />}
         </div>
       </>}
     </Container>

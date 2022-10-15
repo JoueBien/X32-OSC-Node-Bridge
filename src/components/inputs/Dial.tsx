@@ -1,6 +1,7 @@
 // Libs
-import { FC, useEffect, useRef, WheelEvent, PropsWithChildren } from "react"
+import { FC, useEffect, useRef, WheelEvent, PropsWithChildren, useState } from "react"
 import styled from "styled-components"
+import { useAsyncSetState, useGetState } from "use-async-setstate"
 import { distanceBetween } from "../../helpers/positionsBetween"
 import { Direction, Step, stepBy1 } from "../../helpers/step"
 
@@ -51,6 +52,7 @@ type Props = {
   totalTravelDeg?: number // The total deg that to swing to/from
   rotationDeg?: number // The rotation of the dial to start with
   backgroundColor?: string
+  valueFormatter?: (value: number) => string
 } & PropsWithChildren
 
 export const Dial: FC<Props> = ({
@@ -64,9 +66,14 @@ export const Dial: FC<Props> = ({
   rotationDeg = 0, 
   children,
   backgroundColor,
+  valueFormatter,
 }) => {
   // Local State
   const dialRef = useRef<HTMLDivElement | null>(null)
+  const [localValue, setLocalValue] = useAsyncSetState<number>(value)
+  const getLocalValue = useGetState(localValue)
+  const [canUpdate, setCanUpdate] = useState<boolean>(true)
+
 
   // Calc
   // Figure out the degs
@@ -76,7 +83,7 @@ export const Dial: FC<Props> = ({
     const _totalTravelDeg = totalTravelDeg || 180
     const negativeHalfTravel = (_totalTravelDeg / 2) * -1
     // Cast value into positive
-    const _value = Math.abs(0 + min) + value
+    const _value = Math.abs(0 + min) + localValue
     // Work out where the degrees are in relation to the positive value
     return (
       negativeHalfTravel +
@@ -84,9 +91,12 @@ export const Dial: FC<Props> = ({
     )
   })()
 
+  const displayValue = (valueFormatter) ? valueFormatter(localValue) : localValue
+
   // Functions
   // On change - handle undefined func
   const _onChange = (value: number) => {
+    setLocalValue(value)
     if (onChange) {
       onChange(value)
     } else {
@@ -107,6 +117,7 @@ export const Dial: FC<Props> = ({
   const onScroll = (event: WheelEvent) => {
     // Prevent Page from scrolling
     event.preventDefault()
+    
     // Remove Junk
     if (event.deltaY === 0 || event.deltaY === -0) {
       return
@@ -114,7 +125,7 @@ export const Dial: FC<Props> = ({
     // Detect Up/Down
     if (event.deltaY > 0) {
       // Down
-      const newValue = _step(value, Step.down)
+      const newValue = _step(getLocalValue(), Step.down)
       if (newValue <= min) {
         _onChange(min)
       } else {
@@ -122,7 +133,7 @@ export const Dial: FC<Props> = ({
       }
     } else {
       // Up
-      const newValue = _step(value, Step.up)
+      const newValue = _step(getLocalValue(), Step.up)
       if (newValue >= max) {
         _onChange(max)
       } else {
@@ -139,7 +150,14 @@ export const Dial: FC<Props> = ({
     return () => {
       dialRef.current?.removeEventListener("wheel", onScroll as any)
     }
-  }, [onScroll])
+  }, [])
+
+  useEffect(() => {
+    // If we are editing the control we don't want to be updating from OSC messages
+    if (canUpdate) {
+      setLocalValue(value)
+    }
+  }, [value])
 
   // ..
   return (
@@ -151,6 +169,8 @@ export const Dial: FC<Props> = ({
         background: backgroundColor,
         transform: `rotate(${rotationDeg}deg)`,
       }}
+      onMouseEnter={() => { setCanUpdate(false); }} 
+      onMouseLeave={() => { setCanUpdate(true); }} 
     >
       <div
         className="marker"
@@ -165,7 +185,7 @@ export const Dial: FC<Props> = ({
       }}>
         {/* {deg} */}
         {/* <br/> */}
-        {children || value}
+        {children || displayValue}
       </div>
     </Container>
   )
