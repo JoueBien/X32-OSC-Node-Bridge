@@ -141,6 +141,7 @@ export const WaveDesigner: FC<Props> = ({ fxArgs, fxUnit }) => {
             min={0}
             max={1}
             totalTravelDeg={270}
+            valueFormatter={argToPosNeg24}
             onChange={(value) => {
               onChange(6, value)
             }}

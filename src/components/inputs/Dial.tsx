@@ -1,5 +1,5 @@
 // Libs
-import { FC, useEffect, useRef, WheelEvent, PropsWithChildren, useState } from "react"
+import { FC, useEffect, useRef, WheelEvent, PropsWithChildren, useState, ReactNode } from "react"
 import styled from "styled-components"
 import { useAsyncSetState, useGetState } from "use-async-setstate"
 import { distanceBetween } from "../../helpers/positionsBetween"
@@ -52,7 +52,7 @@ type Props = {
   totalTravelDeg?: number // The total deg that to swing to/from
   rotationDeg?: number // The rotation of the dial to start with
   backgroundColor?: string
-  valueFormatter?: (value: number) => string
+  valueFormatter?: (value: number) => string | ReactNode
 } & PropsWithChildren
 
 export const Dial: FC<Props> = ({
@@ -91,7 +91,7 @@ export const Dial: FC<Props> = ({
     )
   })()
 
-  const displayValue = (valueFormatter) ? valueFormatter(localValue) : localValue
+  const displayValue: string | ReactNode = (valueFormatter) ? valueFormatter(localValue) : localValue
 
   // Functions
   // On change - handle undefined func

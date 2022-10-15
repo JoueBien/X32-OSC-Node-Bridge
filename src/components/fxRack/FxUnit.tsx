@@ -15,6 +15,7 @@ import {
 import DbArgMeterST from "../meters/DbArgMeter/DbArgMeterST"
 import { DualGuitarAmp } from "./fxUnits/DualGuitarAmp"
 import { DualLeisureCompressor } from "./fxUnits/DualLeisureCompressor"
+import { StereoGuitarAmp } from "./fxUnits/StereoGuitarAmp"
 import { WaveDesigner } from "./fxUnits/WaveDesigner"
 
 // Styles
@@ -124,6 +125,9 @@ export const FxUnit: FC<Props> = ({
           {/* <DualLeisureCompressor /> */}
           {availableFx?.[localFxTypeArg || 0] === "Wave Designer" && <WaveDesigner fxUnit={fxUnit} fxArgs={fxArgs} /> }
           {availableFx?.[localFxTypeArg || 0] === "Dual Guitar Amp" && <DualGuitarAmp fxUnit={fxUnit} fxArgs={fxArgs} />}
+          {availableFx?.[localFxTypeArg || 0] === "Stereo Guitar Amp" && <StereoGuitarAmp fxUnit={fxUnit} fxArgs={fxArgs} />}
+
+        
         </div>
       </>}
     </Container>
