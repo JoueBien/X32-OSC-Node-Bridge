@@ -176,10 +176,10 @@ export const Dial: FC<Props> = ({
 
   useEffect(() => {
     // If we are editing the control we don't want to be updating from OSC messages
-    if (canUpdate) {
+    if (canUpdate === true) {
       setLocalValue(value)
     }
-  }, [value])
+  }, [value, canUpdate])
 
   // ..
   return (
