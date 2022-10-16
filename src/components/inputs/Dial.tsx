@@ -4,6 +4,7 @@ import styled from "styled-components"
 import { useAsyncSetState, useGetState } from "use-async-setstate"
 import { distanceBetween } from "../../helpers/positionsBetween"
 import { Direction, Step, stepBy1 } from "../../helpers/step"
+import { delay } from "../../helpers/time"
 
 const Container = styled.div`
   position: relative;
@@ -70,10 +71,12 @@ export const Dial: FC<Props> = ({
 }) => {
   // Local State
   const dialRef = useRef<HTMLDivElement | null>(null)
+  // The Local Value
   const [localValue, setLocalValue] = useAsyncSetState<number>(value)
   const getLocalValue = useGetState(localValue)
-  const [canUpdate, setCanUpdate] = useState<boolean>(true)
-
+  // Semaphore for locking and unlocking updates from the value prop
+  const [canUpdate, setCanUpdate] = useState<boolean | number>(true)
+  const getCanUpdate = useGetState(canUpdate)
 
   // Calc
   // Figure out the degs
@@ -94,6 +97,20 @@ export const Dial: FC<Props> = ({
   const displayValue: string | ReactNode = (valueFormatter) ? valueFormatter(localValue) : localValue
 
   // Functions
+  // Lock and unlock OSC access to update the value
+  const lockUpdate = () => {
+    const freeOn = Date.now()
+    setCanUpdate(freeOn)
+    return freeOn
+  }
+  // Unlock only when the control has been released
+  const unlockUpdateIfMatch = (freeOn: number) => {
+    if (getCanUpdate() === freeOn) {
+      setCanUpdate(true)
+    }
+  }
+
+
   // On change - handle undefined func
   const _onChange = (value: number) => {
     setLocalValue(value)
@@ -114,9 +131,11 @@ export const Dial: FC<Props> = ({
   }
 
   // When we scroll we go up or down 1 value
-  const onScroll = (event: WheelEvent) => {
+  const onScroll = async (event: WheelEvent) => {
     // Prevent Page from scrolling
     event.preventDefault()
+    // Prevent OSC update from changing the value during edit
+    const freeOn = lockUpdate()
     
     // Remove Junk
     if (event.deltaY === 0 || event.deltaY === -0) {
@@ -140,6 +159,9 @@ export const Dial: FC<Props> = ({
         _onChange(newValue)
       }
     }
+    // After update see if we can be released
+    await delay(200)
+    unlockUpdateIfMatch(freeOn)
   }
 
   // When scrolled on we need to update the value
@@ -169,8 +191,6 @@ export const Dial: FC<Props> = ({
         background: backgroundColor,
         transform: `rotate(${rotationDeg}deg)`,
       }}
-      onMouseEnter={() => { setCanUpdate(false); }} 
-      onMouseLeave={() => { setCanUpdate(true); }} 
     >
       <div
         className="marker"

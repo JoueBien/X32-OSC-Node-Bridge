@@ -95,7 +95,8 @@ export function argToPosPercentageNoSymbol (value: number): string {
 
 export function argToNeg18Pos6 (value: number): string {
   // This is almost right except for rounding errors
-  let strValue: string = `${floatToFixed1((value - 0.75) * 25)}`
+  let strValue: string = `${floatToFixed1((value - 0.75) * 24)}`
   strValue = strValue.includes(".") ? `${strValue}dB` : `${strValue}.0dB`
   return strValue
+  // return `${value}`
 }
