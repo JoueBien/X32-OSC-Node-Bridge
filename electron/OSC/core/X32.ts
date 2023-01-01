@@ -5,8 +5,8 @@
  * https://github.com/colinbdclark/osc.js/issues/145
  */
 // Libs
-import { ArgumentWithMetadataShape, FullTimeTag } from "../../types/osc"
-import { delay } from "../time";
+import { ArgumentWithMetadataShape, FullTimeTag } from "../../../types/osc"
+import { delay } from "../../../helpers/time";
 import { UDPPort, UDPPortInstance, OptionalMessage, Message } from "./osc"
 
 export type ConnectParams = { mixerIp: string; debug?: boolean }
@@ -37,6 +37,22 @@ export type SubscribeFunc = ({
   onMessage,
 }: SubscribeFuncParams) => Promise<IntervalReference | undefined>
 
+
+export type RequestThenReplyFuncParams = RequestFuncParams & {}
+
+export type RequestThenReplyFunc = ({
+  address,
+  args,
+}: RequestThenReplyFuncParams) => Promise<Message<ArgumentWithMetadataShape<any>> | undefined>
+
+
+export type Info = {
+  serverVersion: string
+  serverName: string
+  console: string
+  version: string
+}
+
 export default class X32 {
   udpPort?: UDPPortInstance
   connected: boolean = false
@@ -45,7 +61,7 @@ export default class X32 {
   // constructor() {}
 
   connect(params: ConnectParams) {
-    return new Promise<boolean>((resolve) => {
+    return new Promise<false | Info>((resolve) => {
       const { mixerIp, debug } = params
       // Make sure we don't re-open on top
       this.disconnect()
@@ -66,6 +82,8 @@ export default class X32 {
       } catch (e) {
         this.connected = false
         console.trace("fc-connect", e)
+        resolve(false)
+        return
       }
 
       // Emit Debug Data
@@ -77,20 +95,84 @@ export default class X32 {
         })
       }
 
-      // On Ready request a message
-      this.udpPort?.on("ready", () => {
-        this.connected = true
-        // On Ready Respond to info
-        this.udpPort?.on("message", function (oscMsg, timeTag, info) {
-          if (oscMsg.address === "/info") {
-            console.log("/info", oscMsg)
-            resolve(true)
+      // Do the last part here async
+      // We are considered connected when ready and we get the console info
+      (async () => {
+        const isReady = await this.ready()
+        console.log('isReady', isReady)
+        if (isReady === true) {
+          const info = await this.requestAndReply({
+            address: "/info",
+            args:[]
+          })
+          if (info !== undefined) {
+            this.connected = true
+            resolve({
+              serverVersion: info?.args?.[0].value || "",
+              serverName: info?.args?.[1].value || "",
+              console: info?.args?.[2].value || "",
+              version: info?.args?.[3].value || "",
+            })
+            return
           }
-        })
-        // Request info
-        this.request({
-          address: "/info",
-        })
+        } 
+        this.connected = false
+        resolve(false)
+      })()
+    })
+  }
+
+  isConnected () {
+    return this.connected
+  }
+
+  async ready () {
+    return new Promise<boolean>((resolve) => {
+      let isResolved = false
+      const onDone = () => {
+        isResolved = true
+        this.udpPort?.off("message", onDone)
+        resolve(true)
+      }
+      this.udpPort?.on("ready", onDone)
+
+      // If we never got a response we need to clean up
+      delay(300).then(() => {
+        if (isResolved === false) {
+          this.udpPort?.off("message", onDone)
+          resolve(false)
+        }
+      })
+    })
+  }
+
+  async requestAndReply({ address, args }: RequestThenReplyFuncParams) {
+    let isResolved = false
+    return new Promise<Message<ArgumentWithMetadataShape<any>> | undefined>((resolve) => {
+      // When done we return the message & Clean up
+      const onDone: OnMessageFunc = (oscMsg, timeTag, info) => {
+        if (oscMsg.address === address) {
+          // console.log('oscMsg', oscMsg)
+          isResolved = true
+          this.udpPort?.off("message", onDone)
+          resolve(oscMsg)
+        }
+      }
+
+      this.udpPort?.on("message", onDone as any)
+
+      this.request({
+        address,
+        args,
+      })
+
+      // If we never got a response we need to clean up
+      delay(1000).then(() => {
+        if (isResolved === false) {
+          this.udpPort?.off("message", onDone)
+          console.warn(`@requestAndReply->too slow to reply on ${address}`)
+          resolve(undefined)
+        }
       })
     })
   }

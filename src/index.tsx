@@ -4,18 +4,20 @@ import "rsuite/dist/rsuite.min.css"
 import "./styles/index.css"
 
 import App from "./screens/_App"
-import reportWebVitals from "./helpers/default/reportWebVitals"
-import { X32ContextProvider } from "./contexts/X32Context"
+// import reportWebVitals from "./helpers/default/reportWebVitals"
+// import { X32ContextProvider } from "./contexts/X32Context"
 import { ConnectFormContextProvider } from "./contexts/ConnectFormContext"
+import { MixerContextProvider } from "./contexts/MixerContext"
 
 const root = ReactDOM.createRoot(document.getElementById("root")!)
 root.render(
   <React.StrictMode>
     <ConnectFormContextProvider>
-      <X32ContextProvider>
+      <MixerContextProvider>
         <App />
-      </X32ContextProvider>
+      </MixerContextProvider>
     </ConnectFormContextProvider>
+    
   </React.StrictMode>
 )
 

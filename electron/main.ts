@@ -1,5 +1,6 @@
 import { app, BrowserWindow } from "electron"
 import * as path from "path"
+// import { initAppMixerEventListeners } from "./OSC/MixerEventListeners"
 // import installExtension, {
 //   REACT_DEVELOPER_TOOLS,
 // } from "electron-devtools-installer"
@@ -13,7 +14,7 @@ function createWindow() {
       // contextIsolation: false,
       preload: path.join(__dirname, "preload.js"),
       nodeIntegration: true,
-      contextIsolation: false,
+      contextIsolation: true,
       // @ts-ignore
       enableRemoteModule: true,
     },
@@ -49,8 +50,9 @@ app.whenReady().then(() => {
   // installExtension(REACT_DEVELOPER_TOOLS)
   //   .then((name) => console.log(`Added Extension:  ${name}`))
   //   .catch((err) => console.log("An error occurred: ", err))
-
+  
   createWindow()
+  // const mixerEventListeners = initAppMixerEventListeners(app)
 
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) {

@@ -1,13 +1,14 @@
 // Libs
 import styled from "styled-components"
 import Nav from "rsuite/Nav"
+// import {ipcRenderer} from "electron"
 // Comps
 import "../styles/App.css"
-import { MeterScreen } from "./MeterScreen"
+// import { MeterScreen } from "./MeterScreen"
 import { useContext, useEffect, useState } from "react"
 import { ConnectScreen } from "./ConnectScreen"
-import { FxScreen } from "./FxScreen"
-import { X32Context } from "../contexts/X32Context"
+// import { FxScreen } from "./FxScreen"
+// import { X32Context } from "../contexts/X32Context"
 
 // Style
 const ScreenContainer = styled.div`
@@ -40,22 +41,27 @@ const ScreenContainer = styled.div`
 function App() {
   // Global State
   const [activeKey, setActiveKey] = useState<string>("setup")
-  const { startMeters, stopMeters, startFxs, stopFxs } = useContext(X32Context) 
+  // const { startMeters, stopMeters, startFxs, stopFxs } = useContext(X32Context) 
 
   // When looking at the bridge we show the bridge
-  useEffect(() => {
-    // We need to stop all
-    stopMeters()
-    stopFxs()
-    // Then start which ever one we need
-    if (activeKey === "bridge") { startMeters(); }
-    if (activeKey === "fx") { startFxs(); } 
+  // useEffect(() => {
+    // // We need to stop all
+    // stopMeters()
+    // stopFxs()
+    // // Then start which ever one we need
+    // if (activeKey === "bridge") { startMeters(); }
+    // if (activeKey === "fx") { startFxs(); } 
 
-  }, [activeKey])
+  // }, [activeKey])
+
+  function send() {
+    // ipcRenderer.send('connect', 'stuff')
+  }
 
   // ..
   return (
     <ScreenContainer className="ScreenContainer">
+      {/* <h1 onClick={send}>Disabled stuff !!</h1> */}
       <Nav
         appearance="subtle"
         className="topNav"
@@ -71,7 +77,7 @@ function App() {
           <ConnectScreen />
         </>
       )}
-      {activeKey === "bridge" && (
+      {/* {activeKey === "bridge" && (
         <>
           <MeterScreen />
         </>
@@ -81,7 +87,7 @@ function App() {
         <>
           <FxScreen />
         </>
-      )}
+      )} */}
     </ScreenContainer>
   )
 }

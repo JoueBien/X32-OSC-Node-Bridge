@@ -4,9 +4,10 @@ import styled from "styled-components"
 import Button from "rsuite/Button"
 import Input from "rsuite/Input"
 // Comps
-import { X32Context } from "../contexts/X32Context"
+import { MixerContext, MixerContextProvider } from "../contexts/MixerContext"
 import { ConnectFormContext } from "../contexts/ConnectFormContext"
 import { connectionScreenStyles } from "./connectionScreenStyles"
+import { useAsyncSetState } from "use-async-setstate"
 
 // Styles
 const Container = styled.div`
@@ -17,7 +18,7 @@ type Props = {}
 
 export const ConnectScreen: FC<Props> = () => {
   // Global State
-  const { connect, disconnect, connected } = useContext(X32Context)
+  const { connect, disconnect, connected } = useContext(MixerContext)
   const { settings, canSubmit, storedIps, removeIp, addIp, setIp, errors } =
     useContext(ConnectFormContext)
   const { ip } = settings
@@ -27,6 +28,8 @@ export const ConnectScreen: FC<Props> = () => {
     connect({ mixerIp: ip, debug: true })
   }
 
+
+  // ..
   return (
     <Container className="ConnectScreen">
       {/* The Connection form */}
