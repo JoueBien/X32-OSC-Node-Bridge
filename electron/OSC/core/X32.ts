@@ -8,12 +8,14 @@
 import { ArgumentWithMetadataShape, FullTimeTag } from "../../../types/osc"
 import { delay } from "../../../helpers/time";
 import { UDPPort, UDPPortInstance, OptionalMessage, Message } from "./osc"
+import { v4 as uuidv4 } from 'uuid'
 
 export type ConnectParams = { mixerIp: string; debug?: boolean }
 
 export type RequestFuncParams =
   | OptionalMessage<ArgumentWithMetadataShape<any>>
   | Message<ArgumentWithMetadataShape<any>>
+export type Arg = ArgumentWithMetadataShape<any>
 export type RequestFunc = ({ address, args }: RequestFuncParams) => void
 
 export type UnSubscribeFunc = () => void
@@ -30,11 +32,13 @@ export type OnMessageFunc = (
 
 export type SubscribeFuncParams = RequestFuncParams & {
   onMessage: OnMessageFunc
+  frequency: number,
 }
 export type SubscribeFunc = ({
   address,
   args,
   onMessage,
+  frequency,
 }: SubscribeFuncParams) => Promise<IntervalReference | undefined>
 
 
@@ -135,7 +139,6 @@ export default class X32 {
         resolve(true)
       }
       this.udpPort?.on("ready", onDone)
-
       // If we never got a response we need to clean up
       delay(300).then(() => {
         if (isResolved === false) {
@@ -204,10 +207,22 @@ export default class X32 {
     return {} as IntervalReference
   }
 
-  async batchSubscribe({ address, args, onMessage }: SubscribeFuncParams) {
+  async batchSubscribe({ args, onMessage, frequency }: SubscribeFuncParams) {
     if (this.connected) {
+      const address = `/${uuidv4()}`
+      const requestArgs: Arg[] = [
+        { type: "s", value: address },
+        ...(args || []),
+        { type: "i", value: frequency }
+      ]
+
+      const _onMessage: OnMessageFunc = (message, timeTag, info) => {
+        if (message.address === address) {
+          onMessage(message, timeTag, info)
+        }
+      }
       // Set up the message
-      this.udpPort?.on("message", onMessage as any)
+      this.udpPort?.on("message", _onMessage as any)
       // Set up the repeats
       const interval = setInterval(() => {
         if (this.connected) {
@@ -220,20 +235,32 @@ export default class X32 {
       }, 5000)
       // Start the first request
       await delay(200)
-      this.request({ address:"/batchsubscribe", args })
+      this.request({ address:"/batchsubscribe", args: requestArgs })
 
       return {
         interval,
-        onMessage,
+        onMessage: _onMessage,
       }
     }
     return {} as IntervalReference
   }
 
-  async formatSubscribe({ address, args, onMessage }: SubscribeFuncParams) {
+  async formatSubscribe({ args, onMessage, frequency }: SubscribeFuncParams) {
     if (this.connected) {
+      const address = `/${uuidv4()}`
+      const requestArgs: Arg[] = [
+        { type: "s", value: address },
+        ...(args || []),
+        { type: "i", value: frequency }
+      ]
+
+      const _onMessage: OnMessageFunc = (message, timeTag, info) => {
+        if (message.address === address) {
+          onMessage(message, timeTag, info)
+        }
+      }
       // Set up the message
-      this.udpPort?.on("message", onMessage as any)
+      this.udpPort?.on("message", _onMessage as any)
       // Set up the repeats
       const interval = setInterval(() => {
         if (this.connected) {
@@ -246,7 +273,7 @@ export default class X32 {
       }, 5000)
       // Start the first request
       await delay(200)
-      this.request({ address:"/formatsubscribe", args })
+      this.request({ address:"/formatsubscribe", args: requestArgs })
       return {
         interval,
         onMessage,

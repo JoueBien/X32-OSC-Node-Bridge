@@ -4,10 +4,9 @@ import styled from "styled-components"
 import Button from "rsuite/Button"
 import Input from "rsuite/Input"
 // Comps
-import { MixerContext, MixerContextProvider } from "../contexts/MixerContext"
-import { ConnectFormContext } from "../contexts/ConnectFormContext"
+import { MixerContext, MixerContextProvider } from "../shared/contexts/MixerContext"
+import { ConnectFormContext } from "../shared/contexts/ConnectFormContext"
 import { connectionScreenStyles } from "./connectionScreenStyles"
-import { useAsyncSetState } from "use-async-setstate"
 
 // Styles
 const Container = styled.div`
