@@ -3,7 +3,7 @@ import { useAsyncSetState } from "use-async-setstate"
 import { createContext, FC, PropsWithChildren } from "react"
 // Comps
 import { ConnectParams } from "../../../electron/OSC/core/X32"
-import { Mixer,  } from "../../../electron/OSC/MixerEventListeners"
+import { WindowMixerShared  } from "../../../electron/OSC/MixerEventListeners"
 // Defs
 type X32ContextProps = {}
 type X32ContextState = {
@@ -12,8 +12,7 @@ type X32ContextState = {
   disconnect: () => void
 }
 
-// @ts-ignore
-const mixer = window.Mixer as Mixer
+const mixer = (globalThis as unknown as WindowMixerShared).Mixer
 
 export const MixerContext = createContext<X32ContextState>({
   connected: false,

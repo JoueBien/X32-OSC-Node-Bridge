@@ -110,6 +110,7 @@ export const ConnectFormContextProvider: FC<
         ..._errors,
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [settings?.ip])
 
   // ..

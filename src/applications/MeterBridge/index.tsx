@@ -1,1 +1,3 @@
-export default {}
+export const MeterBridge = () => {
+  return <>MeterBridge</>
+}

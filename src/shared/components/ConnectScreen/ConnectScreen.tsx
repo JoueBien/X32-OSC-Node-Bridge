@@ -4,8 +4,9 @@ import styled from "styled-components"
 import Button from "rsuite/Button"
 import Input from "rsuite/Input"
 // Comps
-import { MixerContext, MixerContextProvider } from "../shared/contexts/MixerContext"
-import { ConnectFormContext } from "../shared/contexts/ConnectFormContext"
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { MixerContext, MixerContextProvider } from "shared/contexts/MixerContext"
+import { ConnectFormContext } from "shared/contexts/ConnectFormContext"
 import { connectionScreenStyles } from "./connectionScreenStyles"
 
 // Styles
