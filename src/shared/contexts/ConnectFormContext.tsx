@@ -1,13 +1,9 @@
 // Libs
 import validator from "validator"
-import {
-  FC,
-  PropsWithChildren,
-  createContext,
-  useState,
-  useEffect,
-} from "react"
+import { FC, PropsWithChildren, createContext, useEffect } from "react"
 import { useLocalStorage } from "usehooks-ts"
+import { WindowMixerSharedKey } from "../../../electron/OSC/MixerEventListeners"
+import { useAsyncSetState, useGetState } from "use-async-setstate"
 // Comps
 
 // Defs
@@ -23,21 +19,37 @@ type ConnectFormContextProps = {
   defaultIp?: string
 }
 type ConnectFormContextState = {
-  settings: Settings
-  canSubmit: boolean
+  settings: Record<WindowMixerSharedKey, Settings | undefined>
+  canSubmit: {
+    Mixer: boolean
+    MixerA: boolean
+    MixerB: boolean
+  }
   storedIps: { storedIps: string[] }
-  errors: Errors
-  setIp: (value: string) => void
+  errors: Record<WindowMixerSharedKey, Errors | undefined>
+  setIp: (value: string, mixerKey: WindowMixerSharedKey) => void
   addIp: (value: string) => void
   removeIp: (value: string) => void
 }
 
 export const ConnectFormContext = createContext<ConnectFormContextState>({
-  settings: {} as Settings,
-  canSubmit: false,
-  errors: {} as Errors,
+  settings: {
+    Mixer: undefined,
+    MixerA: undefined,
+    MixerB: undefined,
+  },
+  canSubmit: {
+    Mixer: false,
+    MixerA: false,
+    MixerB: false,
+  },
+  errors: {
+    Mixer: undefined,
+    MixerA: undefined,
+    MixerB: undefined,
+  },
   storedIps: { storedIps: [] },
-  setIp: (value: string) => {},
+  setIp: (value: string, mixerKey: WindowMixerSharedKey) => {},
   addIp: (value: string) => {},
   removeIp: (value: string) => {},
 })
@@ -49,26 +61,36 @@ export const ConnectFormContextProvider: FC<
   const { children, defaultIp } = defaultState
 
   // Local State
-  const [settings, setSettings] = useLocalStorage<Settings>(
-    "connect-settings",
-    {
-      ip: defaultIp || "192.168.0.30",
-    }
-  )
+  const [settings, setSettings] = useLocalStorage<
+    Record<WindowMixerSharedKey, Settings | undefined>
+  >("connect-settings", {
+    Mixer: undefined,
+    MixerA: undefined,
+    MixerB: undefined,
+  })
   const [storedIps, setStoredIps] = useLocalStorage<{ storedIps: string[] }>(
     "connect-stored-ip",
     { storedIps: [defaultIp || "192.168.0.30"] }
   )
-  const [errors, setErrors] = useState<Errors>({})
+  const [errors, setErrors] = useAsyncSetState<
+    Record<WindowMixerSharedKey, Errors | undefined>
+  >({ Mixer: undefined, MixerA: undefined, MixerB: undefined })
+  const getErrors = useGetState(errors)
 
   // calc
-  const canSubmit: boolean = Object.keys(errors).length === 0 ? true : false
+  const canSubmit = {
+    Mixer: Object.keys(errors?.Mixer || {}).length === 0 ? true : false,
+    MixerA: Object.keys(errors?.MixerA || {}).length === 0 ? true : false,
+    MixerB: Object.keys(errors?.MixerB || {}).length === 0 ? true : false,
+  }
 
   // Funcs
-  const setIp = (value: string) => {
+  const setIp = (value: string, mixerKey: WindowMixerSharedKey) => {
     setSettings({
       ...settings,
-      ip: value,
+      [mixerKey]: {
+        ip: value,
+      },
     })
   }
 
@@ -91,27 +113,30 @@ export const ConnectFormContextProvider: FC<
 
   // Effects
   useEffect(() => {
-    if (validator.isIP(settings?.ip) === false) {
-      setErrors({
-        ...errors,
-        ip: "Invalid IP Address",
+    ;(async () => {
+      Object.keys(settings).forEach(async (key) => {
+        const ip = settings[key as WindowMixerSharedKey]?.ip
+        if (ip) {
+          if (validator.isIP(ip) === false) {
+            await setErrors({
+              ...getErrors(),
+              [key]: { ip: "Invalid IP Address" },
+            })
+          } else if (ip.includes(":") === true) {
+            await setErrors({
+              ...getErrors(),
+              [key]: { ip: "IP Address must be IPV4 not 6" },
+            })
+          } else {
+            await setErrors({ ...getErrors(), [key]: {} })
+          }
+        } else {
+          await setErrors({ ...getErrors(), [key]: {} })
+        }
       })
-    } else if (settings?.ip?.includes(":") === true) {
-      setErrors({
-        ...errors,
-        ip: "IP Address must be IPV4 not 6",
-      })
-    } else {
-      const _errors = {
-        ...errors,
-      }
-      delete _errors.ip
-      setErrors({
-        ..._errors,
-      })
-    }
+    })()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [settings?.ip])
+  }, [settings.Mixer?.ip, settings?.MixerA, settings?.MixerB])
 
   // ..
   return (

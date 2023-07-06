@@ -47,3 +47,5 @@ export type WindowMixerShared = {
   MixerA: Mixer
   MixerB: Mixer
 }
+
+export type WindowMixerSharedKey = keyof WindowMixerShared

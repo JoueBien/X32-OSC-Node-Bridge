@@ -5,7 +5,7 @@ import "../styles/App.css"
 import { Workbench } from "applications/Workbench"
 import { MeterBridge } from "applications/MeterBridge"
 // Config
-let app: string = "MeterBridge" // MeterBridge// Workbench
+let app: string = "Workbench" // MeterBridge// Workbench
 
 // Style
 const ScreenContainer = styled.div`

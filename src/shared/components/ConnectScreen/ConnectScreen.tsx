@@ -4,42 +4,53 @@ import styled from "styled-components"
 import Button from "rsuite/Button"
 import Input from "rsuite/Input"
 // Comps
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { MixerContext, MixerContextProvider } from "shared/contexts/MixerContext"
+import {
+  MixerContext,
+} from "shared/contexts/MixerContext"
 import { ConnectFormContext } from "shared/contexts/ConnectFormContext"
 import { connectionScreenStyles } from "./connectionScreenStyles"
+import { WindowMixerSharedKey } from "../../../../electron/OSC/MixerEventListeners"
 
 // Styles
 const Container = styled.div`
   ${connectionScreenStyles}
 `
 // Defs
-type Props = {}
+type Props = { mixerKey: WindowMixerSharedKey }
 
-export const ConnectScreen: FC<Props> = () => {
+export const ConnectScreen: FC<Props> = ({ mixerKey }) => {
   // Global State
   const { connect, disconnect, connected } = useContext(MixerContext)
   const { settings, canSubmit, storedIps, removeIp, addIp, setIp, errors } =
     useContext(ConnectFormContext)
-  const { ip } = settings
+  const { ip } = settings[mixerKey] || { ip: "" }
 
   // Functions
-  const onConnect = () => {
-    connect({ mixerIp: ip, debug: true })
+  const onConnect = async () => {
+    const res = await connect({ mixerIp: ip, debug: true }, mixerKey)
+    if (res === false) {
+      alert(`Failed to connect to ${mixerKey}. Could not find mixer at ${ip}`)
+    }
+  }
+  const onDisconnect = () => {
+    disconnect(mixerKey)
   }
 
+  const onIpFiledChanged = (value: string) => {
+    setIp(value, mixerKey)
+  }
 
   // ..
   return (
     <Container className="ConnectScreen">
       {/* The Connection form */}
       <div className="form">
-        <h1> Connection </h1>
+        <h1> Connect to {mixerKey} </h1>
         <div className="form-item">
           <label htmlFor="ip">X32 IP Address</label>
-          <Input id="ip" value={ip} onChange={setIp} />
+          <Input id="ip" value={ip} onChange={onIpFiledChanged} />
           <div className="error" role="alert">
-            {errors?.ip || ""}
+            {errors?.[mixerKey]?.ip || ""}
           </div>
         </div>
         <div className="form-item">
@@ -47,7 +58,9 @@ export const ConnectScreen: FC<Props> = () => {
             id="connect"
             appearance="ghost"
             color="green"
-            disabled={connected === true || canSubmit !== true}
+            disabled={
+              connected[mixerKey] === true || canSubmit[mixerKey] !== true
+            }
             onClick={onConnect}
           >
             Connect
@@ -56,15 +69,15 @@ export const ConnectScreen: FC<Props> = () => {
             id="disconnect"
             appearance="ghost"
             color="orange"
-            disabled={connected !== true}
-            onClick={disconnect}
+            disabled={connected[mixerKey] !== true}
+            onClick={onDisconnect}
           >
             Disconnect
           </Button>
           <Button
             id="save"
             appearance="ghost"
-            disabled={canSubmit === false}
+            disabled={canSubmit[mixerKey] === false}
             onClick={() => addIp(ip)}
           >
             Store
@@ -80,7 +93,7 @@ export const ConnectScreen: FC<Props> = () => {
               <Button
                 className="recall-button"
                 appearance="ghost"
-                onClick={() => setIp(ipAddress)}
+                onClick={() => setIp(ipAddress, mixerKey)}
               >
                 {ipAddress}
               </Button>
