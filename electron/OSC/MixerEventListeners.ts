@@ -6,6 +6,7 @@ import X32, {
   IntervalReference,
   RequestThenReplyFuncParams,
   SubscribeFuncParams,
+  OnMessageFunc,
 } from "./core/X32"
 
 // We can't expose X32 directly so
@@ -20,15 +21,26 @@ const shared = () => {
     disconnect: () => OscMixer.disconnect(),
 
     // Communication Functions
+    // Send Message
     request: (params: RequestFuncParams) => OscMixer.request(params),
     requestAndReply: (params: RequestThenReplyFuncParams) =>
       OscMixer.requestAndReply(params),
+    
+     // Get Updates a number of times 10 seconds
     subscribe: (params: SubscribeFuncParams) => OscMixer.subscribe(params),
     batchSubscribe: (params: SubscribeFuncParams) =>
       OscMixer.batchSubscribe(params),
     formatSubscribe: (params: SubscribeFuncParams) =>
       OscMixer.formatSubscribe(params),
     unsubscribe: (params: IntervalReference) => OscMixer.unsubscribe(params),
+
+    // Handel messages with out subscribe
+    onAnyMessage: (onMessage: OnMessageFunc) =>
+      OscMixer.onAnyMessage(onMessage),
+    onMessages: (addresses: string[], onMessage: OnMessageFunc) =>
+      OscMixer.onMessages(addresses, onMessage),
+    onMessage: (addresses: string, onMessage: OnMessageFunc) =>
+      OscMixer.onMessage(addresses, onMessage),
   }
 }
 export function initAppMixerEventListenersBridge() {

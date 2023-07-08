@@ -6,9 +6,9 @@
  */
 // Libs
 import { ArgumentWithMetadataShape, FullTimeTag } from "../../../types/osc"
-import { delay } from "../../../helpers/time";
+import { delay } from "../../../helpers/time"
 import { UDPPort, UDPPortInstance, OptionalMessage, Message } from "./osc"
-import { v4 as uuidv4 } from 'uuid'
+import { v4 as uuidv4 } from "uuid"
 
 export type ConnectParams = { mixerIp: string; debug?: boolean }
 
@@ -32,7 +32,7 @@ export type OnMessageFunc = (
 
 export type SubscribeFuncParams = RequestFuncParams & {
   onMessage: OnMessageFunc
-  frequency: number,
+  frequency: number
 }
 export type SubscribeFunc = ({
   address,
@@ -41,14 +41,14 @@ export type SubscribeFunc = ({
   frequency,
 }: SubscribeFuncParams) => Promise<IntervalReference | undefined>
 
-
 export type RequestThenReplyFuncParams = RequestFuncParams & {}
 
 export type RequestThenReplyFunc = ({
   address,
   args,
-}: RequestThenReplyFuncParams) => Promise<Message<ArgumentWithMetadataShape<any>> | undefined>
-
+}: RequestThenReplyFuncParams) => Promise<
+  Message<ArgumentWithMetadataShape<any>> | undefined
+>
 
 export type Info = {
   serverVersion: string
@@ -101,13 +101,13 @@ export default class X32 {
 
       // Do the last part here async
       // We are considered connected when ready and we get the console info
-      (async () => {
+      ;(async () => {
         const isReady = await this.ready()
-        console.log('isReady', isReady)
+        console.log("isReady", isReady)
         if (isReady === true) {
           const info = await this.requestAndReply({
             address: "/info",
-            args:[]
+            args: [],
           })
           if (info !== undefined) {
             this.connected = true
@@ -119,18 +119,18 @@ export default class X32 {
             })
             return
           }
-        } 
+        }
         this.connected = false
         resolve(false)
       })()
     })
   }
 
-  isConnected () {
+  isConnected() {
     return this.connected
   }
 
-  async ready () {
+  async ready() {
     return new Promise<boolean>((resolve) => {
       let isResolved = false
       const onDone = () => {
@@ -149,35 +149,70 @@ export default class X32 {
     })
   }
 
+  // When we get any message we should process messages
+  // Clean up with unsubscribe to unregister
+  onAnyMessage(onMessage: OnMessageFunc): IntervalReference {
+    if (this.connected) {
+      // register an event handler to update on any message
+      this?.udpPort?.on("message", onMessage as any)
+      // Return a listener
+      const ret: IntervalReference = {
+        onMessage: onMessage,
+        interval: undefined,
+      }
+      return ret
+    }
+    return {} as IntervalReference
+  }
+
+  // When we get a specific set of addresses
+  // Clean up with unsubscribe to unregister
+  onMessages(addresses: string[], onMessage: OnMessageFunc) {
+    const handler: OnMessageFunc = (oscMsg, timeTag, info) => {
+      if (addresses.includes(oscMsg.address)) {
+        onMessage(oscMsg, timeTag, info)
+      }
+    }
+    return this.onAnyMessage(handler)
+  }
+
+  // When we only need on address
+  // Clean up with unsubscribe to unregister
+  onMessage(address: string, onMessage: OnMessageFunc) {
+    return this.onMessages([address], onMessage)
+  }
+
   async requestAndReply({ address, args }: RequestThenReplyFuncParams) {
     let isResolved = false
-    return new Promise<Message<ArgumentWithMetadataShape<any>> | undefined>((resolve) => {
-      // When done we return the message & Clean up
-      const onDone: OnMessageFunc = (oscMsg, timeTag, info) => {
-        if (oscMsg.address === address) {
-          // console.log('oscMsg', oscMsg)
-          isResolved = true
-          this.udpPort?.off("message", onDone)
-          resolve(oscMsg)
+    return new Promise<Message<ArgumentWithMetadataShape<any>> | undefined>(
+      (resolve) => {
+        // When done we return the message & Clean up
+        const onDone: OnMessageFunc = (oscMsg, timeTag, info) => {
+          if (oscMsg.address === address) {
+            // console.log('oscMsg', oscMsg)
+            isResolved = true
+            this.udpPort?.off("message", onDone)
+            resolve(oscMsg)
+          }
         }
+
+        this.udpPort?.on("message", onDone as any)
+
+        this.request({
+          address,
+          args,
+        })
+
+        // If we never got a response we need to clean up
+        delay(1000).then(() => {
+          if (isResolved === false) {
+            this.udpPort?.off("message", onDone)
+            console.warn(`@requestAndReply->too slow to reply on ${address}`)
+            resolve(undefined)
+          }
+        })
       }
-
-      this.udpPort?.on("message", onDone as any)
-
-      this.request({
-        address,
-        args,
-      })
-
-      // If we never got a response we need to clean up
-      delay(1000).then(() => {
-        if (isResolved === false) {
-          this.udpPort?.off("message", onDone)
-          console.warn(`@requestAndReply->too slow to reply on ${address}`)
-          resolve(undefined)
-        }
-      })
-    })
+    )
   }
 
   async subscribe({ address, args, onMessage }: SubscribeFuncParams) {
@@ -213,7 +248,7 @@ export default class X32 {
       const requestArgs: Arg[] = [
         { type: "s", value: address },
         ...(args || []),
-        { type: "i", value: frequency }
+        { type: "i", value: frequency },
       ]
 
       const _onMessage: OnMessageFunc = (message, timeTag, info) => {
@@ -235,7 +270,7 @@ export default class X32 {
       }, 5000)
       // Start the first request
       await delay(200)
-      this.request({ address:"/batchsubscribe", args: requestArgs })
+      this.request({ address: "/batchsubscribe", args: requestArgs })
 
       return {
         interval,
@@ -251,7 +286,7 @@ export default class X32 {
       const requestArgs: Arg[] = [
         { type: "s", value: address },
         ...(args || []),
-        { type: "i", value: frequency }
+        { type: "i", value: frequency },
       ]
 
       const _onMessage: OnMessageFunc = (message, timeTag, info) => {
@@ -273,7 +308,7 @@ export default class X32 {
       }, 5000)
       // Start the first request
       await delay(200)
-      this.request({ address:"/formatsubscribe", args: requestArgs })
+      this.request({ address: "/formatsubscribe", args: requestArgs })
       return {
         interval,
         onMessage,
