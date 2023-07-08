@@ -4,9 +4,7 @@ import styled from "styled-components"
 import Button from "rsuite/Button"
 import Input from "rsuite/Input"
 // Comps
-import {
-  MixerContext,
-} from "shared/contexts/MixerContext"
+import { MixerContext } from "shared/contexts/MixerContext"
 import { ConnectFormContext } from "shared/contexts/ConnectFormContext"
 import { connectionScreenStyles } from "./connectionScreenStyles"
 import { WindowMixerSharedKey } from "../../../../electron/OSC/MixerEventListeners"
@@ -16,9 +14,9 @@ const Container = styled.div`
   ${connectionScreenStyles}
 `
 // Defs
-type Props = { mixerKey: WindowMixerSharedKey }
+type Props = { mixerKey: WindowMixerSharedKey; className?: string }
 
-export const ConnectScreen: FC<Props> = ({ mixerKey }) => {
+export const ConnectScreen: FC<Props> = ({ mixerKey, className }) => {
   // Global State
   const { connect, disconnect, connected } = useContext(MixerContext)
   const { settings, canSubmit, storedIps, removeIp, addIp, setIp, errors } =
@@ -42,7 +40,7 @@ export const ConnectScreen: FC<Props> = ({ mixerKey }) => {
 
   // ..
   return (
-    <Container className="ConnectScreen">
+    <Container className={`ConnectScreen ${className || ""}`}>
       {/* The Connection form */}
       <div className="form">
         <h1> Connect to {mixerKey} </h1>

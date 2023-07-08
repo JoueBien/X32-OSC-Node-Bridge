@@ -7,17 +7,26 @@ import { colors } from "styles"
 // Styles
 export const connectionScreenStyles = css`
   --rs-border-primary: ${colors.background};
-
   display: flex;
   width: 700px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: ${colors.inverted.background};
-  color: ${colors.inverted.text};
-  padding: 15px;
-  border-radius: 5px;
+
+  &.full-screen {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: ${colors.inverted.background};
+    color: ${colors.inverted.text};
+    padding: 15px;
+    border-radius: 5px;
+  }
+
+  &.white-bg {
+    background: ${colors.inverted.background};
+    color: ${colors.inverted.text};
+    padding: 15px;
+    border-radius: 5px;
+  }
 
   h1 {
     margin: unset;
