@@ -12,14 +12,20 @@ import {
 import { useAsyncSetState } from "use-async-setstate"
 import { MuteMapperContextProvider } from "./contexts/MuteMapperContext"
 import { MuteMapperScreen } from "./screens/MuteMapperScreen"
+import { SetUpScreen } from "./screens/SetUpScreen"
+import {
+  MuteShareContext,
+  MuteShareContextProvider,
+} from "./contexts/MuteShareContext"
 
 export const Workbench = () => {
   // Local State
-  const [activeKey, setActiveKey] = useAsyncSetState<string>("mapping")
+  const [activeKey, setActiveKey] = useAsyncSetState<string>("setup")
 
   // ..
   return (
     <>
+      {/* Page Navigation */}
       <Nav
         appearance="subtle"
         className="topNav"
@@ -34,19 +40,18 @@ export const Workbench = () => {
       <MixerContextProvider>
         <ConnectFormContextProvider>
           <MuteMapperContextProvider>
-            {activeKey === "setup" && (
-              <>
-                <ScreenContainer className="center clear-nav">
-                  <ConnectScreen className="white-bg" mixerKey="MixerA" />
-                  <ConnectScreen className="white-bg" mixerKey="MixerB" />
-                </ScreenContainer>
-              </>
-            )}
-            {activeKey === "mapping" && (
-              <>
-                <MuteMapperScreen />
-              </>
-            )}
+            <MuteShareContextProvider>
+              {activeKey === "setup" && (
+                <>
+                  <SetUpScreen />
+                </>
+              )}
+              {activeKey === "mapping" && (
+                <>
+                  <MuteMapperScreen />
+                </>
+              )}
+            </MuteShareContextProvider>
           </MuteMapperContextProvider>
         </ConnectFormContextProvider>
       </MixerContextProvider>

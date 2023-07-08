@@ -60,9 +60,12 @@ export type Info = {
 export default class X32 {
   udpPort?: UDPPortInstance
   connected: boolean = false
+  localPort: number
 
-  // Do nothing when created
-  // constructor() {}
+  // Set the reply port the mixer replies on init
+  constructor(localPort: number) {
+    this.localPort = localPort
+  }
 
   connect(params: ConnectParams) {
     return new Promise<false | Info>((resolve) => {
@@ -74,7 +77,7 @@ export default class X32 {
       try {
         this.udpPort = new UDPPort({
           localAddress: "0.0.0.0",
-          localPort: 57121,
+          localPort: this.localPort,
           metadata: true,
           remoteAddress: mixerIp,
           remotePort: 10023,

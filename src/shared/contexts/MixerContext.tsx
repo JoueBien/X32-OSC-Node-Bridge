@@ -7,6 +7,10 @@ import {
   WindowMixerShared,
   WindowMixerSharedKey,
 } from "../../../electron/OSC/MixerEventListeners"
+
+// Consts
+const AllMixers = globalThis as unknown as WindowMixerShared
+
 // Defs
 type X32ContextProps = {}
 type X32ContextState = {
@@ -16,15 +20,14 @@ type X32ContextState = {
     mixerKey: WindowMixerSharedKey
   ) => Promise<boolean>
   disconnect: (mixerKey: WindowMixerSharedKey) => void
+  mixers: WindowMixerShared
 }
-
-
-const AllMixers = globalThis as unknown as WindowMixerShared
 
 export const MixerContext = createContext<X32ContextState>({
   connected: { Mixer: false, MixerA: false, MixerB: false },
   connect: (() => {}) as any,
   disconnect: () => {},
+  mixers: AllMixers,
 })
 
 export const MixerContextProvider: FC<PropsWithChildren & X32ContextProps> = (
@@ -47,17 +50,17 @@ export const MixerContextProvider: FC<PropsWithChildren & X32ContextProps> = (
   ) {
     const res = await AllMixers[mixerKey].connect(params)
     if (res !== false) {
-      setConnected({ ...getConnected(), [mixerKey]: true })
+      await setConnected({ ...getConnected(), [mixerKey]: true })
       return true
     } else {
-      setConnected({ ...getConnected(), [mixerKey]: false })
+      await setConnected({ ...getConnected(), [mixerKey]: false })
       return false
     }
   }
 
   async function disconnect(mixerKey: WindowMixerSharedKey) {
     AllMixers[mixerKey].disconnect()
-    setConnected({ ...getConnected(), [mixerKey]: false })
+    await setConnected({ ...getConnected(), [mixerKey]: false })
   }
 
   // ..
@@ -70,6 +73,7 @@ export const MixerContextProvider: FC<PropsWithChildren & X32ContextProps> = (
         // Mutations
         connect,
         disconnect,
+        mixers: AllMixers,
       }}
     >
       {children}

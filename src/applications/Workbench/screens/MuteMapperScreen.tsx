@@ -11,6 +11,7 @@ import {
 import { useObjectList } from "shared/hooks/useObjectList"
 import { colors } from "styles"
 
+// Styles
 const MuteMapperScreenContainer = styled.div`
   width: 100%;
   display: flex;
@@ -63,12 +64,14 @@ const MuteMapperScreenContainer = styled.div`
 
 export const MuteMapperScreen: FC<{}> = () => {
   // Global State
-  const { sharedMuteItemList, addSharedMuteItem } =
+  const { sharedMuteItemList, addSharedMuteItem, removeSharedMuteItem, } =
     useContext(MuteMapperContext)
 
   // Local State
-  const { list: dataOptions, getObjectByKeyValue: getListByKeyValue } =
-    useObjectList<CommandOption>(allMuteOptions)
+  const {
+    list: dataOptions,
+    getObjectByKeyValue: getListByKeyValue,
+  } = useObjectList<CommandOption>(allMuteOptions)
   const [formState, setFormState] = useAsyncSetState<Partial<SharedMuteItem>>(
     {}
   )
@@ -98,6 +101,10 @@ export const MuteMapperScreen: FC<{}> = () => {
     if (formState?.mixerA !== undefined && formState?.mixerB !== undefined) {
       addSharedMuteItem(formState as SharedMuteItem)
     }
+  }
+
+  const removeMapping = (index: number) => {
+    removeSharedMuteItem(index)
   }
 
   // ..
@@ -142,7 +149,7 @@ export const MuteMapperScreen: FC<{}> = () => {
                   className="Button"
                   appearance="ghost"
                   color="orange"
-                  onClick={() => {}}
+                  onClick={() => removeMapping(index)}
                 >
                   Remove
                 </Button>
