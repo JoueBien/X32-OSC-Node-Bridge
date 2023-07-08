@@ -35,6 +35,7 @@ export const MuteShareContextProvider: FC<
   const isConnected = connected.MixerA && connected.MixerB
 
   // Actions
+  // TODO: fix Mute Groups being inverted to that of anything else
   const syncMixerAToB = async () => {
     await Promise.all(
       Object.keys(mixerAMuteHashMap).map(async (aKey) => {
