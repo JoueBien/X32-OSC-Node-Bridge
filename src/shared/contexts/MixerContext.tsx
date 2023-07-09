@@ -1,6 +1,6 @@
 // Libs
 import { useAsyncSetState, useGetState } from "use-async-setstate"
-import { createContext, FC, PropsWithChildren } from "react"
+import { createContext, FC, PropsWithChildren, useEffect } from "react"
 // Comps
 import { ConnectParams } from "../../../electron/OSC/core/X32"
 import {

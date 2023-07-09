@@ -9,7 +9,7 @@ import {
   SharedMuteItem,
 } from "../contexts/MuteMapperContext"
 import { useObjectList } from "shared/hooks/useObjectList"
-import { colors } from "styles"
+import { colors } from "shared/styles"
 
 // Styles
 const MuteMapperScreenContainer = styled.div`
@@ -64,14 +64,12 @@ const MuteMapperScreenContainer = styled.div`
 
 export const MuteMapperScreen: FC<{}> = () => {
   // Global State
-  const { sharedMuteItemList, addSharedMuteItem, removeSharedMuteItem, } =
+  const { sharedMuteItemList, addSharedMuteItem, removeSharedMuteItem } =
     useContext(MuteMapperContext)
 
   // Local State
-  const {
-    list: dataOptions,
-    getObjectByKeyValue: getListByKeyValue,
-  } = useObjectList<CommandOption>(allMuteOptions)
+  const { list: dataOptions, getObjectByKeyValue: getListByKeyValue } =
+    useObjectList<CommandOption>(allMuteOptions)
   const [formState, setFormState] = useAsyncSetState<Partial<SharedMuteItem>>(
     {}
   )
@@ -138,6 +136,12 @@ export const MuteMapperScreen: FC<{}> = () => {
         </Button>
       </form>
       <div className="list">
+        <div className="item">
+          <div className="label">Mixer A (Master)</div>
+          <div className="direction">{` <-> `}</div>
+          <div className="label">Mixer B</div>
+          <div className="remove"></div>
+        </div>
         {sharedMuteItemList.map((item, index) => {
           return (
             <div key={index} className="item">

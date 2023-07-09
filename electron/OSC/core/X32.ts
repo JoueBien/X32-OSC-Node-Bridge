@@ -155,9 +155,12 @@ export default class X32 {
   // When we get any message we should process messages
   // Clean up with unsubscribe to unregister
   onAnyMessage(onMessage: OnMessageFunc): IntervalReference {
+    const _onMessage: OnMessageFunc = (a, b, c) => {
+      onMessage(a, b, c)
+    }
     if (this.connected) {
       // register an event handler to update on any message
-      this?.udpPort?.on("message", onMessage as any)
+      this?.udpPort?.on("message", _onMessage as any)
       // Return a listener
       const ret: IntervalReference = {
         onMessage: onMessage,
@@ -172,6 +175,7 @@ export default class X32 {
   // Clean up with unsubscribe to unregister
   onMessages(addresses: string[], onMessage: OnMessageFunc) {
     const handler: OnMessageFunc = (oscMsg, timeTag, info) => {
+      // console.log("@onAny", oscMsg.address, addresses.includes(oscMsg.address))
       if (addresses.includes(oscMsg.address)) {
         onMessage(oscMsg, timeTag, info)
       }
@@ -236,6 +240,30 @@ export default class X32 {
       // Start the first request
       await delay(200)
       this.request({ address, args })
+
+      return {
+        interval,
+        onMessage,
+      }
+    }
+    return {} as IntervalReference
+  }
+
+  async xSubscribe() {
+    if (this.connected) {
+      const onMessage = () => {}
+      const address = "/xremote"
+      // Set up the repeats
+      const interval = setInterval(() => {
+        if (this.connected) {
+          this.request({
+            address,
+          })
+        }
+      }, 5000)
+      // Start the first request
+      await delay(200)
+      this.request({ address })
 
       return {
         interval,

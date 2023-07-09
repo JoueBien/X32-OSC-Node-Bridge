@@ -12,6 +12,7 @@ type MuteMapperContextState = {
   }
   addSharedMuteItem: (value: SharedMuteItem) => Promise<void>
   removeSharedMuteItem: (index: number) => Promise<void>
+  sharedMuteItemMessageAddresses: {MixerA: string[], MixerB: string[]}
 }
 type MuteMapperContextProps = {}
 
@@ -23,6 +24,10 @@ export const MuteMapperContext = createContext<MuteMapperContextState>({
   },
   addSharedMuteItem: async () => {},
   removeSharedMuteItem: async () => {},
+  sharedMuteItemMessageAddresses: {
+    MixerA: [],
+    MixerB: []
+  }
 })
 
 export const MuteMapperContextProvider: FC<
@@ -56,6 +61,11 @@ export const MuteMapperContextProvider: FC<
     ),
   }
 
+  const sharedMuteItemMessageAddresses = {
+    MixerA: Object.keys(sharedMuteItemHashMap.MixerA),
+    MixerB: Object.keys(sharedMuteItemHashMap.MixerB),
+  }
+
   // Effects
   // Keep State always stored
   useEffect(() => {
@@ -68,6 +78,7 @@ export const MuteMapperContextProvider: FC<
       value={{
         sharedMuteItemList,
         addSharedMuteItem,
+        sharedMuteItemMessageAddresses,
         removeSharedMuteItem,
         sharedMuteItemHashMap,
       }}

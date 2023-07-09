@@ -25,8 +25,9 @@ const shared = (localPort: number) => {
     request: (params: RequestFuncParams) => OscMixer.request(params),
     requestAndReply: (params: RequestThenReplyFuncParams) =>
       OscMixer.requestAndReply(params),
-    
-     // Get Updates a number of times 10 seconds
+
+    // Get Updates a number of times 10 seconds
+    xSubscribe: () => OscMixer.xSubscribe(),
     subscribe: (params: SubscribeFuncParams) => OscMixer.subscribe(params),
     batchSubscribe: (params: SubscribeFuncParams) =>
       OscMixer.batchSubscribe(params),
