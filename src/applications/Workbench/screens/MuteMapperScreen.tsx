@@ -64,7 +64,7 @@ const MuteMapperScreenContainer = styled.div`
 
 export const MuteMapperScreen: FC<{}> = () => {
   // Global State
-  const { sharedMuteItemList, addSharedMuteItem, removeSharedMuteItem } =
+  const { sharedMuteItemList, addSharedMuteItem, removeSharedMuteItem, importMuteScene } =
     useContext(MuteMapperContext)
 
   // Local State
@@ -162,6 +162,18 @@ export const MuteMapperScreen: FC<{}> = () => {
           )
         })}
       </div>
+      <form>
+      <Button
+          id="import"
+          className="Button"
+          appearance="ghost"
+          color="green"
+          onClick={importMuteScene}
+          type="button"
+        >
+          Import
+        </Button>
+      </form>
     </MuteMapperScreenContainer>
   )
 }

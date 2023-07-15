@@ -1,14 +1,21 @@
-import { app, BrowserWindow } from "electron"
+import { app, BrowserWindow, ipcMain, dialog } from "electron"
+import {
+  DialogueOpenRequestArgs,
+  DialogueOpenResponseArgs,
+} from "../src/types/dialogues"
+import { promises as fsPromises } from "node:fs"
 import * as path from "path"
 // import { initAppMixerEventListeners } from "./OSC/MixerEventListeners"
 // import installExtension, {
 //   REACT_DEVELOPER_TOOLS,
 // } from "electron-devtools-installer"
 
+const { readFile } = fsPromises
+
 function createWindow() {
   const win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1280,
+    height: 720,
     title: "X32 OSC Node Bridge",
     webPreferences: {
       // contextIsolation: false,
@@ -50,7 +57,7 @@ app.whenReady().then(() => {
   // installExtension(REACT_DEVELOPER_TOOLS)
   //   .then((name) => console.log(`Added Extension:  ${name}`))
   //   .catch((err) => console.log("An error occurred: ", err))
-  
+
   createWindow()
   // const mixerEventListeners = initAppMixerEventListeners(app)
 
@@ -65,4 +72,30 @@ app.whenReady().then(() => {
       app.quit()
     }
   })
+})
+
+// On an open request read a file
+ipcMain.on("dialogue-open", async (event, arg: DialogueOpenRequestArgs) => {
+  const { channel, options } = arg
+  const { filters } = options
+  try {
+    // Let the user find the file
+    const res = await dialog.showOpenDialog({
+      properties: ["openFile"],
+      filters,
+    })
+    // Read the file or reject if something went wrong
+    // const filePath: string | undefined = res?.filePaths?.[0]
+    // if (res.canceled || filePath === undefined) {
+    //   throw new Error("file open canceled")
+    // }
+    // const fileRes = await readFile(filePath, { encoding: "utf8" })
+    // const args: DialogueOpenResponseArgs = {
+    //   contents: fileRes,
+    // }
+    // event.sender.send(channel, args)
+  } catch (e) {
+    console.error('@ipcMain.on("dialogue-open")', e)
+    event.sender.send(channel, {})
+  }
 })

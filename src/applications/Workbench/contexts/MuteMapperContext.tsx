@@ -1,6 +1,7 @@
 import { createContext, FC, PropsWithChildren, useEffect } from "react"
 import { useObjectList } from "shared/hooks/useObjectList"
 import { useLocalStorage } from "usehooks-ts"
+import { useStoredSceneList } from "shared/hooks/useStoredSceneList"
 
 export type SharedMuteItem = { mixerA: CommandOption; mixerB: CommandOption }
 
@@ -12,7 +13,8 @@ type MuteMapperContextState = {
   }
   addSharedMuteItem: (value: SharedMuteItem) => Promise<void>
   removeSharedMuteItem: (index: number) => Promise<void>
-  sharedMuteItemMessageAddresses: {MixerA: string[], MixerB: string[]}
+  sharedMuteItemMessageAddresses: { MixerA: string[]; MixerB: string[] }
+  importMuteScene: () => void
 }
 type MuteMapperContextProps = {}
 
@@ -26,8 +28,9 @@ export const MuteMapperContext = createContext<MuteMapperContextState>({
   removeSharedMuteItem: async () => {},
   sharedMuteItemMessageAddresses: {
     MixerA: [],
-    MixerB: []
-  }
+    MixerB: [],
+  },
+  importMuteScene: () => {},
 })
 
 export const MuteMapperContextProvider: FC<
@@ -43,9 +46,22 @@ export const MuteMapperContextProvider: FC<
     removeAtIndex: removeSharedMuteItem,
   } = useObjectList<SharedMuteItem>(storedMiteItemsList)
 
+  const { importScene } = useStoredSceneList<any>({
+    key: "mutes",
+    writeVersion: 1,
+    supportedVersions: [1],
+    openMessage: "Import mute scene from file.",
+    fileTypes: [
+      {
+        name: "mute scene",
+        extensions: ["zscn"],
+      },
+    ],
+  })
+
   // Calc
   // Set up a hash map to map for what links to what
-  // We need both directions A->B and B->A 
+  // We need both directions A->B and B->A
   const sharedMuteItemHashMap = {
     MixerA: sharedMuteItemList.reduce<Record<string, string>>(
       (allValues, item) => {
@@ -72,6 +88,11 @@ export const MuteMapperContextProvider: FC<
     setStoredMiteItemsList(sharedMuteItemList)
   }, [sharedMuteItemList])
 
+  // Functions
+  const importMuteScene = () => {
+    importScene()
+  }
+
   // ..
   return (
     <MuteMapperContext.Provider
@@ -81,6 +102,7 @@ export const MuteMapperContextProvider: FC<
         sharedMuteItemMessageAddresses,
         removeSharedMuteItem,
         sharedMuteItemHashMap,
+        importMuteScene,
       }}
     >
       {children}

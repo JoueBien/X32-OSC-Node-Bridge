@@ -184,12 +184,13 @@ export const MuteShareContextProvider: FC<
       Object.keys(mixerBMuteHashMap).map(async (bKey) => {
         const aKey = mixerAMuteHashMap[bKey]
         // Get the value on console A
-        const resA = await MixerA.requestAndReply({
-          address: aKey,
-        })
         const resB = await MixerB.requestAndReply({
           address: bKey,
         })
+        const resA = await MixerA.requestAndReply({
+          address: aKey,
+        })
+        
         // If we get a response and they are not equal
         // We can set the other consoles value
         if (

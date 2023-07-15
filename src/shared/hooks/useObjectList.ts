@@ -39,6 +39,11 @@ export const useObjectList = <T>(
     return first
   }
 
+  const removeObject = async (value: T) => {
+    const strValue = JSON.stringify(value)
+    await setList(getList().filter((item) => strValue !== JSON.stringify(item)))
+  }
+
   return {
     list,
     updateAtIndex,
@@ -46,6 +51,7 @@ export const useObjectList = <T>(
     pushEnd,
     pushStart,
     removeAtIndex,
+    removeObject,
     getObjectByKeyValue,
   }
 }
