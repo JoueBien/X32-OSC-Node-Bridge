@@ -83,7 +83,7 @@
     "@types/validator": "^13.7.7",
     "concurrently": "^7.2.1",
     "cross-env": "^7.0.3",
-    "electron": "^23.1.2",
+    "electron": "^25.3.0",
     "electron-builder": "^23.0.3",
     "electron-rebuild": "^3.2.9",
     "prettier": "^2.7.1",

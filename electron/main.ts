@@ -85,15 +85,15 @@ ipcMain.on("dialogue-open", async (event, arg: DialogueOpenRequestArgs) => {
       filters,
     })
     // Read the file or reject if something went wrong
-    // const filePath: string | undefined = res?.filePaths?.[0]
-    // if (res.canceled || filePath === undefined) {
-    //   throw new Error("file open canceled")
-    // }
-    // const fileRes = await readFile(filePath, { encoding: "utf8" })
-    // const args: DialogueOpenResponseArgs = {
-    //   contents: fileRes,
-    // }
-    // event.sender.send(channel, args)
+    const filePath: string | undefined = res?.filePaths?.[0]
+    if (res.canceled || filePath === undefined) {
+      throw new Error("file open canceled")
+    }
+    const fileRes = await readFile(filePath, { encoding: "utf8" })
+    const args: DialogueOpenResponseArgs = {
+      contents: fileRes,
+    }
+    event.sender.send(channel, args)
   } catch (e) {
     console.error('@ipcMain.on("dialogue-open")', e)
     event.sender.send(channel, {})

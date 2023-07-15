@@ -1,12 +1,15 @@
 export type DialogueOpenRequestArgs = {
   channel: string
   options: {
-    filters: Electron.FileFilter[],
+    filters: Electron.FileFilter[]
     message?: string
   }
-  // fileExtensions: string[]
 }
 
 export type DialogueOpenResponseArgs = {
   contents?: string
+}
+
+export type WindowWithIpcRenderer = Window & {
+  ipcRenderer: Electron.IpcRenderer
 }

@@ -2,11 +2,13 @@ import { useLocalStorage } from "usehooks-ts"
 import { useObjectList } from "./useObjectList"
 import { useEffect, useState } from "react"
 import { v4 as uuid } from "uuid"
-import { ipcRenderer } from "electron"
 import {
   DialogueOpenRequestArgs,
   DialogueOpenResponseArgs,
+  WindowWithIpcRenderer,
 } from "types/dialogues"
+
+const ipcRenderer = (window as unknown as WindowWithIpcRenderer).ipcRenderer
 
 export type StorageItem<T> = {
   name: string
