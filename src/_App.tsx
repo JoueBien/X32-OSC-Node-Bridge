@@ -16,7 +16,6 @@ const ScreenContainer = styled.div`
   .topNav {
     margin-bottom: 15px;
     .rs-nav-item {
-      /* font-size: 20px; */
       font-size: 10px;
       padding: 5px;
     }
@@ -40,14 +39,18 @@ const ScreenContainer = styled.div`
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    padding: 0.30rem;
-    border-radius: 0.30rem;
+    padding: 0.3rem;
+    border-radius: 0.3rem;
     line-height: 200%;
     font-size: 0.6rem;
     font-weight: 650;
     letter-spacing: 0.025rem;
     text-transform: uppercase;
     flex-shrink: 0;
+
+    &.width-full {
+      width: 100%;
+    }
 
     .led {
       width: 10px;
@@ -56,13 +59,14 @@ const ScreenContainer = styled.div`
       border: 1px solid ${colors.inverted.buttonGrey};
       border-radius: 0.15rem;
 
+      background-color: ${colors.inverted.text};
+
       &.green {
         background-color: #4dff88;
       }
       &.yellow {
         background-color: #ffff4d;
       }
-
     }
   }
 
@@ -90,10 +94,9 @@ const ScreenContainer = styled.div`
     border: 1px solid ${colors.buttonGreen};
   }
 
-
   .rs-input {
-    padding: 0.30rem;
-    border-radius: 0.30rem;
+    padding: 0.3rem;
+    border-radius: 0.3rem;
     line-height: 200%;
     font-size: 0.6rem;
     font-weight: 650;

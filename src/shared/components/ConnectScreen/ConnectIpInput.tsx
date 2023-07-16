@@ -10,7 +10,7 @@ import { WindowMixerSharedKey } from "../../../../electron/OSC/MixerEventListene
 // Styles
 const Container = styled.div`
   .form-item {
-    max-width: 400px;
+    width: 200px;
   }
 
   .form-item + .form-item {
@@ -43,7 +43,9 @@ export const ConnectIpInput: FC<Props> = ({ mixerKey, className }) => {
   // ..
   return (
     <Container className={`ConnectIpInput ${className || ""}`}>
-      <h1> Connect to {mixerKey} </h1>
+      <p>
+        <b>Connect to {mixerKey}</b>
+      </p>
       <div className="form-item">
         <label htmlFor="ip">X32 IP Address</label>
         <Input

@@ -34,7 +34,9 @@ export const ConnectIpOptionList: FC<Props> = ({ mixerKeys, className }) => {
   // ..
   return (
     <Container className={`ConnectIpOptionList ${className || ""}`}>
-      <h1> Stored Ip Addresses </h1>
+      <p>
+        <b>Stored Ip Addresses</b>
+      </p>
       {storedIps.storedIps.map((ipAddress, index) => {
         return (
           <div className="ip-address" key={`storedIps-${index}`}>
@@ -42,6 +44,7 @@ export const ConnectIpOptionList: FC<Props> = ({ mixerKeys, className }) => {
             {mixerKeys.map((mixerKey) => {
               return (
                 <Button
+                  key={mixerKey}
                   className="Button-grey"
                   disabled={connected[mixerKey]}
                   onClick={() => setIp(ipAddress, mixerKey)}
