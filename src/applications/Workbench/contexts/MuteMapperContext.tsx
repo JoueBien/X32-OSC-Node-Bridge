@@ -1,7 +1,7 @@
 import { createContext, FC, PropsWithChildren, useEffect } from "react"
 import { useObjectList } from "shared/hooks/useObjectList"
 import { useLocalStorage } from "usehooks-ts"
-import { useStoredSceneList } from "shared/hooks/useStoredSceneList"
+import { StorageItem, useStoredSceneList } from "shared/hooks/useStoredSceneList"
 
 export type SharedMuteItem = { mixerA: CommandOption; mixerB: CommandOption }
 
@@ -11,10 +11,15 @@ type MuteMapperContextState = {
     MixerA: Record<string, string>
     MixerB: Record<string, string>
   }
+  overrideSharedMuteList: (values: SharedMuteItem[]) => Promise<void>
   addSharedMuteItem: (value: SharedMuteItem) => Promise<void>
   removeSharedMuteItem: (index: number) => Promise<void>
   sharedMuteItemMessageAddresses: { MixerA: string[]; MixerB: string[] }
   importMuteScene: () => void
+  exportMuteScene: () => void
+  supportedList: StorageItem<{value: SharedMuteItem[]}>[],
+  saveNewScene: (item: Omit<StorageItem<{value: SharedMuteItem[]}>, "id" | "version">) => Promise<void>
+  removeScene: (item: StorageItem<{value: SharedMuteItem[]}>) => Promise<void>
 }
 type MuteMapperContextProps = {}
 
@@ -24,6 +29,7 @@ export const MuteMapperContext = createContext<MuteMapperContextState>({
     MixerA: {},
     MixerB: {},
   },
+  overrideSharedMuteList: async () => {},
   addSharedMuteItem: async () => {},
   removeSharedMuteItem: async () => {},
   sharedMuteItemMessageAddresses: {
@@ -31,6 +37,10 @@ export const MuteMapperContext = createContext<MuteMapperContextState>({
     MixerB: [],
   },
   importMuteScene: () => {},
+  exportMuteScene: () => {},
+  supportedList: [],
+  saveNewScene: async () => {},
+  removeScene: async () => {}
 })
 
 export const MuteMapperContextProvider: FC<
@@ -44,17 +54,27 @@ export const MuteMapperContextProvider: FC<
     list: sharedMuteItemList,
     push: addSharedMuteItem,
     removeAtIndex: removeSharedMuteItem,
+    overrideList: overrideSharedMuteList
   } = useObjectList<SharedMuteItem>(storedMiteItemsList)
 
-  const { importScene } = useStoredSceneList<any>({
+  const { importScene, exportScene, supportedList, saveNewScene, removeScene } = useStoredSceneList<{value: SharedMuteItem[]}>({
     key: "mutes",
     writeVersion: 1,
     supportedVersions: [1],
-    openMessage: "Import mute scene from file.",
-    fileTypes: [
+    messages: {
+      importMessage: "Import mute scene from file.",
+      exportMessage: "Export mute scene from file.",
+    },
+    importFileTypes: [
       {
         name: "mute scene",
-        extensions: ["zscn"],
+        extensions: ["1.zscn"],
+      },
+    ],
+    exportFileTypes: [
+      {
+        name: "mute scene",
+        extensions: ["1.zscn"],
       },
     ],
   })
@@ -92,17 +112,25 @@ export const MuteMapperContextProvider: FC<
   const importMuteScene = () => {
     importScene()
   }
+  const exportMuteScene = () => {
+    exportScene({} as any)
+  }
 
   // ..
   return (
     <MuteMapperContext.Provider
       value={{
         sharedMuteItemList,
+        overrideSharedMuteList,
         addSharedMuteItem,
         sharedMuteItemMessageAddresses,
         removeSharedMuteItem,
         sharedMuteItemHashMap,
         importMuteScene,
+        exportMuteScene,
+        supportedList,
+        saveNewScene,
+        removeScene,
       }}
     >
       {children}

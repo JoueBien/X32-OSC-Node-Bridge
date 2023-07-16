@@ -2,6 +2,7 @@ import { app, BrowserWindow, ipcMain, dialog } from "electron"
 import {
   DialogueOpenRequestArgs,
   DialogueOpenResponseArgs,
+  DialogueSaveRequestArgs,
 } from "../src/types/dialogues"
 import { promises as fsPromises } from "node:fs"
 import * as path from "path"
@@ -10,7 +11,7 @@ import * as path from "path"
 //   REACT_DEVELOPER_TOOLS,
 // } from "electron-devtools-installer"
 
-const { readFile } = fsPromises
+const { readFile, writeFile } = fsPromises
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -74,15 +75,39 @@ app.whenReady().then(() => {
   })
 })
 
+// On an save request save file
+ipcMain.on("dialogue-save", async (event, arg: DialogueSaveRequestArgs) => {
+  const { channel, options, contents } = arg
+  const { filters, message } = options
+  try {
+    // Let the user find the file
+    const res = await dialog.showSaveDialog({
+      filters,
+      message,
+    })
+    const filePath: string | undefined = res?.filePath
+    if (res.canceled || filePath === undefined) {
+      throw new Error("file save canceled")
+    }
+    // Write file here
+    await writeFile(filePath, contents, { encoding: "utf8" })
+    event.sender.send(channel, {})
+  } catch (e: any) {
+    console.error('@ipcMain.on("dialogue-save")', e)
+    event.sender.send(channel, {})
+  }
+})
+
 // On an open request read a file
 ipcMain.on("dialogue-open", async (event, arg: DialogueOpenRequestArgs) => {
   const { channel, options } = arg
-  const { filters } = options
+  const { filters, message } = options
   try {
     // Let the user find the file
     const res = await dialog.showOpenDialog({
       properties: ["openFile"],
       filters,
+      message,
     })
     // Read the file or reject if something went wrong
     const filePath: string | undefined = res?.filePaths?.[0]

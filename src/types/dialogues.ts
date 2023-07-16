@@ -6,6 +6,17 @@ export type DialogueOpenRequestArgs = {
   }
 }
 
+export type DialogueSaveRequestArgs = {
+  channel: string
+  contents: string,
+  options: {
+    filters: Electron.FileFilter[]
+    message?: string
+  }
+}
+
+export type DialogueSaveResponseArgs = {}
+
 export type DialogueOpenResponseArgs = {
   contents?: string
 }

@@ -46,6 +46,9 @@ export const useObjectList = <T>(
 
   return {
     list,
+    overrideList: async ( values: T[]) => {
+      await setList(values)
+    },
     updateAtIndex,
     push,
     pushEnd,

@@ -10,65 +10,28 @@ import {
 } from "../contexts/MuteMapperContext"
 import { useObjectList } from "shared/hooks/useObjectList"
 import { colors } from "shared/styles"
+import { muteMapperScreenStyles } from "./muteMapperScreenStyles"
+import Input from "rsuite/Input"
+import { useLocalStorage } from "usehooks-ts"
+import { text } from "stream/consumers"
 
 // Styles
 const MuteMapperScreenContainer = styled.div`
-  width: 100%;
-  display: flex;
-
-  flex-direction: row;
-  justify-content: flex-start;
-
-  form {
-    display: flex;
-    flex-direction: column;
-
-    .text {
-      line-height: 3rem;
-    }
-
-    .SelectPicker {
-      min-width: 243px;
-    }
-
-    .Button {
-      margin-top: 1rem;
-    }
-  }
-
-  .list {
-    margin-left: 1rem;
-    .item {
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      align-items: center;
-      border-bottom: 1px solid ${colors.text};
-
-      & + .item {
-        margin-top: 1rem;
-      }
-
-      .label {
-        width: 243px;
-      }
-      .direction {
-        width: 3rem;
-      }
-      .remove {
-        width: 243px;
-      }
-    }
-  }
+  ${muteMapperScreenStyles}
 `
 
 export const MuteMapperScreen: FC<{}> = () => {
   // Global State
   const {
     sharedMuteItemList,
+    overrideSharedMuteList,
     addSharedMuteItem,
     removeSharedMuteItem,
     importMuteScene,
+    exportMuteScene,
+    supportedList,
+    saveNewScene,
+    removeScene,
   } = useContext(MuteMapperContext)
 
   // Local State
@@ -77,11 +40,22 @@ export const MuteMapperScreen: FC<{}> = () => {
   const [formState, setFormState] = useAsyncSetState<Partial<SharedMuteItem>>(
     {}
   )
+  const [currentSceneName, _setCurrentSceneName] = useLocalStorage<string>(
+    "shared-mute-list-name",
+    "New Mute Scene"
+  )
+
   // Calc
   const canAdd =
     formState.mixerA !== undefined && formState.mixerB !== undefined
 
   // Functions
+  const updateCurrentSceneName = (text: string) => {
+    if (text.length < 60) {
+      _setCurrentSceneName(text)
+    }
+  }
+
   // When A changes update form
   const onMixerAChange = (value: string | null, event: any) => {
     const option = getListByKeyValue("value", value || undefined)
@@ -139,11 +113,63 @@ export const MuteMapperScreen: FC<{}> = () => {
           Add Mapping
         </Button>
       </form>
-      <div className="list">
+      <div className="list with-600">
         <div className="item">
-          <div className="label">Mixer A (Master)</div>
-          <div className="direction">{` <-> `}</div>
-          <div className="label">Mixer B</div>
+          <div className="label-full">
+            <b>Active Mute Scene</b>
+          </div>
+        </div>
+        <div className="item">
+          <div className="label-fill">
+            <Input
+              id="scene-name"
+              placeholder="Mute Scene Name"
+              value={currentSceneName}
+              onChange={updateCurrentSceneName}
+            />
+          </div>
+          <div className="remove">
+            <Button
+              id="store"
+              className="Button-grey"
+              onClick={() =>
+                saveNewScene({
+                  name: currentSceneName,
+                  value: [...sharedMuteItemList],
+                })
+              }
+              type="button"
+            >
+              Store
+            </Button>
+            <Button
+              id="import"
+              className="Button-blue"
+              onClick={importMuteScene}
+              type="button"
+            >
+              Import
+            </Button>
+            <Button
+              id="export"
+              className="Button-blue"
+              onClick={exportMuteScene}
+              type="button"
+            >
+              Export
+            </Button>
+          </div>
+        </div>
+        <div className="item">
+          <div className="label">
+            <b>Mixer A (Master)</b>
+          </div>
+          <div className="direction">
+            <b>{` <-> `}</b>
+          </div>
+          <div className="label">
+            <b>Mixer B</b>
+          </div>
           <div className="remove"></div>
         </div>
         {sharedMuteItemList.map((item, index) => {
@@ -154,9 +180,7 @@ export const MuteMapperScreen: FC<{}> = () => {
               <div className="label">{item.mixerB.label}</div>
               <div className="remove">
                 <Button
-                  className="Button"
-                  appearance="ghost"
-                  color="orange"
+                  className="Button-red"
                   onClick={() => removeMapping(index)}
                 >
                   Remove
@@ -166,18 +190,47 @@ export const MuteMapperScreen: FC<{}> = () => {
           )
         })}
       </div>
-      <form>
-        <Button
-          id="import"
-          className="Button"
-          appearance="ghost"
-          color="green"
-          onClick={importMuteScene}
-          type="button"
-        >
-          Import
-        </Button>
-      </form>
+      <div className="separator"/>
+      <div className="list">
+        <div className="item">
+          <div className="label-full">
+            <b>Stored Mute Scenes</b>
+          </div>
+        </div>
+        {supportedList.map((item, index) => {
+          return (
+            <div className="item" key={index}>
+              <div className="label">
+                <>
+                  {item.name} (V{item.version})
+                </>
+              </div>
+              <div className="remove">
+                <Button
+                  id="recall"
+                  className="Button-grey"
+                  onClick={() => {
+                    overrideSharedMuteList(item.value)
+                    updateCurrentSceneName(item.name)
+                  }}
+                  type="button"
+                >
+                  Recall
+                </Button>
+                {/* TODO: add are you sure */}
+                <Button
+                  id="store-remove"
+                  className="Button-red"
+                  onClick={() => removeScene(item)}
+                  type="button"
+                >
+                  Remove
+                </Button>
+              </div>
+            </div>
+          )
+        })}
+      </div>
     </MuteMapperScreenContainer>
   )
 }

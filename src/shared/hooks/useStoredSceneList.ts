@@ -5,6 +5,8 @@ import { v4 as uuid } from "uuid"
 import {
   DialogueOpenRequestArgs,
   DialogueOpenResponseArgs,
+  DialogueSaveRequestArgs,
+  DialogueSaveResponseArgs,
   WindowWithIpcRenderer,
 } from "types/dialogues"
 
@@ -20,11 +22,24 @@ export function useStoredSceneList<T>(params: {
   key: string
   writeVersion: number
   supportedVersions: number[]
-  fileTypes: Electron.FileFilter[]
-  openMessage?: string
+  exportFileTypes: Electron.FileFilter[]
+  importFileTypes: Electron.FileFilter[]
+  messages?: {
+    importMessage?: string
+    exportMessage?: string
+    unsupportedVersionMessage?: string
+    unableToReadFileMessage?: string
+  }
 }) {
   // Params
-  const { key, writeVersion, openMessage, fileTypes } = params
+  const { key, writeVersion, supportedVersions, messages, importFileTypes } =
+    params
+  const {
+    importMessage,
+    exportMessage,
+    unsupportedVersionMessage,
+    unableToReadFileMessage,
+  } = messages || {}
   const fullKey = `scene-saves-${key}`
 
   // Local State
@@ -35,10 +50,16 @@ export function useStoredSceneList<T>(params: {
   const { list, pushStart, removeObject } =
     useObjectList<StorageItem<T>>(savedList)
 
+  // Calc
+  // Only show supported versions
+  const supportedList = list.filter((item) =>
+    supportedVersions.includes(item.version)
+  )
+
   // Effects
   // Keep storage in sync with list
   useEffect(() => {
-    setSaveList(savedList)
+    setSaveList(list)
   }, [list])
 
   // Function
@@ -58,23 +79,55 @@ export function useStoredSceneList<T>(params: {
 
   // Import and Export to a file
   const importScene = () => {
-    const channel = uuid()
-    const args: DialogueOpenRequestArgs = {
-      channel,
-      options: {
-        message: openMessage || "Import scene from file.",
-        filters: fileTypes,
-      },
-    }
-    ipcRenderer.send("dialogue-open", args)
-    ipcRenderer.once(channel, (event, arg: DialogueOpenResponseArgs) => {
-      console.log("@@hi", arg)
+    return new Promise<StorageItem<T> | string | undefined>((resolve) => {
+      const channel = uuid()
+      const args: DialogueOpenRequestArgs = {
+        channel,
+        options: {
+          message: importMessage || "Import scene from file.",
+          filters: importFileTypes,
+        },
+      }
+      ipcRenderer.send("dialogue-open", args)
+      ipcRenderer.once(channel, (event, arg: DialogueOpenResponseArgs) => {
+        const { contents } = arg
+        if (contents) {
+          try {
+            const item: StorageItem<T> = JSON.parse(contents)
+            if (supportedVersions.includes(item?.version)) {
+              return resolve(item)
+            }
+            return resolve(unsupportedVersionMessage || "Un-supported version")
+          } catch (e) {
+            return resolve(unableToReadFileMessage || "Unable to read file")
+          }
+        }
+        return resolve(undefined)
+      })
     })
   }
-  const exportScene = async (item: StorageItem<T>) => {}
+
+  const exportScene = (item: StorageItem<T>) => {
+    return new Promise<undefined>((resolve) => {
+      const channel = uuid()
+      const args: DialogueSaveRequestArgs = {
+        channel,
+        contents: JSON.stringify(item),
+        options: {
+          message: exportMessage || "Export scene from file.",
+          filters: importFileTypes,
+        },
+      }
+      ipcRenderer.send("dialogue-save", args)
+      ipcRenderer.once(channel, (event, arg: DialogueSaveResponseArgs) => {
+        resolve(undefined)
+      })
+    })
+  }
 
   return {
     list,
+    supportedList,
     saveNewScene,
     removeScene,
     exportScene,
