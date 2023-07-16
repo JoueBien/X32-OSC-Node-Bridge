@@ -6,7 +6,7 @@ import { colors } from "shared/styles"
 
 // Styles
 export const connectionScreenStyles = css`
-  --rs-border-primary: ${colors.background};
+  /* --rs-border-primary: ${colors.background}; */
   display: flex;
   width: 700px;
 
@@ -21,12 +21,12 @@ export const connectionScreenStyles = css`
     border-radius: 5px;
   }
 
-  &.white-bg {
+  /* &.white-bg {
     background: ${colors.inverted.background};
     color: ${colors.inverted.text};
     padding: 15px;
     border-radius: 5px;
-  }
+  } */
 
   h1 {
     margin: unset;
@@ -36,6 +36,8 @@ export const connectionScreenStyles = css`
 
   .form {
     flex: 2;
+  }
+  /*
     .form-item {
       max-width: 400px;
     }
@@ -52,9 +54,9 @@ export const connectionScreenStyles = css`
       height: 1em;
       color: red;
     }
-  }
+  } */
 
-  .recall {
+  /* .recall {
     flex: 1;
     height: 400px;
     overflow: auto;
@@ -73,5 +75,5 @@ export const connectionScreenStyles = css`
         margin-left: 10px;
       }
     }
-  }
+  } */
 `

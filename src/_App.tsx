@@ -37,6 +37,9 @@ const ScreenContainer = styled.div`
   }
 
   .rs-btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
     padding: 0.30rem;
     border-radius: 0.30rem;
     line-height: 200%;
@@ -45,6 +48,22 @@ const ScreenContainer = styled.div`
     letter-spacing: 0.025rem;
     text-transform: uppercase;
     flex-shrink: 0;
+
+    .led {
+      width: 10px;
+      height: 1rem;
+      margin-left: 5px;
+      border: 1px solid ${colors.inverted.buttonGrey};
+      border-radius: 0.15rem;
+
+      &.green {
+        background-color: #4dff88;
+      }
+      &.yellow {
+        background-color: #ffff4d;
+      }
+
+    }
   }
 
   .Button-grey.rs-btn-default {
@@ -65,10 +84,12 @@ const ScreenContainer = styled.div`
     border: 1px solid ${colors.buttonBlue};
   }
 
+  .Button-green {
+    background-color: ${colors.buttonGreen};
+    color: ${colors.inverted.buttonGreen};
+    border: 1px solid ${colors.buttonGreen};
+  }
 
-
-
-  // 0066ff
 
   .rs-input {
     padding: 0.30rem;
@@ -79,7 +100,6 @@ const ScreenContainer = styled.div`
     letter-spacing: 0.025rem;
     background-color: transparent;
     color: ${colors.text};
-    /* text-transform: uppercase; */
   }
 `
 
