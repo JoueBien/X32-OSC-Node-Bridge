@@ -1,14 +1,14 @@
 
 // Comps
-import type { OSCTransport } from "../../../types/osc-transports"
-import type { OSC, Argument, ArgumentType } from "../../../types/osc"
-export type { OSCTransport, Port } from "../../../types/osc-transports"
+import type { OSCTransport } from "../../../src/types/osc-transports"
+import type { OSC, Argument, ArgumentType } from "../../../src/types/osc"
+export type { OSCTransport, Port } from "../../../src/types/osc-transports"
 export type {
   Argument,
   Message,
   ArgumentType,
   OptionalMessage,
-} from "../../../types/osc"
+} from "../../../src/types/osc"
 
 
 type OscType = OSCTransport & OSC

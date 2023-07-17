@@ -5,8 +5,8 @@
  * https://github.com/colinbdclark/osc.js/issues/145
  */
 // Libs
-import { ArgumentWithMetadataShape, FullTimeTag } from "../../../types/osc"
-import { delay } from "../../../helpers/time"
+import { ArgumentWithMetadataShape, FullTimeTag } from "../../../src/types/osc"
+import { delay } from "../../../src/shared/helpers/time"
 import { UDPPort, UDPPortInstance, OptionalMessage, Message } from "./osc"
 import { v4 as uuidv4 } from "uuid"
 
