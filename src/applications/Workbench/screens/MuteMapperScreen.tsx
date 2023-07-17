@@ -145,7 +145,13 @@ export const MuteMapperScreen: FC<{}> = () => {
             <Button
               id="import"
               className="Button-blue"
-              onClick={importMuteScene}
+              onClick={async () => {
+                const imported = await importMuteScene()
+                if (typeof imported === "object") {
+                  _setCurrentSceneName(imported.name)
+                  overrideSharedMuteList(imported.value)
+                }
+              }}
               type="button"
             >
               Import
@@ -153,7 +159,9 @@ export const MuteMapperScreen: FC<{}> = () => {
             <Button
               id="export"
               className="Button-blue"
-              onClick={exportMuteScene}
+              onClick={() =>
+                exportMuteScene([...sharedMuteItemList], currentSceneName)
+              }
               type="button"
             >
               Export
@@ -190,7 +198,7 @@ export const MuteMapperScreen: FC<{}> = () => {
           )
         })}
       </div>
-      <div className="separator"/>
+      <div className="separator" />
       <div className="list">
         <div className="item">
           <div className="label-full">

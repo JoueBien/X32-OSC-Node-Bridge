@@ -107,7 +107,13 @@ export function useStoredSceneList<T>(params: {
     })
   }
 
-  const exportScene = (item: StorageItem<T>) => {
+  const exportScene = (value: T, name: string) => {
+    const item: StorageItem<T> = {
+      ...value,
+      id: uuid(),
+      name,
+      version: writeVersion,
+    }
     return new Promise<undefined>((resolve) => {
       const channel = uuid()
       const args: DialogueSaveRequestArgs = {
