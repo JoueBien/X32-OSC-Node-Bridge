@@ -34,7 +34,7 @@ export const Workbench = () => {
       >
         <Nav.Item eventKey="setup">Setup</Nav.Item>
         <Nav.Item eventKey="mapping">Mute Mapping</Nav.Item>
-        <Nav.Item eventKey="mutes">Mutes</Nav.Item>
+        {/* <Nav.Item eventKey="mutes">Mutes</Nav.Item> */}
       </Nav>
       {/* Components that talk to the mixer */}
       <MixerContextProvider>

@@ -41,8 +41,9 @@ export const MuteShareContextProvider: FC<
   // Shared State
   const { mixers, connected } = useContext(MixerContext)
   const { MixerA, MixerB } = mixers
-  const { sharedMuteItemHashMap, sharedMuteItemMessageAddresses } =
+  const { activeScene } =
     useContext(MuteMapperContext)
+  const {sharedMuteItemHashMap, sharedMuteItemMessageAddresses} = activeScene
   const { MixerA: mixerAMuteHashMap, MixerB: mixerBMuteHashMap } =
     sharedMuteItemHashMap
   const {

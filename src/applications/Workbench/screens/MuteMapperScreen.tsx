@@ -22,17 +22,17 @@ const MuteMapperScreenContainer = styled.div`
 
 export const MuteMapperScreen: FC<{}> = () => {
   // Global State
+  const { activeScene, importMuteScene, exportMuteScene, storedScenes } =
+    useContext(MuteMapperContext)
   const {
-    sharedMuteItemList,
+    activeSceneName,
+    updateActiveSceneName,
     overrideSharedMuteList,
+    sharedMuteItemList,
     addSharedMuteItem,
     removeSharedMuteItem,
-    importMuteScene,
-    exportMuteScene,
-    supportedList,
-    saveNewScene,
-    removeScene,
-  } = useContext(MuteMapperContext)
+  } = activeScene
+  const { storedMutedScenes, removeMuteScene, saveNewMuteScene } = storedScenes
 
   // Local State
   const { list: dataOptions, getObjectByKeyValue: getListByKeyValue } =
@@ -40,22 +40,12 @@ export const MuteMapperScreen: FC<{}> = () => {
   const [formState, setFormState] = useAsyncSetState<Partial<SharedMuteItem>>(
     {}
   )
-  const [currentSceneName, _setCurrentSceneName] = useLocalStorage<string>(
-    "shared-mute-list-name",
-    "New Mute Scene"
-  )
 
   // Calc
   const canAdd =
     formState.mixerA !== undefined && formState.mixerB !== undefined
 
   // Functions
-  const updateCurrentSceneName = (text: string) => {
-    if (text.length < 60) {
-      _setCurrentSceneName(text)
-    }
-  }
-
   // When A changes update form
   const onMixerAChange = (value: string | null, event: any) => {
     const option = getListByKeyValue("value", value || undefined)
@@ -124,8 +114,8 @@ export const MuteMapperScreen: FC<{}> = () => {
             <Input
               id="scene-name"
               placeholder="Mute Scene Name"
-              value={currentSceneName}
-              onChange={updateCurrentSceneName}
+              value={activeSceneName}
+              onChange={updateActiveSceneName}
             />
           </div>
           <div className="remove">
@@ -133,8 +123,8 @@ export const MuteMapperScreen: FC<{}> = () => {
               id="store"
               className="Button-grey"
               onClick={() =>
-                saveNewScene({
-                  name: currentSceneName,
+                saveNewMuteScene({
+                  name: activeSceneName,
                   value: [...sharedMuteItemList],
                 })
               }
@@ -145,13 +135,7 @@ export const MuteMapperScreen: FC<{}> = () => {
             <Button
               id="import"
               className="Button-blue"
-              onClick={async () => {
-                const imported = await importMuteScene()
-                if (typeof imported === "object") {
-                  _setCurrentSceneName(imported.name)
-                  overrideSharedMuteList(imported.value)
-                }
-              }}
+              onClick={importMuteScene}
               type="button"
             >
               Import
@@ -160,7 +144,7 @@ export const MuteMapperScreen: FC<{}> = () => {
               id="export"
               className="Button-blue"
               onClick={() =>
-                exportMuteScene([...sharedMuteItemList], currentSceneName)
+                exportMuteScene([...sharedMuteItemList], activeSceneName)
               }
               type="button"
             >
@@ -205,7 +189,7 @@ export const MuteMapperScreen: FC<{}> = () => {
             <b>Stored Mute Scenes</b>
           </div>
         </div>
-        {supportedList.map((item, index) => {
+        {storedMutedScenes.map((item, index) => {
           return (
             <div className="item" key={index}>
               <div className="label">
@@ -219,7 +203,7 @@ export const MuteMapperScreen: FC<{}> = () => {
                   className="Button-grey"
                   onClick={() => {
                     overrideSharedMuteList(item.value)
-                    updateCurrentSceneName(item.name)
+                    updateActiveSceneName(item.name)
                   }}
                   type="button"
                 >
@@ -229,7 +213,7 @@ export const MuteMapperScreen: FC<{}> = () => {
                 <Button
                   id="store-remove"
                   className="Button-red"
-                  onClick={() => removeScene(item)}
+                  onClick={() => removeMuteScene(item)}
                   type="button"
                 >
                   Remove

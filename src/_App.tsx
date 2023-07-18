@@ -10,6 +10,20 @@ let app: string = "Workbench" // MeterBridge// Workbench
 
 // Style
 const ScreenContainer = styled.div`
+  @keyframes led-blink {
+    0% {
+      opacity: 1;
+    }
+
+    50% {
+      opacity: 0.75;
+    }
+
+    100% {
+      opacity: 1;
+    }
+  }
+
   min-width: 1900px;
   width: 100%;
 
@@ -63,9 +77,17 @@ const ScreenContainer = styled.div`
 
       &.green {
         background-color: #4dff88;
+        animation-name: led-blink;
+        animation-duration: 1s;
+        animation-iteration-count: infinite;
+        animation-timing-function: ease-in-out;
       }
       &.yellow {
         background-color: #ffff4d;
+        animation-name: led-blink;
+        animation-duration: 1s;
+        animation-iteration-count: infinite;
+        animation-timing-function: ease-in-out;
       }
     }
   }
