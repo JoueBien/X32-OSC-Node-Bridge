@@ -11,8 +11,8 @@ import X32, {
 
 // We can't expose X32 directly so
 // we use the bridge to use OSC/Node in the render
-const shared = (localPort: number) => {
-  const OscMixer = new X32(localPort)
+const shared = (localPort: number, localPortX: number) => {
+  const OscMixer = new X32(localPort, localPortX)
   return {
     // Connect & Disconnect
     connect: (params: ConnectParams): Promise<boolean | Info> =>
@@ -46,9 +46,9 @@ const shared = (localPort: number) => {
 }
 export function initAppMixerEventListenersBridge() {
   return {
-    Mixer: contextBridge.exposeInMainWorld("Mixer", shared(57121)),
-    MixerA: contextBridge.exposeInMainWorld("MixerA", shared(57122)),
-    MixerB: contextBridge.exposeInMainWorld("MixerB", shared(57123)),
+    Mixer: contextBridge.exposeInMainWorld("Mixer", shared(57121, 57122)),
+    MixerA: contextBridge.exposeInMainWorld("MixerA", shared(57123, 57124)),
+    MixerB: contextBridge.exposeInMainWorld("MixerB", shared(57125, 57126)),
   }
 }
 

@@ -2,6 +2,8 @@ import { app, BrowserWindow, ipcMain, dialog } from "electron"
 import {
   DialogueOpenRequestArgs,
   DialogueOpenResponseArgs,
+  DialogueQuestionArgs,
+  DialogueQuestionResponseArgs,
   DialogueSaveRequestArgs,
 } from "../src/types/dialogues"
 import { promises as fsPromises } from "node:fs"
@@ -124,3 +126,43 @@ ipcMain.on("dialogue-open", async (event, arg: DialogueOpenRequestArgs) => {
     event.sender.send(channel, {})
   }
 })
+
+ipcMain.on("dialogue-question", async (event, arg: DialogueQuestionArgs) => {
+  const { channel, options } = arg
+  const { buttons, message } = options
+
+  const {response} = await dialog.showMessageBox({
+    message: message || "Question?",
+    type: "question",
+    buttons,
+  })
+
+  const res: DialogueQuestionResponseArgs = {
+    button: response
+  }
+  event.sender.send(channel,res)
+  
+
+  // try {
+  //   // Let the user find the file
+  //   const res = await dialog.showOpenDialog({
+  //     properties: ["openFile"],
+  //     filters,
+  //     message,
+  //   })
+  //   // Read the file or reject if something went wrong
+  //   const filePath: string | undefined = res?.filePaths?.[0]
+  //   if (res.canceled || filePath === undefined) {
+  //     throw new Error("file open canceled")
+  //   }
+  //   const fileRes = await readFile(filePath, { encoding: "utf8" })
+  //   const args: DialogueOpenResponseArgs = {
+  //     contents: fileRes,
+  //   }
+  //   event.sender.send(channel, args)
+  // } catch (e) {
+  //   console.error('@ipcMain.on("dialogue-open")', e)
+  //   event.sender.send(channel, {})
+  // }
+})
+

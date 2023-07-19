@@ -59,12 +59,15 @@ export type Info = {
 
 export default class X32 {
   udpPort?: UDPPortInstance
+  udpPortX?: UDPPortInstance
   connected: boolean = false
   localPort: number
+  localPortX: number
 
   // Set the reply port the mixer replies on init
-  constructor(localPort: number) {
+  constructor(localPort: number, localPortX: number,) {
     this.localPort = localPort
+    this.localPortX = localPortX
   }
 
   connect(params: ConnectParams) {
@@ -83,8 +86,17 @@ export default class X32 {
           remotePort: 10023,
           broadcast: false,
         }) as any
+        this.udpPortX = new UDPPort({
+          localAddress: "0.0.0.0",
+          localPort: this.localPortX,
+          metadata: true,
+          remoteAddress: mixerIp,
+          remotePort: 10023,
+          broadcast: false,
+        }) as any
 
         // Request Connect
+        this.udpPortX?.open()
         this.udpPort?.open()
       } catch (e) {
         this.connected = false
@@ -98,6 +110,10 @@ export default class X32 {
         // On error show track
         this.udpPort?.on("error", function (error: any) {
           console.log("An error occurred: ", error?.message)
+          console.trace(error)
+        })
+        this.udpPortX?.on("error", function (error: any) {
+          console.log("An error occurred X: ", error?.message)
           console.trace(error)
         })
       }
@@ -256,14 +272,14 @@ export default class X32 {
       // Set up the repeats
       const interval = setInterval(() => {
         if (this.connected) {
-          this.request({
+          this.requestX({
             address,
           })
         }
       }, 5000)
       // Start the first request
       await delay(200)
-      this.request({ address })
+      this.requestX({ address })
 
       return {
         interval,
@@ -354,6 +370,7 @@ export default class X32 {
     }
     if (onMessage) {
       this.udpPort?.off("message", onMessage)
+      this.udpPortX?.off("message", onMessage)
     }
   }
 
@@ -361,6 +378,7 @@ export default class X32 {
   disconnect() {
     try {
       this.udpPort?.close()
+      this.udpPortX?.close()
       this.connected = false
     } catch (error) {
       this.connected = false
@@ -372,6 +390,13 @@ export default class X32 {
   request({ address, args }: RequestFuncParams) {
     console.log("@X32->request", address, args)
     this.udpPort?.send({
+      address,
+      args: args || [],
+    })
+  }
+  requestX({ address, args }: RequestFuncParams) {
+    console.log("@X32->request", address, args)
+    this.udpPortX?.send({
       address,
       args: args || [],
     })

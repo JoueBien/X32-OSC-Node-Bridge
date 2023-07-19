@@ -6,6 +6,18 @@ export type DialogueOpenRequestArgs = {
   }
 }
 
+export type DialogueQuestionArgs = {
+  channel: string
+  options: {
+    buttons?: string[]
+    message?: string
+  }
+}
+
+export type DialogueQuestionResponseArgs = {
+  button: number
+}
+
 export type DialogueSaveRequestArgs = {
   channel: string
   contents: string,
