@@ -25,6 +25,7 @@ function createWindow() {
       // process.env
     ],
     webPreferences: {
+      backgroundThrottling: false,
       // contextIsolation: false,
       preload: path.join(__dirname, "preload.js"),
       nodeIntegration: true,
