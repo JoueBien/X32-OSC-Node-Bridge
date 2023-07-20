@@ -23,6 +23,7 @@ const shared = (localPort: number, localPortX: number) => {
     // Communication Functions
     // Send Message
     request: (params: RequestFuncParams) => OscMixer.request(params),
+    requestX: (params: RequestFuncParams) => OscMixer.requestX(params),
     requestAndReply: (params: RequestThenReplyFuncParams) =>
       OscMixer.requestAndReply(params),
 
@@ -42,6 +43,14 @@ const shared = (localPort: number, localPortX: number) => {
       OscMixer.onMessages(addresses, onMessage),
     onMessage: (addresses: string, onMessage: OnMessageFunc) =>
       OscMixer.onMessage(addresses, onMessage),
+    
+    // For use with X
+    onAnyMessageX: (onMessage: OnMessageFunc) =>
+      OscMixer.onAnyMessageX(onMessage),
+    onMessagesX: (addresses: string[], onMessage: OnMessageFunc) =>
+      OscMixer.onMessagesX(addresses, onMessage),
+    onMessageX: (addresses: string, onMessage: OnMessageFunc) =>
+      OscMixer.onMessageX(addresses, onMessage),
   }
 }
 export function initAppMixerEventListenersBridge() {

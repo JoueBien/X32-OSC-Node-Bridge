@@ -111,7 +111,7 @@ export const MuteShareContextProvider: FC<
     await setXRemoteRefA(await MixerA.xSubscribe())
     await setXRemoteRefB(await MixerB.xSubscribe())
     await setMessagesRefA(
-      MixerA.onMessages(mixerAMuteItemMessageAddresses, async (message) => {
+      MixerA.onMessagesX(mixerAMuteItemMessageAddresses, async (message) => {
         const aKey = message.address
         const bKey = mixerBMuteHashMap[aKey]
         await MixerB.request({
@@ -121,7 +121,7 @@ export const MuteShareContextProvider: FC<
       })
     )
     await setMessagesRefB(
-      MixerB.onMessages(mixerBMuteItemMessageAddresses, async (message) => {
+      MixerB.onMessagesX(mixerBMuteItemMessageAddresses, async (message) => {
         const bKey = message.address
         const aKey = mixerAMuteHashMap[bKey]
         await MixerA.request({

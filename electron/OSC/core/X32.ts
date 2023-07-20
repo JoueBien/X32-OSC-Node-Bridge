@@ -187,6 +187,23 @@ export default class X32 {
     return {} as IntervalReference
   }
 
+  onAnyMessageX(onMessage: OnMessageFunc): IntervalReference {
+    const _onMessage: OnMessageFunc = (a, b, c) => {
+      onMessage(a, b, c)
+    }
+    if (this.connected) {
+      // register an event handler to update on any message
+      this?.udpPortX?.on("message", _onMessage as any)
+      // Return a listener
+      const ret: IntervalReference = {
+        onMessage: onMessage,
+        interval: undefined,
+      }
+      return ret
+    }
+    return {} as IntervalReference
+  }
+
   // When we get a specific set of addresses
   // Clean up with unsubscribe to unregister
   onMessages(addresses: string[], onMessage: OnMessageFunc) {
@@ -199,10 +216,24 @@ export default class X32 {
     return this.onAnyMessage(handler)
   }
 
+  onMessagesX(addresses: string[], onMessage: OnMessageFunc) {
+    const handler: OnMessageFunc = (oscMsg, timeTag, info) => {
+      // console.log("@onAny", oscMsg.address, addresses.includes(oscMsg.address))
+      if (addresses.includes(oscMsg.address)) {
+        onMessage(oscMsg, timeTag, info)
+      }
+    }
+    return this.onAnyMessageX(handler)
+  }
+
   // When we only need on address
   // Clean up with unsubscribe to unregister
   onMessage(address: string, onMessage: OnMessageFunc) {
     return this.onMessages([address], onMessage)
+  }
+
+  onMessageX(address: string, onMessage: OnMessageFunc) {
+    return this.onMessagesX([address], onMessage)
   }
 
   async requestAndReply({ address, args }: RequestThenReplyFuncParams) {
@@ -396,7 +427,7 @@ export default class X32 {
   }
   requestX({ address, args }: RequestFuncParams) {
     console.log("@X32->request", address, args)
-    this.udpPort?.send({
+    this.udpPortX?.send({
       address,
       args: args || [],
     })
