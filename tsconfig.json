@@ -19,13 +19,13 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "baseUrl": "./src"
   },
   "extends": [
     "@josephmark/react"
   ],
   "include": [
     "src"
-  ]
-  
+  ],
 }
