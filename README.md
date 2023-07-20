@@ -1,15 +1,18 @@
 
 X32 OSC Node Bridge
 ===========================================================================
-An electron framework to communicate with an X32. The project exists as a mono repo to provide a re-usable framework to many apps. Several apps share live within the repo currently this includes (or will include), X32 OSC WorkBench, MuteSync and MeterBridge.
+An electron framework to communicate with an X32. The project exists as a mono repo to provide a re-usable framework to many apps. Several apps live within the repo; currently this includes (or will include), X32 OSC WorkBench, MuteSync, MeterBridge and GetStarted.
 
 The non-web libraries are now using the contextBridge which means the code base should somewhat be suitable for production builds.
 
-I current bugs:
+## Current Bugs:
 - the app looses connection on subscriptions/messages when the app moves to the background.
----
----
 
+
+---
+---
+About the electron template used.
+===========================================================================
 The code base is based on [React-TypeScript-Electron sample with Create React App and Electron Builder](https://github.com/yhirose/react-typescript-electron-sample-with-create-react-app-and-electron-builder).
 
 Last installed with node `16.17.0`. Requires python 3.6.0 and C/C++ compiler (Windows build tools or xCode) as there are packages that need to be recompiled with node-gyp.
