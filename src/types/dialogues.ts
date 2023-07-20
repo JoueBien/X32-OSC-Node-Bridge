@@ -11,6 +11,7 @@ export type DialogueQuestionArgs = {
   options: {
     buttons?: string[]
     message?: string
+    detail?: string
   }
 }
 

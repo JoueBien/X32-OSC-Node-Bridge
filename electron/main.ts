@@ -8,7 +8,6 @@ import {
 } from "../src/types/dialogues"
 import { promises as fsPromises } from "node:fs"
 import * as path from "path"
-// import { initAppMixerEventListeners } from "./OSC/MixerEventListeners"
 // import installExtension, {
 //   REACT_DEVELOPER_TOOLS,
 // } from "electron-devtools-installer"
@@ -129,40 +128,18 @@ ipcMain.on("dialogue-open", async (event, arg: DialogueOpenRequestArgs) => {
 
 ipcMain.on("dialogue-question", async (event, arg: DialogueQuestionArgs) => {
   const { channel, options } = arg
-  const { buttons, message } = options
+  const { buttons, message, detail } = options
 
-  const {response} = await dialog.showMessageBox({
+  const { response } = await dialog.showMessageBox({
     message: message || "Question?",
+    detail: detail || undefined,
     type: "question",
+    noLink: true,
     buttons,
   })
 
   const res: DialogueQuestionResponseArgs = {
-    button: response
+    button: response,
   }
-  event.sender.send(channel,res)
-  
-
-  // try {
-  //   // Let the user find the file
-  //   const res = await dialog.showOpenDialog({
-  //     properties: ["openFile"],
-  //     filters,
-  //     message,
-  //   })
-  //   // Read the file or reject if something went wrong
-  //   const filePath: string | undefined = res?.filePaths?.[0]
-  //   if (res.canceled || filePath === undefined) {
-  //     throw new Error("file open canceled")
-  //   }
-  //   const fileRes = await readFile(filePath, { encoding: "utf8" })
-  //   const args: DialogueOpenResponseArgs = {
-  //     contents: fileRes,
-  //   }
-  //   event.sender.send(channel, args)
-  // } catch (e) {
-  //   console.error('@ipcMain.on("dialogue-open")', e)
-  //   event.sender.send(channel, {})
-  // }
+  event.sender.send(channel, res)
 })
-

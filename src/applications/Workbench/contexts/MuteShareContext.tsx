@@ -41,9 +41,8 @@ export const MuteShareContextProvider: FC<
   // Shared State
   const { mixers, connected } = useContext(MixerContext)
   const { MixerA, MixerB } = mixers
-  const { activeScene } =
-    useContext(MuteMapperContext)
-  const {sharedMuteItemHashMap, sharedMuteItemMessageAddresses} = activeScene
+  const { activeScene } = useContext(MuteMapperContext)
+  const { sharedMuteItemHashMap, sharedMuteItemMessageAddresses } = activeScene
   const { MixerA: mixerAMuteHashMap, MixerB: mixerBMuteHashMap } =
     sharedMuteItemHashMap
   const {
@@ -53,6 +52,7 @@ export const MuteShareContextProvider: FC<
 
   // Local State
   const [syncIsRunning, setSyncIsRunning] = useAsyncSetState<boolean>(false)
+  const getSyncIsRunning = useGetState(syncIsRunning)
   const [_messagesRefA, setMessagesRefA, getMessagesRefA] = useAsyncState<
     IntervalReference | undefined
   >(undefined)
@@ -96,16 +96,12 @@ export const MuteShareContextProvider: FC<
   // Actions
   // When button starts sync
   const startSync = async () => {
-    if (canStartSync) {
-      await setSyncIsRunning(true)
-    }
+    await setSyncIsRunning(true)
   }
 
   // When button stop sync
   const endSync = async () => {
-    if (canStopSync) {
-      await setSyncIsRunning(false)
-    }
+    await setSyncIsRunning(false)
   }
 
   // Set up listen for mute changes
@@ -154,6 +150,9 @@ export const MuteShareContextProvider: FC<
 
   // TODO: fix Mute Groups being inverted to that of anything else
   const syncMixerAToB = async () => {
+    const reStartSync = getSyncIsRunning()
+    // Pause sync
+    await endSync()
     await Promise.all(
       Object.keys(mixerAMuteHashMap).map(async (aKey) => {
         const bKey = mixerBMuteHashMap[aKey]
@@ -178,9 +177,14 @@ export const MuteShareContextProvider: FC<
         }
       })
     )
+    if (reStartSync) {
+      startSync()
+    }
   }
 
   const syncMixerBToA = async () => {
+    const reStartSync = getSyncIsRunning()
+    await endSync()
     await Promise.all(
       Object.keys(mixerBMuteHashMap).map(async (bKey) => {
         const aKey = mixerAMuteHashMap[bKey]
@@ -191,7 +195,7 @@ export const MuteShareContextProvider: FC<
         const resA = await MixerA.requestAndReply({
           address: aKey,
         })
-        
+
         // If we get a response and they are not equal
         // We can set the other consoles value
         if (
@@ -206,6 +210,9 @@ export const MuteShareContextProvider: FC<
         }
       })
     )
+    if (reStartSync) {
+      startSync()
+    }
   }
 
   // ..

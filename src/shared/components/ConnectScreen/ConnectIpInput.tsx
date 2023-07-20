@@ -27,9 +27,14 @@ const Container = styled.div`
   }
 `
 // Defs
-type Props = { mixerKey: WindowMixerSharedKey; className?: string }
+type Props = {
+  mixerKey: WindowMixerSharedKey
+  title?: React.ReactElement | string | false
+  label?: React.ReactElement | string
+  className?: string
+}
 
-export const ConnectIpInput: FC<Props> = ({ mixerKey, className }) => {
+export const ConnectIpInput: FC<Props> = ({ mixerKey, className, label, title }) => {
   // Global State
   const { connected } = useContext(MixerContext)
   const { settings, setIp, errors } = useContext(ConnectFormContext)
@@ -43,11 +48,22 @@ export const ConnectIpInput: FC<Props> = ({ mixerKey, className }) => {
   // ..
   return (
     <Container className={`ConnectIpInput ${className || ""}`}>
-      <p>
-        <b>Connect to {mixerKey}</b>
-      </p>
+      {typeof title !== "boolean" && (
+        <>
+          <p>
+            <b>
+              {title !== undefined && title}
+              {title === undefined && <>Connect to {mixerKey}</>}
+            </b>
+          </p>
+        </>
+      )}
       <div className="form-item">
-        <label htmlFor="ip">X32 IP Address</label>
+        <label htmlFor="ip">
+          {label === undefined && <>X32 IP Address</>}
+          {label !== undefined && <>{label}</>}
+        </label>
+        
         <Input
           id="ip"
           value={ip}

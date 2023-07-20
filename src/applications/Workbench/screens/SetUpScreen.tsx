@@ -4,11 +4,22 @@ import { MuteShareContext } from "../contexts/MuteShareContext"
 import Button from "rsuite/Button"
 import { colors } from "shared/styles"
 import { ConnectIpInput } from "shared/components/ConnectScreen/ConnectIpInput"
-import { ConnectButton } from "shared/components/ConnectScreen/ConnectButton"
 import { StoreButton } from "shared/components/ConnectScreen/StoreButton"
 import { ConnectIpOptionList } from "shared/components/ConnectScreen/ConnectIpOptionList"
+import { ConnectButtonMultiple } from "shared/components/ConnectScreen/ConnectButtonMultiple"
+import {
+  DialogueQuestionArgs,
+  DialogueQuestionResponseArgs,
+  WindowWithIpcRenderer,
+} from "types/dialogues"
+import { v4 as uuid } from "uuid"
+import { async } from "q"
+
+const { ipcRenderer } = window as unknown as WindowWithIpcRenderer
+
 // Types
 type Props = {}
+
 // Styles
 const Container = styled.div`
   width: 100%;
@@ -72,24 +83,91 @@ export const SetUpScreen: FC<Props> = () => {
     }
   }
 
+  const onConnectThenDo = async () => {
+    // if user is asked to sync then do it :)
+    await endSync()
+    const channel = uuid()
+    const args: DialogueQuestionArgs = {
+      channel,
+      options: {
+        message: "Connected. How do you want to start Syncing mutes?",
+        detail:
+          "Recalling will make mutes on the console the same before Synchronizing the mutes.",
+        buttons: [
+          "Skip",
+          "Sync",
+          "Recall  A to B then Sync",
+          "Map B to A then Sync",
+        ],
+      },
+    }
+    ipcRenderer.send("dialogue-question", args)
+    ipcRenderer.once(
+      channel,
+      async (event, arg: DialogueQuestionResponseArgs) => {
+        const { button } = arg
+        switch (button) {
+          case 1:
+            await startSync()
+            break
+          case 2:
+            await syncMixerAToB()
+            await startSync()
+            break
+          case 3:
+            await syncMixerBToA()
+            await startSync()
+            break
+        }
+      }
+    )
+  }
+
   // ..
   return (
     <Container>
       {/* Connect to Mixers */}
       <div className="connect-controls">
         <div className="connect-group">
-          <ConnectIpInput mixerKey="MixerA" />
+          <ConnectIpInput
+            mixerKey="MixerA"
+            title={false}
+            label={
+              <>
+                <b>Set IP Address for Mixer A</b>
+              </>
+            }
+          />
           <div>
-            <ConnectButton mixerKey="MixerA" />
+            {/* <ConnectButton mixerKey="MixerA" /> */}
             <StoreButton mixerKey="MixerA" />
           </div>
-        </div>
-        <div className="connect-group">
-          <ConnectIpInput mixerKey="MixerB" />
+          <br/>
+          {/* </div>
+        <div className="connect-group"> */}
+          <ConnectIpInput
+            mixerKey="MixerB"
+            title={false}
+            label={
+              <>
+                <b>Set IP Address for Mixer B</b>
+              </>
+            }
+          />
           <div>
-            <ConnectButton mixerKey="MixerB" />
             <StoreButton mixerKey="MixerB" />
+            {/* <ConnectButton mixerKey="MixerB" /> */}
           </div>
+          <br/>
+          {/* </div>
+        <div className="connect-group"> */}
+          <p>
+            <b>Start connection with Mixers</b>
+          </p>
+          <ConnectButtonMultiple
+            mixerKeys={["MixerA", "MixerB"]}
+            onSuccess={onConnectThenDo}
+          />
         </div>
       </div>
       {/* Recall and IP that is stored */}
@@ -102,27 +180,27 @@ export const SetUpScreen: FC<Props> = () => {
       <div className="connect-controls">
         <div className="connect-group">
           <p>
-            <b>Single Sync</b>
+            <b>Recall mutes from one console to the other.</b>
           </p>
           <Button
             className="Button-blue width-full"
             disabled={!isConnected}
             onClick={syncMixerAToB}
           >
-            Sync A (Master) to B
+            Recall A (Master) to B
           </Button>
           <Button
             className="Button-blue width-full"
             disabled={!isConnected}
             onClick={syncMixerBToA}
           >
-            Sync B to A (Master)
+            Recall B to A (Master)
           </Button>
         </div>
 
         <div className="connect-group">
           <p>
-            <b>Sync Controls</b>
+            <b>Sync Mutes between consoles</b>
           </p>
           <Button
             className="Button-green"
