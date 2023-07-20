@@ -18,7 +18,7 @@ import {
   MuteShareContextProvider,
 } from "./contexts/MuteShareContext"
 
-export const Workbench = () => {
+export const MuteSync = () => {
   // Local State
   const [activeKey, setActiveKey] = useAsyncSetState<string>("setup")
 

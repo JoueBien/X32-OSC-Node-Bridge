@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, dialog } from "electron"
+import { app, BrowserWindow, ipcMain, dialog, powerSaveBlocker, powerMonitor } from "electron"
 import {
   DialogueOpenRequestArgs,
   DialogueOpenResponseArgs,
@@ -14,11 +14,16 @@ import * as path from "path"
 
 const { readFile, writeFile } = fsPromises
 
+
 function createWindow() {
   const win = new BrowserWindow({
     width: 1280,
     height: 720,
     title: "X32 OSC Node Bridge",
+    autoHideMenuBar: true,
+    additionalArguments: [
+      // process.env
+    ],
     webPreferences: {
       // contextIsolation: false,
       preload: path.join(__dirname, "preload.js"),
@@ -28,7 +33,7 @@ function createWindow() {
       enableRemoteModule: true,
     },
   })
-  win.setMinimizable(false)
+  // win.setMinimizable(false)
 
   if (app.isPackaged) {
     // 'build/index.html'
@@ -62,6 +67,13 @@ app.whenReady().then(() => {
 
   createWindow()
   // const mixerEventListeners = initAppMixerEventListeners(app)
+  // Tell the app to never suspend while out of focus
+  powerMonitor.on("lock-screen", () => {
+    powerSaveBlocker.start("prevent-display-sleep");
+  });
+  powerMonitor.on("suspend", () => {
+    powerSaveBlocker.start("prevent-app-suspension");
+  });
 
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) {
