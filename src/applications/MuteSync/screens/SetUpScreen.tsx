@@ -14,7 +14,6 @@ import {
 } from "@/types/dialogues"
 import { v4 as uuid } from "uuid"
 
-
 const { ipcRenderer } = window as unknown as WindowWithIpcRenderer
 
 // Types
@@ -142,7 +141,7 @@ export const SetUpScreen: FC<Props> = () => {
             {/* <ConnectButton mixerKey="MixerA" /> */}
             <StoreButton mixerKey="MixerA" />
           </div>
-          <br/>
+          <br />
           {/* </div>
         <div className="connect-group"> */}
           <ConnectIpInput
@@ -158,7 +157,7 @@ export const SetUpScreen: FC<Props> = () => {
             <StoreButton mixerKey="MixerB" />
             {/* <ConnectButton mixerKey="MixerB" /> */}
           </div>
-          <br/>
+          <br />
           {/* </div>
         <div className="connect-group"> */}
           <p>
