@@ -50,7 +50,7 @@ export const ConnectIpOptionList: FC<Props> = ({ mixerKeys, className }) => {
                   onClick={() => setIp(ipAddress, mixerKey)}
                 >
                   {/* We replace the string here other wise it's hard to read */}
-                  Set {mixerKey.replaceAll("Mixer", "Mixer ")}
+                  Set {`${mixerKey}`.replace("Mixer", "Mixer ")}
                 </Button>
               )
             })}
