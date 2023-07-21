@@ -5,6 +5,7 @@ import {
   StorageItem,
   useStoredSceneList,
 } from "@/shared/hooks/useStoredSceneList"
+import { CommandOption } from "@/shared/commandOptions/types"
 
 export type SharedMuteItem = { mixerA: CommandOption; mixerB: CommandOption }
 
@@ -35,7 +36,7 @@ type MuteMapperContextState = {
     removeMuteScene: (item: MuteSceneStorageItem) => Promise<void>
   }
 }
-type MuteMapperContextProps = {}
+type MuteMapperContextProps = NonNullable<unknown>
 
 export const MuteMapperContext = createContext<MuteMapperContextState>({
   activeScene: {

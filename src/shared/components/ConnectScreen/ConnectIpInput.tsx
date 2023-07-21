@@ -5,7 +5,7 @@ import Input from "rsuite/Input"
 // Comps
 import { MixerContext } from "@/shared/contexts/MixerContext"
 import { ConnectFormContext } from "@/shared/contexts/ConnectFormContext"
-import { WindowMixerSharedKey } from "../../../../electron/OSC/MixerEventListeners"
+import { WindowMixerSharedKey } from "@/electron/OSC/MixerEventListeners"
 
 // Styles
 const Container = styled.div`

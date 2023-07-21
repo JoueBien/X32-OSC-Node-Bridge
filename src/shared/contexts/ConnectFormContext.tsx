@@ -2,7 +2,7 @@
 import validator from "validator"
 import { FC, PropsWithChildren, createContext, useEffect } from "react"
 import { useLocalStorage } from "usehooks-ts"
-import { WindowMixerSharedKey } from "../../../electron/OSC/MixerEventListeners"
+import { WindowMixerSharedKey } from "@/electron/OSC/MixerEventListeners"
 import { useAsyncSetState, useGetState } from "use-async-setstate"
 // Comps
 
@@ -49,9 +49,9 @@ export const ConnectFormContext = createContext<ConnectFormContextState>({
     MixerB: undefined,
   },
   storedIps: { storedIps: [] },
-  setIp: (value: string, mixerKey: WindowMixerSharedKey) => {},
-  addIp: (value: string) => {},
-  removeIp: (value: string) => {},
+  setIp: (_value: string, _mixerKey: WindowMixerSharedKey) => {},
+  addIp: (_value: string) => {},
+  removeIp: (_value: string) => {},
 })
 
 export const ConnectFormContextProvider: FC<
@@ -113,7 +113,7 @@ export const ConnectFormContextProvider: FC<
 
   // Effects
   useEffect(() => {
-    ;(async () => {
+    (async () => {
       Object.keys(settings).forEach(async (key) => {
         const ip = settings[key as WindowMixerSharedKey]?.ip
         if (ip) {
@@ -135,7 +135,6 @@ export const ConnectFormContextProvider: FC<
         }
       })
     })()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [settings.Mixer?.ip, settings?.MixerA, settings?.MixerB])
 
   // ..

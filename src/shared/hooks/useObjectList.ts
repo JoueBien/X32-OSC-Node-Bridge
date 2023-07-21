@@ -10,7 +10,7 @@ export const useObjectList = <T>(
 
   // Mutators
   const updateAtIndex = async (index: number, value: T) => {
-    let newList = getList()
+    const newList = getList()
     newList[index] = value
     await setList(newList.sort(sort))
   }

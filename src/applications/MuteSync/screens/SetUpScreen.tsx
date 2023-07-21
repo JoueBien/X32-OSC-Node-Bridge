@@ -11,14 +11,14 @@ import {
   DialogueQuestionArgs,
   DialogueQuestionResponseArgs,
   WindowWithIpcRenderer,
-} from "types/dialogues"
+} from "@/types/dialogues"
 import { v4 as uuid } from "uuid"
-import { async } from "q"
+
 
 const { ipcRenderer } = window as unknown as WindowWithIpcRenderer
 
 // Types
-type Props = {}
+type Props = NonNullable<unknown>
 
 // Styles
 const Container = styled.div`

@@ -41,7 +41,7 @@ export type SubscribeFunc = ({
   frequency,
 }: SubscribeFuncParams) => Promise<IntervalReference | undefined>
 
-export type RequestThenReplyFuncParams = RequestFuncParams & {}
+export type RequestThenReplyFuncParams = RequestFuncParams // & {}
 
 export type RequestThenReplyFunc = ({
   address,
@@ -60,12 +60,12 @@ export type Info = {
 export default class X32 {
   udpPort?: UDPPortInstance
   udpPortX?: UDPPortInstance
-  connected: boolean = false
+  connected = false
   localPort: number
   localPortX: number
 
   // Set the reply port the mixer replies on init
-  constructor(localPort: number, localPortX: number,) {
+  constructor(localPort: number, localPortX: number) {
     this.localPort = localPort
     this.localPortX = localPortX
   }
@@ -120,7 +120,7 @@ export default class X32 {
 
       // Do the last part here async
       // We are considered connected when ready and we get the console info
-      ;(async () => {
+      (async () => {
         const isReady = await this.ready()
         console.log("isReady", isReady)
         if (isReady === true) {
@@ -241,7 +241,7 @@ export default class X32 {
     return new Promise<Message<ArgumentWithMetadataShape<any>> | undefined>(
       (resolve) => {
         // When done we return the message & Clean up
-        const onDone: OnMessageFunc = (oscMsg, timeTag, info) => {
+        const onDone: OnMessageFunc = (oscMsg, _timeTag, _info) => {
           if (oscMsg.address === address) {
             // console.log('oscMsg', oscMsg)
             isResolved = true

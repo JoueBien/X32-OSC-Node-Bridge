@@ -21,14 +21,14 @@ export type DialogueQuestionResponseArgs = {
 
 export type DialogueSaveRequestArgs = {
   channel: string
-  contents: string,
+  contents: string
   options: {
     filters: Electron.FileFilter[]
     message?: string
   }
 }
 
-export type DialogueSaveResponseArgs = {}
+export type DialogueSaveResponseArgs = NonNullable<unknown>
 
 export type DialogueOpenResponseArgs = {
   contents?: string
