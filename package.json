@@ -1,93 +1,62 @@
 {
-  "name": "x32-osc-node-bridge",
-  "version": "0.2.0",
-  "author": "Your Name",
-  "description": "React-TypeScript-Electron sample with Create React App and Electron Builder",
-  "homepage": ".",
-  "main": "build/electron/main.js",
-  "private": true,
-  "dependencies": {
-    "@testing-library/jest-dom": "^5.16.4",
-    "@testing-library/react": "^13.3.0",
-    "@testing-library/user-event": "^14.2.0",
-    "@types/electron-devtools-installer": "^2.2.2",
-    "@types/jest": "^28.1.1",
-    "@types/node": "^17.0.40",
-    "@types/react": "^18.0.12",
-    "@types/react-dom": "^18.0.5",
-    "@types/react-helmet": "^6.1.5",
-    "electron-devtools-installer": "^3.2.0",
-    "electron-reload": "^1.5.0",
-    "fs-extra": "^11.1.1",
-    "osc": "^2.4.3",
-    "react": "^18.1.0",
-    "react-dom": "^18.1.0",
-    "react-helmet": "^6.1.0",
-    "react-scripts": "5.0.1",
-    "rsuite": "^5.19.0",
-    "serialport": "^10.4.0",
-    "styled-components": "^5.3.5",
-    "typescript": "^4.7.3",
-    "use-async-setstate": "^0.1.1",
-    "use-debounce": "^8.0.4",
-    "usehooks-ts": "^2.7.2",
-    "uuid": "^9.0.0",
-    "validator": "^13.7.0",
-    "web-vitals": "^2.1.4"
-  },
+  "name": "my-new-app",
+  "productName": "my-new-app",
+  "version": "1.0.0",
+  "description": "My Electron application description",
+  "main": ".webpack/main",
   "scripts": {
-    "start": "react-scripts start",
-    "dev": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "postinstall": "electron-builder install-app-deps",
-    "electron:dev": "concurrently \"cross-env BROWSER=none npm start\" \"wait-on http://localhost:3000 && tsc -p electron -w\" \"wait-on http://localhost:3000 && tsc -p electron && electron .\"",
-    "electron:build": "npm run build && tsc -p electron && electron-builder",
-    "eject": "react-scripts eject",
-    "lint": "eslint --ext .tsx,.ts .",
-    "fix": "eslint --fix --ext .tsx,.ts ."
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "publish": "electron-forge publish",
+    "lint": "eslint --ext .ts,.tsx ."
   },
-  "build": {
-    "buildDependenciesFromSource": true,
-    "extends": null,
-    "files": [
-      "build/**/*"
-    ],
-    "directories": {
-      "buildResources": "assets"
-    }
+  "keywords": [],
+  "author": {
+    "name": "Zach Radloff",
+    "email": "ZCR2244@live.com"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
+  "license": "MIT",
   "devDependencies": {
-    "@josephmark/eslint-config": "^1.0.2",
-    "@josephmark/eslint-config-react": "^1.0.1",
-    "@types/styled-components": "^5.1.26",
-    "@types/uuid": "^9.0.1",
-    "@types/validator": "^13.7.7",
-    "concurrently": "^7.2.1",
-    "cross-env": "^7.0.3",
-    "electron": "^25.3.0",
-    "electron-builder": "^23.0.3",
-    "electron-rebuild": "^3.2.9",
-    "prettier": "^2.7.1",
-    "wait-on": "^6.0.1",
-    "webpack-node-externals": "^3.0.0"
+    "@electron-forge/cli": "^6.2.1",
+    "@electron-forge/maker-deb": "^6.2.1",
+    "@electron-forge/maker-rpm": "^6.2.1",
+    "@electron-forge/maker-squirrel": "^6.2.1",
+    "@electron-forge/maker-zip": "^6.2.1",
+    "@electron-forge/plugin-auto-unpack-natives": "^6.2.1",
+    "@electron-forge/plugin-webpack": "^6.2.1",
+    "@josephmark/eslint-config-react": "^1.0.9",
+    "@types/react": "^18.2.15",
+    "@types/react-dom": "^18.2.7",
+    "@types/uuid": "^9.0.2",
+    "@types/validator": "^13.7.17",
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@typescript-eslint/parser": "^5.62.0",
+    "@vercel/webpack-asset-relocator-loader": "^1.7.3",
+    "css-loader": "^6.8.1",
+    "electron": "25.3.1",
+    "eslint": "^8.45.0",
+    "eslint-plugin-import": "^2.27.5",
+    "fork-ts-checker-webpack-plugin": "^7.3.0",
+    "node-loader": "^2.0.0",
+    "style-loader": "^3.3.3",
+    "ts-loader": "^9.4.4",
+    "ts-node": "^10.9.1",
+    "typescript": "~4.5.4"
+  },
+  "dependencies": {
+    "electron-squirrel-startup": "^1.0.0",
+    "fs-extra": "^11.1.1",
+    "osc": "^2.4.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "rsuite": "^5.37.1",
+    "serialport": "^11.0.0",
+    "styled-components": "^6.0.4",
+    "use-async-setstate": "^0.1.1",
+    "use-debounce": "^9.0.4",
+    "usehooks-ts": "^2.9.1",
+    "uuid": "^9.0.0",
+    "validator": "^13.9.0"
   }
 }

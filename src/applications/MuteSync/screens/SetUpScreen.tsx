@@ -2,11 +2,11 @@ import { FC, useContext } from "react"
 import styled from "styled-components"
 import { MuteShareContext } from "../contexts/MuteShareContext"
 import Button from "rsuite/Button"
-import { colors } from "shared/styles"
-import { ConnectIpInput } from "shared/components/ConnectScreen/ConnectIpInput"
-import { StoreButton } from "shared/components/ConnectScreen/StoreButton"
-import { ConnectIpOptionList } from "shared/components/ConnectScreen/ConnectIpOptionList"
-import { ConnectButtonMultiple } from "shared/components/ConnectScreen/ConnectButtonMultiple"
+import { colors } from "@/shared/styles"
+import { ConnectIpInput } from "@/shared/components/ConnectScreen/ConnectIpInput"
+import { StoreButton } from "@/shared/components/ConnectScreen/StoreButton"
+import { ConnectIpOptionList } from "@/shared/components/ConnectScreen/ConnectIpOptionList"
+import { ConnectButtonMultiple } from "@/shared/components/ConnectScreen/ConnectButtonMultiple"
 import {
   DialogueQuestionArgs,
   DialogueQuestionResponseArgs,

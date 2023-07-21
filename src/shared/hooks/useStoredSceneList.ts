@@ -8,7 +8,7 @@ import {
   DialogueSaveRequestArgs,
   DialogueSaveResponseArgs,
   WindowWithIpcRenderer,
-} from "types/dialogues"
+} from "@/types/dialogues"
 
 const ipcRenderer = (window as unknown as WindowWithIpcRenderer).ipcRenderer
 

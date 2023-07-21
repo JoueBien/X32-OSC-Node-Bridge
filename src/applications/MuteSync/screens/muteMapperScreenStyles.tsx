@@ -1,4 +1,4 @@
-import { colors } from "shared/styles"
+import { colors } from "@/shared/styles"
 import { css } from "styled-components"
 
 export const muteMapperScreenStyles = css`

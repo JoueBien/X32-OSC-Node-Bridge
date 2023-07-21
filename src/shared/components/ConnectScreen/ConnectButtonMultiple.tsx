@@ -2,8 +2,8 @@
 import { FC, useContext } from "react"
 import Button from "rsuite/Button"
 // Comps
-import { MixerContext } from "shared/contexts/MixerContext"
-import { ConnectFormContext } from "shared/contexts/ConnectFormContext"
+import { MixerContext } from "@/shared/contexts/MixerContext"
+import { ConnectFormContext } from "@/shared/contexts/ConnectFormContext"
 import { WindowMixerSharedKey } from "../../../../electron/OSC/MixerEventListeners"
 import { useAsyncSetState } from "use-async-setstate"
 

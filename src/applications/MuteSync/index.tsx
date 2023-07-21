@@ -1,14 +1,14 @@
 import { Nav } from "rsuite"
-import { ConnectScreen } from "shared/components/ConnectScreen/ConnectScreen"
-import { ScreenContainer } from "shared/components/ScreenContainer/ScreenContainer"
+import { ConnectScreen } from "@/shared/components/ConnectScreen/ConnectScreen"
+import { ScreenContainer } from "@/shared/components/ScreenContainer/ScreenContainer"
 import {
   ConnectFormContext,
   ConnectFormContextProvider,
-} from "shared/contexts/ConnectFormContext"
+} from "@/shared/contexts/ConnectFormContext"
 import {
   MixerContext,
   MixerContextProvider,
-} from "shared/contexts/MixerContext"
+} from "@/shared/contexts/MixerContext"
 import { useAsyncSetState } from "use-async-setstate"
 import { MuteMapperContextProvider } from "./contexts/MuteMapperContext"
 import { MuteMapperScreen } from "./screens/MuteMapperScreen"

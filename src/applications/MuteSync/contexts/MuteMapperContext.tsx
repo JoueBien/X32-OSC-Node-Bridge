@@ -1,10 +1,10 @@
 import { createContext, FC, PropsWithChildren, useEffect } from "react"
-import { useObjectList } from "shared/hooks/useObjectList"
+import { useObjectList } from "@/shared/hooks/useObjectList"
 import { useLocalStorage } from "usehooks-ts"
 import {
   StorageItem,
   useStoredSceneList,
-} from "shared/hooks/useStoredSceneList"
+} from "@/shared/hooks/useStoredSceneList"
 
 export type SharedMuteItem = { mixerA: CommandOption; mixerB: CommandOption }
 

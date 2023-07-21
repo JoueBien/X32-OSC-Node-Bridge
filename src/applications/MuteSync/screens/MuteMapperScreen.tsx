@@ -2,14 +2,14 @@ import { FC, PropsWithChildren, useContext, useEffect } from "react"
 import styled from "styled-components"
 import SelectPicker from "rsuite/SelectPicker"
 import Button from "rsuite/Button"
-import { allMuteOptions } from "shared/commandOptions/mutes"
+import { allMuteOptions } from "@/shared/commandOptions/mutes"
 import { useAsyncSetState } from "use-async-setstate"
 import {
   MuteMapperContext,
   SharedMuteItem,
 } from "../contexts/MuteMapperContext"
-import { useObjectList } from "shared/hooks/useObjectList"
-import { colors } from "shared/styles"
+import { useObjectList } from "@/shared/hooks/useObjectList"
+import { colors } from "@/shared/styles"
 import { muteMapperScreenStyles } from "./muteMapperScreenStyles"
 import Input from "rsuite/Input"
 import { useLocalStorage } from "usehooks-ts"

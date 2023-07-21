@@ -3,8 +3,8 @@ import { FC, useContext } from "react"
 import styled from "styled-components"
 import Button from "rsuite/Button"
 // Comps
-import { MixerContext } from "shared/contexts/MixerContext"
-import { ConnectFormContext } from "shared/contexts/ConnectFormContext"
+import { MixerContext } from "@/shared/contexts/MixerContext"
+import { ConnectFormContext } from "@/shared/contexts/ConnectFormContext"
 import { WindowMixerSharedKey } from "../../../../electron/OSC/MixerEventListeners"
 
 // Styles

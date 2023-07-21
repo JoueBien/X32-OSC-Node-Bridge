@@ -2,7 +2,7 @@
 import { FC, useContext } from "react"
 import Button from "rsuite/Button"
 // Comps
-import { ConnectFormContext } from "shared/contexts/ConnectFormContext"
+import { ConnectFormContext } from "@/shared/contexts/ConnectFormContext"
 import { WindowMixerSharedKey } from "../../../../electron/OSC/MixerEventListeners"
 
 // Defs
