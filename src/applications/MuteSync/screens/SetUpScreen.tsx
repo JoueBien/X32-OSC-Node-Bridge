@@ -2,23 +2,22 @@ import { FC, useContext } from "react"
 import styled from "styled-components"
 import { MuteShareContext } from "../contexts/MuteShareContext"
 import Button from "rsuite/Button"
-import { colors } from "shared/styles"
-import { ConnectIpInput } from "shared/components/ConnectScreen/ConnectIpInput"
-import { StoreButton } from "shared/components/ConnectScreen/StoreButton"
-import { ConnectIpOptionList } from "shared/components/ConnectScreen/ConnectIpOptionList"
-import { ConnectButtonMultiple } from "shared/components/ConnectScreen/ConnectButtonMultiple"
+import { colors } from "@/shared/styles"
+import { ConnectIpInput } from "@/shared/components/ConnectScreen/ConnectIpInput"
+import { StoreButton } from "@/shared/components/ConnectScreen/StoreButton"
+import { ConnectIpOptionList } from "@/shared/components/ConnectScreen/ConnectIpOptionList"
+import { ConnectButtonMultiple } from "@/shared/components/ConnectScreen/ConnectButtonMultiple"
 import {
   DialogueQuestionArgs,
   DialogueQuestionResponseArgs,
   WindowWithIpcRenderer,
-} from "types/dialogues"
+} from "@/types/dialogues"
 import { v4 as uuid } from "uuid"
-import { async } from "q"
 
 const { ipcRenderer } = window as unknown as WindowWithIpcRenderer
 
 // Types
-type Props = {}
+type Props = NonNullable<unknown>
 
 // Styles
 const Container = styled.div`
@@ -142,7 +141,7 @@ export const SetUpScreen: FC<Props> = () => {
             {/* <ConnectButton mixerKey="MixerA" /> */}
             <StoreButton mixerKey="MixerA" />
           </div>
-          <br/>
+          <br />
           {/* </div>
         <div className="connect-group"> */}
           <ConnectIpInput
@@ -158,7 +157,7 @@ export const SetUpScreen: FC<Props> = () => {
             <StoreButton mixerKey="MixerB" />
             {/* <ConnectButton mixerKey="MixerB" /> */}
           </div>
-          <br/>
+          <br />
           {/* </div>
         <div className="connect-group"> */}
           <p>

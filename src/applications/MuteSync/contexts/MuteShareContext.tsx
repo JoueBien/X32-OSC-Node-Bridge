@@ -5,11 +5,11 @@ import {
   useContext,
   useEffect,
 } from "react"
-import { MixerContext } from "shared/contexts/MixerContext"
+import { MixerContext } from "@/shared/contexts/MixerContext"
 import { MuteMapperContext } from "./MuteMapperContext"
 import { useAsyncSetState, useGetState } from "use-async-setstate"
-import type { IntervalReference } from "../../../../electron/OSC/core/X32"
-import { useAsyncState } from "shared/hooks/useAsyncState"
+import type { IntervalReference } from "@/electron/OSC/core/X32"
+import { useAsyncState } from "@/shared/hooks/useAsyncState"
 
 // Types
 type MuteShareContextState = {
@@ -22,7 +22,7 @@ type MuteShareContextState = {
   startSync: () => Promise<void>
   endSync: () => Promise<void>
 }
-type MuteShareContextProps = {}
+type MuteShareContextProps = NonNullable<unknown>
 
 export const MuteShareContext = createContext<MuteShareContextState>({
   isConnected: false,

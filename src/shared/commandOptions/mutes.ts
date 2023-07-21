@@ -1,3 +1,5 @@
+import { CommandOption } from "./types"
+
 export const muteGroupOptions: CommandOption[] = [
   { label: "Mute Group 1", value: "/config/mute/1" },
   { label: "Mute Group 2", value: "/config/mute/2" },

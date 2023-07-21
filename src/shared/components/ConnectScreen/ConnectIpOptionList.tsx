@@ -3,9 +3,9 @@ import { FC, useContext } from "react"
 import styled from "styled-components"
 import Button from "rsuite/Button"
 // Comps
-import { MixerContext } from "shared/contexts/MixerContext"
-import { ConnectFormContext } from "shared/contexts/ConnectFormContext"
-import { WindowMixerSharedKey } from "../../../../electron/OSC/MixerEventListeners"
+import { MixerContext } from "@/shared/contexts/MixerContext"
+import { ConnectFormContext } from "@/shared/contexts/ConnectFormContext"
+import { WindowMixerSharedKey } from "@/electron/OSC/MixerEventListeners"
 
 // Styles
 const Container = styled.div`
@@ -50,7 +50,7 @@ export const ConnectIpOptionList: FC<Props> = ({ mixerKeys, className }) => {
                   onClick={() => setIp(ipAddress, mixerKey)}
                 >
                   {/* We replace the string here other wise it's hard to read */}
-                  Set {mixerKey.replaceAll("Mixer", "Mixer ")}
+                  Set {`${mixerKey}`.replace("Mixer", "Mixer ")}
                 </Button>
               )
             })}

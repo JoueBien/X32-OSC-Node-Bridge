@@ -3,7 +3,7 @@ import { FC } from "react"
 import styled from "styled-components"
 // Comps
 import { connectionScreenStyles } from "./connectionScreenStyles"
-import { WindowMixerSharedKey } from "../../../../electron/OSC/MixerEventListeners"
+import { WindowMixerSharedKey } from "@/electron/OSC/MixerEventListeners"
 import { ConnectButton } from "./ConnectButton"
 import { ConnectIpOptionList } from "./ConnectIpOptionList"
 import { StoreButton } from "./StoreButton"

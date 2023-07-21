@@ -1,6 +1,6 @@
 import { useLocalStorage } from "usehooks-ts"
 import { useObjectList } from "./useObjectList"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { v4 as uuid } from "uuid"
 import {
   DialogueOpenRequestArgs,
@@ -8,7 +8,7 @@ import {
   DialogueSaveRequestArgs,
   DialogueSaveResponseArgs,
   WindowWithIpcRenderer,
-} from "types/dialogues"
+} from "@/types/dialogues"
 
 const ipcRenderer = (window as unknown as WindowWithIpcRenderer).ipcRenderer
 
@@ -89,7 +89,7 @@ export function useStoredSceneList<T>(params: {
         },
       }
       ipcRenderer.send("dialogue-open", args)
-      ipcRenderer.once(channel, (event, arg: DialogueOpenResponseArgs) => {
+      ipcRenderer.once(channel, (_event, arg: DialogueOpenResponseArgs) => {
         const { contents } = arg
         if (contents) {
           try {
@@ -125,7 +125,7 @@ export function useStoredSceneList<T>(params: {
         },
       }
       ipcRenderer.send("dialogue-save", args)
-      ipcRenderer.once(channel, (event, arg: DialogueSaveResponseArgs) => {
+      ipcRenderer.once(channel, (_event, _arg: DialogueSaveResponseArgs) => {
         resolve(undefined)
       })
     })

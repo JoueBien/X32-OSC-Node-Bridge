@@ -1,5 +1,5 @@
 import { css } from "styled-components"
-import { colors } from "shared/styles"
+import { colors } from "@/shared/styles"
 
 export const screenContainerStyles = css`
   @keyframes led-blink {

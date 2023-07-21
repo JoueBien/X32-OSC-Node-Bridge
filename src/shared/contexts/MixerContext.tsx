@@ -1,18 +1,18 @@
 // Libs
 import { useAsyncSetState, useGetState } from "use-async-setstate"
-import { createContext, FC, PropsWithChildren, useEffect } from "react"
+import { createContext, FC, PropsWithChildren } from "react"
 // Comps
-import { ConnectParams } from "../../../electron/OSC/core/X32"
+import { ConnectParams } from "@/electron/OSC/core/X32"
 import {
   WindowMixerShared,
   WindowMixerSharedKey,
-} from "../../../electron/OSC/MixerEventListeners"
+} from "@/electron/OSC/MixerEventListeners"
 
 // Consts
 const AllMixers = globalThis as unknown as WindowMixerShared
 
 // Defs
-type X32ContextProps = {}
+type X32ContextProps = NonNullable<unknown>
 type X32ContextState = {
   connected: Record<WindowMixerSharedKey, boolean>
   connect: (

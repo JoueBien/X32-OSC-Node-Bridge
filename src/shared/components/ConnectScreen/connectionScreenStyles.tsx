@@ -2,7 +2,7 @@
 import { css } from "styled-components"
 
 // Comps
-import { colors } from "shared/styles"
+import { colors } from "@/shared/styles"
 
 // Styles
 export const connectionScreenStyles = css`

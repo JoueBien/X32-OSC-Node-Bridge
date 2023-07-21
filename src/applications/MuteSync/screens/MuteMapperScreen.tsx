@@ -1,26 +1,24 @@
-import { FC, PropsWithChildren, useContext, useEffect } from "react"
+import { FC, useContext } from "react"
 import styled from "styled-components"
 import SelectPicker from "rsuite/SelectPicker"
 import Button from "rsuite/Button"
-import { allMuteOptions } from "shared/commandOptions/mutes"
+import { allMuteOptions } from "@/shared/commandOptions/mutes"
 import { useAsyncSetState } from "use-async-setstate"
 import {
   MuteMapperContext,
   SharedMuteItem,
 } from "../contexts/MuteMapperContext"
-import { useObjectList } from "shared/hooks/useObjectList"
-import { colors } from "shared/styles"
+import { useObjectList } from "@/shared/hooks/useObjectList"
 import { muteMapperScreenStyles } from "./muteMapperScreenStyles"
 import Input from "rsuite/Input"
-import { useLocalStorage } from "usehooks-ts"
-import { text } from "stream/consumers"
+import { CommandOption } from "@/shared/commandOptions/types"
 
 // Styles
 const MuteMapperScreenContainer = styled.div`
   ${muteMapperScreenStyles}
 `
 
-export const MuteMapperScreen: FC<{}> = () => {
+export const MuteMapperScreen: FC<NonNullable<unknown>> = () => {
   // Global State
   const { activeScene, importMuteScene, exportMuteScene, storedScenes } =
     useContext(MuteMapperContext)
@@ -47,7 +45,7 @@ export const MuteMapperScreen: FC<{}> = () => {
 
   // Functions
   // When A changes update form
-  const onMixerAChange = (value: string | null, event: any) => {
+  const onMixerAChange = (value: string | null, _event: any) => {
     const option = getListByKeyValue("value", value || undefined)
     setFormState({
       ...formState,
@@ -55,7 +53,7 @@ export const MuteMapperScreen: FC<{}> = () => {
     })
   }
   // When B changes update form
-  const onMixerBChange = (value: string | null, event: any) => {
+  const onMixerBChange = (value: string | null, _event: any) => {
     const option = getListByKeyValue("value", value || undefined)
     setFormState({
       ...formState,
