@@ -6,6 +6,7 @@ import { MixerContext } from "@/shared/contexts/MixerContext"
 import { ConnectFormContext } from "@/shared/contexts/ConnectFormContext"
 import { WindowMixerSharedKey } from "@/electron/OSC/MixerEventListeners"
 import { useAsyncSetState } from "use-async-setstate"
+import { delay } from "@/shared/helpers/time"
 
 // Defs
 type Props = {
@@ -37,22 +38,29 @@ export const ConnectButtonMultiple: FC<Props> = ({
       await setIsLoading(true)
       // Connect if any are dis-connected
       if (isAllConnected === false) {
-        await Promise.all(
-          mixerKeys.map((mixerKey) => Promise.resolve(disconnect(mixerKey)))
-        )
-        const results = await Promise.all(
-          mixerKeys.map((mixerKey) =>
-            connect(
-              { mixerIp: settings[mixerKey]?.ip || "", debug: true },
-              mixerKey
-            )
+        await delay(100)
+        for (const mixerKeyIndex in mixerKeys) {
+          const mixerKey = mixerKeys[mixerKeyIndex]
+          await disconnect(mixerKey)
+        }
+
+        await delay(100)
+        const results = []
+        for (const mixerKeyIndex in mixerKeys) {
+          const mixerKey = mixerKeys[mixerKeyIndex]
+          const res = await connect(
+            { mixerIp: settings[mixerKey]?.ip || "", debug: true },
+            mixerKey
           )
-        )
+          results.push(res)
+        }
+        await delay(100)
         // If we had a fail then disconnect and alert
         if (results.includes(false)) {
-          await Promise.all(
-            mixerKeys.map((mixerKey) => Promise.resolve(disconnect(mixerKey)))
-          )
+          for (const mixerKeyIndex in mixerKeys) {
+            const mixerKey = mixerKeys[mixerKeyIndex]
+            await disconnect(mixerKey)
+          }
           const forAlerts = results
             .map((res, index) => (res === false ? mixerKeys[index] : undefined))
             .filter((item) => (item !== undefined ? true : false)) as string[]
@@ -63,9 +71,11 @@ export const ConnectButtonMultiple: FC<Props> = ({
         }
       } else {
         // If already connected disconnect
-        await Promise.all(
-          mixerKeys.map((mixerKey) => Promise.resolve(disconnect(mixerKey)))
-        )
+        await delay(100)
+        for (const mixerKeyIndex in mixerKeys) {
+          const mixerKey = mixerKeys[mixerKeyIndex]
+          await disconnect(mixerKey)
+        }
       }
       await setIsLoading(false)
     }

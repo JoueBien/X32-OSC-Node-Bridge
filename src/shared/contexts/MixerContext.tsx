@@ -19,14 +19,14 @@ type X32ContextState = {
     params: ConnectParams,
     mixerKey: WindowMixerSharedKey
   ) => Promise<boolean>
-  disconnect: (mixerKey: WindowMixerSharedKey) => void
+  disconnect: (mixerKey: WindowMixerSharedKey) => Promise<void>
   mixers: WindowMixerShared
 }
 
 export const MixerContext = createContext<X32ContextState>({
   connected: { Mixer: false, MixerA: false, MixerB: false },
   connect: (() => {}) as any,
-  disconnect: () => {},
+  disconnect: (() => {}) as any,
   mixers: AllMixers,
 })
 
