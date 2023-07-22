@@ -34,13 +34,13 @@ This project uses Electron Forge as a base and as such you should be able to bui
 
 # Known issues
 
-### Resolved
-
-- Calling Disconnect before Connect causes the mixers connection state to be corrupted. This issue was present on slower systems.
-
 ### Outstanding
 
 - Building on Linux hangs due to trying to load a Windows Binary. (See Note in install instructions for a workaround).
 - The app looses connection on subscriptions/messages when the app moves to the background.
-- The question dialogue can crash the app due to a missing try/catch
 - Versions older than [commit 0a7a558](https://github.com/JoueBien/X32-OSC-Node-Bridge/commit/0a7a5585a7015e15933ec6903eb830f2791deaec) will only run in node 16.
+
+### Resolved
+
+- The question dialogue can crash the app due to a missing try/catch.
+- Calling Disconnect before Connect causes the mixers connection state to be corrupted. This issue was present on slower systems.

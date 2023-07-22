@@ -144,17 +144,24 @@ ipcMain.on("dialogue-open", async (event, arg: DialogueOpenRequestArgs) => {
 ipcMain.on("dialogue-question", async (event, arg: DialogueQuestionArgs) => {
   const { channel, options } = arg
   const { buttons, message, detail } = options
+  try {
+    const { response } = await dialog.showMessageBox({
+      message: message || "Question?",
+      detail: detail || undefined,
+      type: "question",
+      noLink: true,
+      buttons,
+    })
 
-  const { response } = await dialog.showMessageBox({
-    message: message || "Question?",
-    detail: detail || undefined,
-    type: "question",
-    noLink: true,
-    buttons,
-  })
-
-  const res: DialogueQuestionResponseArgs = {
-    button: response,
+    const res: DialogueQuestionResponseArgs = {
+      button: response,
+    }
+    event.sender.send(channel, res)
+  } catch (e) {
+    console.error('@ipcMain.on("dialogue-question")', e)
+    const res: DialogueQuestionResponseArgs = {
+      button: -1,
+    }
+    event.sender.send(channel, res)
   }
-  event.sender.send(channel, res)
 })
