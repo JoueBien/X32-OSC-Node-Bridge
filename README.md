@@ -26,12 +26,21 @@ then the project can be run in develop mode with
 npm start
 ```
 
+Note: if you are on Lunix or Raspberry Pi you will need to comment out `new MakerSquirrel({}),` in `forge.config.ts` to avoid the build hanging due to a bug where Electron Forge tries to load a Windows exe.
+
 # Building
 
 This project uses Electron Forge as a base and as such you should be able to build this project by following the [documentation](https://www.electronforge.io/guides/framework-integration/react-with-typescript).
 
 # Known issues
 
+### Resolved
+
+- Calling Disconnect before Connect causes the mixers connection state to be corrupted. This issue was present on slower systems.
+
+### Outstanding
+
+- Building on Linux hangs due to trying to load a Windows Binary. (See Note in install instructions for a workaround).
 - The app looses connection on subscriptions/messages when the app moves to the background.
 - The question dialogue can crash the app due to a missing try/catch
 - Versions older than [commit 0a7a558](https://github.com/JoueBien/X32-OSC-Node-Bridge/commit/0a7a5585a7015e15933ec6903eb830f2791deaec) will only run in node 16.

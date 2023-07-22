@@ -32,6 +32,8 @@ export const ConnectButtonMultiple: FC<Props> = ({
   const [isLoading, setIsLoading] = useAsyncSetState<boolean>(false)
 
   // Functions
+  // Note we are doing bad for loops here
+  // This is so the raspberry pi sets the state in the right order
   const onConnectToggle = async () => {
     // Reject if we are loading
     if (isLoading === false) {
