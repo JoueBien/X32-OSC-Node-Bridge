@@ -6,6 +6,7 @@ import {
   useStoredSceneList,
 } from "@/shared/hooks/useStoredSceneList"
 import { CommandOption } from "@/shared/commandOptions/types"
+import { ListItem } from "@/shared/hooks/useIdRecordList"
 
 export type SharedMuteItem = { mixerA: CommandOption; mixerB: CommandOption }
 
@@ -13,8 +14,21 @@ export type MuteSceneStorageItem = StorageItem<{ value: SharedMuteItem[] }>
 
 type MuteMapperContextState = {
   activeScene: {
+    activeSceneId: string | undefined
     activeSceneName: string
     updateActiveSceneName: (text: string) => void
+
+    clearActive: () => Promise<void>
+    storeActiveAs: () => Promise<void>
+    storeActive: () => Promise<void>
+    recallToActive: (
+      item: ListItem<
+        StorageItem<{
+          value: SharedMuteItem[]
+        }>
+      >
+    ) => Promise<void>
+
     sharedMuteItemList: SharedMuteItem[]
     sharedMuteItemHashMap: {
       MixerA: Record<string, string>
@@ -29,19 +43,29 @@ type MuteMapperContextState = {
   exportMuteScene: (contents: SharedMuteItem[], name: string) => void
 
   storedScenes: {
-    storedMutedScenes: MuteSceneStorageItem[]
+    storedMutedScenes: ListItem<
+      StorageItem<{
+        value: SharedMuteItem[]
+      }>
+    >[]
     saveNewMuteScene: (
       item: Omit<StorageItem<{ value: SharedMuteItem[] }>, "id" | "version">
-    ) => Promise<void>
-    removeMuteScene: (item: MuteSceneStorageItem) => Promise<void>
+    ) => Promise<string>
+    removeMuteScene: (id: string) => Promise<void>
   }
 }
 type MuteMapperContextProps = NonNullable<unknown>
 
 export const MuteMapperContext = createContext<MuteMapperContextState>({
   activeScene: {
+    activeSceneId: undefined,
     activeSceneName: "",
     updateActiveSceneName: () => {},
+    recallToActive: async () => {},
+    clearActive: async () => {},
+    storeActiveAs: async () => {},
+    storeActive: async () => {},
+
     sharedMuteItemList: [],
     sharedMuteItemHashMap: {
       MixerA: {},
@@ -57,7 +81,7 @@ export const MuteMapperContext = createContext<MuteMapperContextState>({
   },
   storedScenes: {
     storedMutedScenes: [],
-    saveNewMuteScene: async () => {},
+    saveNewMuteScene: async () => "",
     removeMuteScene: async () => {},
   },
   importMuteScene: async () => {},
@@ -77,6 +101,11 @@ export const MuteMapperContextProvider: FC<
     "New Mute Scene"
   )
 
+  const [activeSceneId, setActiveSceneId] = useLocalStorage<string | undefined>(
+    "shared-mute-list-id",
+    undefined
+  )
+
   const {
     list: sharedMuteItemList,
     push: addSharedMuteItem,
@@ -84,11 +113,49 @@ export const MuteMapperContextProvider: FC<
     overrideList: overrideSharedMuteList,
   } = useObjectList<SharedMuteItem>(storedMiteItemsList)
 
+  const clearActive = async () => {
+    await _setActiveSceneName("New Mute Scene")
+    await overrideSharedMuteList([])
+    await setActiveSceneId(undefined)
+  }
+
+  const storeActiveAs = async () => {
+    const id = await saveNewMuteScene({
+      name: activeSceneName,
+      value: [...sharedMuteItemList],
+      version: 1,
+    })
+    await setActiveSceneId(id)
+  }
+
+  const storeActive = async () => {
+    if (activeSceneId !== undefined) {
+      updateMuteScene(activeSceneId, {
+        name: activeSceneName,
+        value: [...sharedMuteItemList],
+        version: 1,
+      })
+    }
+  }
+
+  const recallToActive = async (
+    item: ListItem<
+      StorageItem<{
+        value: SharedMuteItem[]
+      }>
+    >
+  ) => {
+    await overrideSharedMuteList(item.value.value)
+    await updateActiveSceneName(item.value.name)
+    await setActiveSceneId(item.id)
+  }
+
   const {
     importScene,
     exportScene,
     supportedList: storedMutedScenes,
     saveNewScene: saveNewMuteScene,
+    updateScene: updateMuteScene,
     removeScene: removeMuteScene,
   } = useStoredSceneList<{ value: SharedMuteItem[] }>({
     key: "mutes",
@@ -164,8 +231,13 @@ export const MuteMapperContextProvider: FC<
     <MuteMapperContext.Provider
       value={{
         activeScene: {
+          activeSceneId,
           activeSceneName,
           updateActiveSceneName,
+          clearActive,
+          storeActiveAs,
+          storeActive,
+          recallToActive,
           sharedMuteItemList,
           overrideSharedMuteList,
           addSharedMuteItem,

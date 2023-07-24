@@ -16,8 +16,10 @@ export const screenContainerStyles = css`
     }
   }
 
-  min-width: 1900px;
   width: 100%;
+
+  /* min-width: 1900px;
+  width: 100%; */
 
   .topNav {
     margin-bottom: 15px;

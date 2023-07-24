@@ -34,8 +34,12 @@ if (require("electron-squirrel-startup")) {
 const createWindow = (): void => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 1280,
-    height: 720,
+    minWidth: 1024,
+    minHeight: 600,
+    width: 1024,
+    height: 600,
+    // width: 1280,
+    // height: 720,
     title: "X32 OSC Node Bridge",
     autoHideMenuBar: true,
 

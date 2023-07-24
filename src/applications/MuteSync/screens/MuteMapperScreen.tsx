@@ -29,7 +29,13 @@ export const MuteMapperScreen: FC<NonNullable<unknown>> = () => {
     sharedMuteItemList,
     addSharedMuteItem,
     removeSharedMuteItem,
+    clearActive,
+    storeActive,
+    storeActiveAs,
+    activeSceneId,
+    recallToActive,
   } = activeScene
+  // TODO: remove saveNewMuteScene at later date
   const { storedMutedScenes, removeMuteScene, saveNewMuteScene } = storedScenes
 
   // Local State
@@ -101,14 +107,14 @@ export const MuteMapperScreen: FC<NonNullable<unknown>> = () => {
           Add Mapping
         </Button>
       </form>
-      <div className="list with-600">
+      <div className="list">
         <div className="item">
           <div className="label-full">
             <b>Active Mute Scene</b>
           </div>
         </div>
         <div className="item">
-          <div className="label-fill">
+          <div className="label label-fill">
             <Input
               id="scene-name"
               placeholder="Mute Scene Name"
@@ -118,18 +124,31 @@ export const MuteMapperScreen: FC<NonNullable<unknown>> = () => {
           </div>
           <div className="remove">
             <Button
+              id="new"
+              className="Button-grey"
+              onClick={clearActive}
+              type="button"
+            >
+              New
+            </Button>
+            <Button
               id="store"
               className="Button-grey"
-              onClick={() =>
-                saveNewMuteScene({
-                  name: activeSceneName,
-                  value: [...sharedMuteItemList],
-                })
-              }
+              disabled={activeSceneId === undefined}
+              onClick={() => storeActive()}
               type="button"
             >
               Store
             </Button>
+            <Button
+              id="store-as"
+              className="Button-grey"
+              onClick={() => storeActiveAs()}
+              type="button"
+            >
+              Store As
+            </Button>
+
             <Button
               id="import"
               className="Button-blue"
@@ -151,13 +170,13 @@ export const MuteMapperScreen: FC<NonNullable<unknown>> = () => {
           </div>
         </div>
         <div className="item">
-          <div className="label">
+          <div className="label label-40p">
             <b>Mixer A (Master)</b>
           </div>
           <div className="direction">
             <b>{` <-> `}</b>
           </div>
-          <div className="label">
+          <div className="label label-40p">
             <b>Mixer B</b>
           </div>
           <div className="remove"></div>
@@ -165,9 +184,9 @@ export const MuteMapperScreen: FC<NonNullable<unknown>> = () => {
         {sharedMuteItemList.map((item, index) => {
           return (
             <div key={index} className="item">
-              <div className="label">{item.mixerA.label}</div>
+              <div className="label label-40p">{item.mixerA.label}</div>
               <div className="direction">{` <-> `}</div>
-              <div className="label">{item.mixerB.label}</div>
+              <div className="label label-40p">{item.mixerB.label}</div>
               <div className="remove">
                 <Button
                   className="Button-red"
@@ -180,29 +199,26 @@ export const MuteMapperScreen: FC<NonNullable<unknown>> = () => {
           )
         })}
       </div>
-      <div className="separator" />
-      <div className="list">
+      {/* <div className="separator" /> */}
+      <div className="list with-100%">
         <div className="item">
-          <div className="label-full">
+          <div className="label label-full">
             <b>Stored Mute Scenes</b>
           </div>
         </div>
         {storedMutedScenes.map((item, index) => {
           return (
             <div className="item" key={index}>
-              <div className="label">
+              <div className="label label-fill">
                 <>
-                  {item.name} (V{item.version})
+                  {item.value.name} (V{item.value.version})
                 </>
               </div>
               <div className="remove">
                 <Button
                   id="recall"
                   className="Button-grey"
-                  onClick={() => {
-                    overrideSharedMuteList(item.value)
-                    updateActiveSceneName(item.name)
-                  }}
+                  onClick={() => recallToActive(item)}
                   type="button"
                 >
                   Recall
@@ -211,7 +227,7 @@ export const MuteMapperScreen: FC<NonNullable<unknown>> = () => {
                 <Button
                   id="store-remove"
                   className="Button-red"
-                  onClick={() => removeMuteScene(item)}
+                  onClick={() => removeMuteScene(item.id)}
                   type="button"
                 >
                   Remove

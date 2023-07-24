@@ -6,12 +6,14 @@ export const muteMapperScreenStyles = css`
   display: flex;
 
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: space-between;
+  /* justify-content: flex-start; */
 
   padding: 0.6rem;
   padding-top: 0px;
 
   form {
+    width: 200px;
     display: flex;
     flex-direction: column;
 
@@ -20,7 +22,7 @@ export const muteMapperScreenStyles = css`
     }
 
     .SelectPicker {
-      min-width: 243px;
+      min-width: 200px;
     }
 
     .Button {
@@ -34,12 +36,37 @@ export const muteMapperScreenStyles = css`
 
   .list {
     margin-left: 1rem;
+    flex-grow: 1;
+    flex-shrink: 1;
+
+    &.with-full {
+      width: 100%;
+      .item {
+        width: 100%;
+      }
+    }
 
     &.with-600 {
       width: 600px;
 
       .item {
-        width: 100%;
+        width: 600px;
+      }
+    }
+
+    &.with-400 {
+      width: 400px;
+
+      .item {
+        width: 400px;
+      }
+    }
+
+    &.with-300 {
+      width: 300px;
+
+      .item {
+        width: 300px;
       }
     }
 
@@ -61,16 +88,28 @@ export const muteMapperScreenStyles = css`
 
       .label {
         text-align: left;
-        width: 243px;
+        /* width: 243px; */
+      }
+
+      .label-35p {
+        flex-shrink: 1;
+        width: 35%;
+      }
+
+      .label-40p {
+        flex-shrink: 1;
+        width: 40%;
       }
 
       .label-fill {
+        flex-shrink: 1;
+        flex-grow: 1;
         text-align: left;
         width: 100%;
       }
 
       .direction {
-        width: 3rem;
+        width: 32px;
       }
       .remove {
         flex-shrink: 0;
