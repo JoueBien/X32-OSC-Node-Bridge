@@ -17,24 +17,13 @@ type MuteMapperContextState = {
     activeSceneId: string | undefined
     activeSceneName: string
     updateActiveSceneName: (text: string) => void
-
     clearActive: () => Promise<void>
-    storeActiveAs: () => Promise<void>
-    storeActive: () => Promise<void>
-    recallToActive: (
-      item: ListItem<
-        StorageItem<{
-          value: SharedMuteItem[]
-        }>
-      >
-    ) => Promise<void>
-
     sharedMuteItemList: SharedMuteItem[]
     sharedMuteItemHashMap: {
       MixerA: Record<string, string>
       MixerB: Record<string, string>
     }
-    overrideSharedMuteList: (values: SharedMuteItem[]) => Promise<void>
+    // overrideSharedMuteList: (values: SharedMuteItem[]) => Promise<void>
     addSharedMuteItem: (value: SharedMuteItem) => Promise<void>
     removeSharedMuteItem: (index: number) => Promise<void>
     sharedMuteItemMessageAddresses: { MixerA: string[]; MixerB: string[] }
@@ -48,9 +37,15 @@ type MuteMapperContextState = {
         value: SharedMuteItem[]
       }>
     >[]
-    saveNewMuteScene: (
-      item: Omit<StorageItem<{ value: SharedMuteItem[] }>, "id" | "version">
-    ) => Promise<string>
+    storeActiveAs: () => Promise<void>
+    storeActive: () => Promise<void>
+    recallToActive: (
+      item: ListItem<
+        StorageItem<{
+          value: SharedMuteItem[]
+        }>
+      >
+    ) => Promise<void>
     removeMuteScene: (id: string) => Promise<void>
   }
 }
@@ -60,18 +55,13 @@ export const MuteMapperContext = createContext<MuteMapperContextState>({
   activeScene: {
     activeSceneId: undefined,
     activeSceneName: "",
-    updateActiveSceneName: () => {},
-    recallToActive: async () => {},
     clearActive: async () => {},
-    storeActiveAs: async () => {},
-    storeActive: async () => {},
-
+    updateActiveSceneName: () => {},
     sharedMuteItemList: [],
     sharedMuteItemHashMap: {
       MixerA: {},
       MixerB: {},
     },
-    overrideSharedMuteList: async () => {},
     addSharedMuteItem: async () => {},
     removeSharedMuteItem: async () => {},
     sharedMuteItemMessageAddresses: {
@@ -81,7 +71,11 @@ export const MuteMapperContext = createContext<MuteMapperContextState>({
   },
   storedScenes: {
     storedMutedScenes: [],
-    saveNewMuteScene: async () => "",
+    recallToActive: async () => {},
+
+    storeActiveAs: async () => {},
+    storeActive: async () => {},
+    // saveNewMuteScene: async () => "",
     removeMuteScene: async () => {},
   },
   importMuteScene: async () => {},
@@ -235,11 +229,7 @@ export const MuteMapperContextProvider: FC<
           activeSceneName,
           updateActiveSceneName,
           clearActive,
-          storeActiveAs,
-          storeActive,
-          recallToActive,
           sharedMuteItemList,
-          overrideSharedMuteList,
           addSharedMuteItem,
           sharedMuteItemMessageAddresses,
           removeSharedMuteItem,
@@ -247,7 +237,10 @@ export const MuteMapperContextProvider: FC<
         },
         storedScenes: {
           storedMutedScenes,
-          saveNewMuteScene,
+
+          storeActiveAs,
+          storeActive,
+          recallToActive,
           removeMuteScene,
         },
         importMuteScene,

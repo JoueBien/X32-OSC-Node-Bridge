@@ -24,19 +24,21 @@ export const MuteMapperScreen: FC<NonNullable<unknown>> = () => {
     useContext(MuteMapperContext)
   const {
     activeSceneName,
+    activeSceneId,
     updateActiveSceneName,
-    overrideSharedMuteList,
+    clearActive,
     sharedMuteItemList,
     addSharedMuteItem,
     removeSharedMuteItem,
-    clearActive,
-    storeActive,
-    storeActiveAs,
-    activeSceneId,
-    recallToActive,
   } = activeScene
   // TODO: remove saveNewMuteScene at later date
-  const { storedMutedScenes, removeMuteScene, saveNewMuteScene } = storedScenes
+  const {
+    storedMutedScenes,
+    removeMuteScene,
+    storeActive,
+    storeActiveAs,
+    recallToActive,
+  } = storedScenes
 
   // Local State
   const { list: dataOptions, getObjectByKeyValue: getListByKeyValue } =
