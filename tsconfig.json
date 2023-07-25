@@ -18,8 +18,8 @@
     "paths": {
       "*": ["node_modules/*"],
       "@/*": ["./src/*"],
-      "~/*": ["./electron/*"],
+      "~/*": ["./src/electron/*"]
     }
   },
-  "include": ["src/**/*", "electron/**/*"]
+  "include": ["src/**/*"]
 }

@@ -6,11 +6,13 @@ import "@/shared/styles/index.css"
 import "@/shared/styles/App.css"
 // Comps
 import { MuteSync } from "@/applications/MuteSync"
-import { MeterBridge } from "@/applications/MeterBridge"
+import { MeterBridge } from "@/applications/MeterBridge/Index"
 import { screenContainerStyles } from "@/shared/styles/screenContainerStyles"
+import { GetStarted } from "./applications/GetStarted/Index"
+import { Workbench } from "./applications/Workbench/Index"
 // Config
-type AppType = "Workbench" | "MeterBridge" | "MuteSync"
-const app: AppType = "MuteSync"
+type AppType = "Workbench" | "MeterBridge" | "MuteSync" | "GetStarted"
+const app: AppType = "GetStarted"
 
 // Style
 const ScreenContainer = styled.div`
@@ -21,6 +23,11 @@ function App() {
   // ..
   return (
     <ScreenContainer className="ScreenContainer">
+      {app === "GetStarted" && (
+        <>
+          <GetStarted />
+        </>
+      )}
       {app === "MeterBridge" && (
         <>
           <MeterBridge />
@@ -29,6 +36,11 @@ function App() {
       {app === "MuteSync" && (
         <>
           <MuteSync />
+        </>
+      )}
+      {app === "Workbench" && (
+        <>
+          <Workbench />
         </>
       )}
     </ScreenContainer>

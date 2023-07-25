@@ -5,7 +5,7 @@ import { useAsyncSetState } from "use-async-setstate"
 
 import { SetUpScreen } from "./screens/SetUpScreen"
 
-export const MeterBridge = () => {
+export const Workbench = () => {
   // Local State
   const [activeKey, setActiveKey] = useAsyncSetState<string>("setup")
 
