@@ -15,7 +15,9 @@ type Props = {
   size?: {
     width?: string
     height?: string
-    textLineHeight?: string
+    textSize?: string
+    markerPadding?: string
+    ledSegmentSpacing?: string
   }
 }
 
@@ -26,13 +28,14 @@ const Container = styled.div<StyleProps>`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
 
   width: ${(props) => props?.size?.width || "40px"};
   height: ${(props) => props?.size?.height || "20px"};
   background: #282c34;
 
   & + .LedSegment {
-    margin-top: 5px;
+    margin-top: ${(props) => props?.size?.ledSegmentSpacing || "5px"};
   }
 
   .light {
@@ -69,9 +72,12 @@ const Container = styled.div<StyleProps>`
   }
 
   span {
-    line-height: ${(props) => props?.size?.textLineHeight || "20px"};
+    display: inline-block;
+    line-height: ${(props) => props?.size?.textSize || "20px"};
     color: white;
-    font-size: 12px;
+    font-size: ${(props) => props?.size?.textSize || "20px"};
+    margin-left: ${(props) => props?.size?.markerPadding || "5px"};
+    /* markerPadding */
   }
 `
 

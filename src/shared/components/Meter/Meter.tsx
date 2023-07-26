@@ -6,19 +6,15 @@ import { LedSegment } from "./LedSegment" // Meter
 import { MeterPoints } from "@/shared/helpers/meterPoints"
 
 // Styles
-const Container = styled.div`
+const Container = styled.div<{ size: Size }>`
   display: flex;
   flex-direction: column;
   align-items: center;
+  align-items: self-start;
+  width: fit-content;
 
-  width: 50px;
-  border-left: 1px solid white;
-  border-right: 1px solid white;
-
-  & + .Meter {
-    border-left: 1px solid transparent;
-  }
-
+  padding-left: ${(props) => props.size.paddingLeft || "4px"};
+  padding-right: ${(props) => props.size.paddingRight || "4px"};
   label {
     text-align: center;
     width: 100%;
@@ -30,16 +26,21 @@ const Container = styled.div`
 `
 
 // Defs
+type Size = {
+  width?: string
+  height?: string
+  textSize?: string
+  markerPadding?: string
+  paddingLeft?: string
+  paddingRight?: string
+  ledSegmentSpacing?: string
+}
 type Props = {
   arg?: number
   points?: MeterPoints
   label?: string
   hidden?: boolean
-  ledSize?: {
-    width?: string
-    height?: string
-    textLineHeight?: string
-  }
+  ledSize?: Size
 }
 
 export const Meter: FC<Props> = (props) => {
@@ -54,7 +55,7 @@ export const Meter: FC<Props> = (props) => {
 
   // ..
   return (
-    <Container className="Meter">
+    <Container className="Meter" size={ledSize}>
       {label && (
         <>
           <label>{label}</label>
@@ -79,7 +80,13 @@ export const Meter: FC<Props> = (props) => {
             arg={arg}
             min={min}
             max={max}
-            size={ledSize}
+            size={{
+              width: ledSize?.width,
+              height: ledSize?.height,
+              textSize: ledSize?.textSize,
+              markerPadding: ledSize?.markerPadding,
+              ledSegmentSpacing: ledSize?.ledSegmentSpacing,
+            }}
             color={point.fs <= -18 ? "green" : "#FFBF00"}
           />
         )
