@@ -12,7 +12,7 @@ import { GetStarted } from "./applications/GetStarted/Index"
 import { Workbench } from "./applications/Workbench/Index"
 // Config
 type AppType = "Workbench" | "MeterBridge" | "MuteSync" | "GetStarted"
-const app: AppType = "GetStarted"
+const APP: AppType = (process.env.APP || "GetStarted") as AppType
 
 // Style
 const ScreenContainer = styled.div`
@@ -23,22 +23,22 @@ function App() {
   // ..
   return (
     <ScreenContainer className="ScreenContainer">
-      {app === "GetStarted" && (
+      {APP === "GetStarted" && (
         <>
           <GetStarted />
         </>
       )}
-      {app === "MeterBridge" && (
+      {APP === "MeterBridge" && (
         <>
           <MeterBridge />
         </>
       )}
-      {app === "MuteSync" && (
+      {APP === "MuteSync" && (
         <>
           <MuteSync />
         </>
       )}
-      {app === "Workbench" && (
+      {APP === "Workbench" && (
         <>
           <Workbench />
         </>
