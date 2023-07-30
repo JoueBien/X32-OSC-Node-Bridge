@@ -22,28 +22,28 @@ const ScreenContainer = styled.div`
 function App() {
   // ..
   return (
-    <ScreenContainer className="ScreenContainer">
+    <>
       {APP === "GetStarted" && (
-        <>
+        <ScreenContainer className="ScreenContainer">
           <GetStarted />
-        </>
+        </ScreenContainer>
       )}
       {APP === "MeterBridge" && (
-        <>
+        <ScreenContainer className="ScreenContainer">
           <MeterBridge />
-        </>
+        </ScreenContainer>
       )}
       {APP === "MuteSync" && (
-        <>
+        <ScreenContainer className="ScreenContainer">
           <MuteSync />
-        </>
+        </ScreenContainer>
       )}
       {APP === "Workbench" && (
-        <>
+        <ScreenContainer className="ScreenContainer fill-screen">
           <Workbench />
-        </>
+        </ScreenContainer>
       )}
-    </ScreenContainer>
+    </>
   )
 }
 

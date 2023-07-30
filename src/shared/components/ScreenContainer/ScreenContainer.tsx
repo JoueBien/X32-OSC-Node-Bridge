@@ -7,7 +7,7 @@ type Props = {
 } & PropsWithChildren
 
 // Styles
-const ScreenContainerStyles = styled.div`
+const Container = styled.div`
   position: fixed;
   top: 0px;
   bottom: 0px;
@@ -23,13 +23,17 @@ const ScreenContainerStyles = styled.div`
     justify-content: center;
     align-items: center;
   }
+
+  &.fill-screen {
+    display: flex;
+  }
 `
 
 export const ScreenContainer: FC<Props> = ({ children, className }) => {
   // ..
   return (
-    <ScreenContainerStyles className={`ScreenContainer ${className || ""}`}>
+    <Container className={`ScreenContainer ${className || ""}`}>
       {children}
-    </ScreenContainerStyles>
+    </Container>
   )
 }

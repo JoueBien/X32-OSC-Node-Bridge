@@ -2,6 +2,15 @@ import { css } from "styled-components"
 import { colors } from "@/shared/styles"
 
 export const screenContainerStyles = css`
+  &.fill-screen {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    display: flex;
+  }
+
   @keyframes led-blink {
     0% {
       opacity: 1;
