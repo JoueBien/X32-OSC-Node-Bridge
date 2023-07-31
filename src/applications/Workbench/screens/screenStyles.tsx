@@ -13,10 +13,27 @@ export const screenStyles = css`
 
     flex-direction: column;
     justify-content: flex-start;
+    overflow: auto;
 
     padding: 0.6rem;
     padding-top: 0px;
     border-right: 1px solid ${colors.inverted.background};
+
+    .connect-project {
+      .item {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+
+        & + .item {
+          margin-top: 0.6rem;
+        }
+
+        button {
+          margin-left: 0.6rem;
+        }
+      }
+    }
 
     .connect-controls {
       & + .connect-controls {

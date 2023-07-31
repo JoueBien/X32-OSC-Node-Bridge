@@ -5,7 +5,7 @@ import { ConnectIpInput } from "@/shared/components/ConnectScreen/ConnectIpInput
 import { StoreButton } from "@/shared/components/ConnectScreen/StoreButton"
 import { ConnectIpOptionList } from "@/shared/components/ConnectScreen/ConnectIpOptionList"
 import { ConnectButton } from "@/shared/components/ConnectScreen/ConnectButton"
-import { Nav, Input } from "rsuite"
+import { Nav, Input, Button } from "rsuite"
 import { useAsyncSetState } from "use-async-setstate"
 import { screenStyles } from "./screenStyles"
 import { useObjectList } from "@/shared/hooks/useObjectList"
@@ -22,25 +22,49 @@ type ProjectItem = {
   notes: string
 }
 
+const EMPTY_PROJECT_ITEM_FAB: ProjectItem = {
+  name: "New Command",
+  arg: "[]",
+  lastOutput: "[]",
+  savedOuPut: "[]",
+  notes: "",
+}
+
 // Styles
 const Container = styled.div`
   ${screenStyles}
 `
 
+function jsonToStringFormat(str: string) {
+  try {
+    return JSON.stringify(str, null, 2)
+  } catch (_e) {
+    return str
+  }
+}
+
 export const Screen: FC<Props> = () => {
   // Connect Fly out
-  const [flyOut, setFlyOut] = useAsyncSetState<string>("connect")
+  const [flyOut, setFlyOut] = useLocalStorage<string>("fly-out-tab", "connect")
 
   const [activeItem, setActiveItem] = useLocalStorage<ProjectItem>(
     "active-project-item",
-    { name: "", arg: "[]", lastOutput: "[]", savedOuPut: "[]", notes: "" }
+    { ...EMPTY_PROJECT_ITEM_FAB }
   )
 
   const [storedList, setStoredList] = useLocalStorage<ProjectItem[]>(
     "project-items",
     []
   )
-  const { list } = useObjectList<ProjectItem>(storedList)
+  const [activeItemIndex, setActiveItemIndex] = useLocalStorage<number>(
+    "active-item-index",
+    -1
+  )
+  const {
+    list,
+    push: listPush,
+    removeAtIndex: listRemoveAtIndex,
+  } = useObjectList<ProjectItem>(storedList)
 
   // Effects
   // Make sure to always sync changes to the list with storage
@@ -48,6 +72,31 @@ export const Screen: FC<Props> = () => {
   useEffect(() => {
     setStoredList(list)
   }, [list])
+
+  // Functions
+  const setNew = () => {
+    setActiveItemIndex(-1)
+    setActiveItem({ ...EMPTY_PROJECT_ITEM_FAB })
+  }
+
+  const storeAs = () => {
+    setActiveItemIndex(list.length + 1)
+    listPush(activeItem)
+  }
+
+  const store = () => {
+    if (activeItemIndex !== -1) {
+      setActiveItemIndex(activeItemIndex)
+      listPush(activeItem)
+    }
+  }
+
+  const recall = (index: number) => {
+    if (list?.[index] !== undefined) {
+      setActiveItem(list[index])
+      setActiveItemIndex(index)
+    }
+  }
 
   // ..
   return (
@@ -98,18 +147,50 @@ export const Screen: FC<Props> = () => {
         )}
         {flyOut === "project" && (
           <>
-            <ol>
+            <div className="connect-project">
               {list.map((item, index) => {
-                return <li key={index}>{item.name}</li>
+                return (
+                  <div key={index} className="item">
+                    {item.name}{" "}
+                    <div>
+                      <Button
+                        className="Button-grey"
+                        type="button"
+                        onClick={() => recall(index)}
+                      >
+                        Recall
+                      </Button>
+                      <Button className="Button-red" type="button">
+                        {/* TODO: Fix delete breaks active item here :( */}
+                        {/* onClick={() => listRemoveAtIndex(index)} */}
+                        Delete
+                      </Button>
+                    </div>
+                  </div>
+                )
               })}
-            </ol>
+            </div>
           </>
         )}
       </div>
       <div className="work">
         <div className="nav-container-sticky">
           <div className="wrapper">
-            <Nav
+            <Button className="Button-green" type="button" onClick={setNew}>
+              New
+            </Button>
+            <Button className="Button-blue" type="button" onClick={storeAs}>
+              Store As
+            </Button>
+            <Button
+              className="Button-blue"
+              type="button"
+              onClick={store}
+              disabled={activeItemIndex === -1}
+            >
+              Store
+            </Button>
+            {/* <Nav
               appearance="subtle"
               className="topNav"
               activeKey={flyOut}
@@ -117,7 +198,7 @@ export const Screen: FC<Props> = () => {
             >
               <Nav.Item eventKey="connect">Connect</Nav.Item>
               <Nav.Item eventKey="project">Project</Nav.Item>
-            </Nav>
+            </Nav> */}
           </div>
         </div>
         <label>Request</label>
@@ -138,7 +219,7 @@ export const Screen: FC<Props> = () => {
             <label>Last Output</label>
             <Input
               as="textarea"
-              value={activeItem.lastOutput}
+              value={jsonToStringFormat(activeItem.lastOutput)}
               disabled={true}
             />
           </div>
@@ -158,7 +239,7 @@ export const Screen: FC<Props> = () => {
             <label>Saved Output</label>
             <Input
               as="textarea"
-              value={activeItem.savedOuPut}
+              value={jsonToStringFormat(activeItem.savedOuPut)}
               disabled={true}
             />
           </div>
