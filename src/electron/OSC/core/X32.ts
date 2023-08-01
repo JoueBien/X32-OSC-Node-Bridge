@@ -9,6 +9,7 @@ import { ArgumentWithMetadataShape, FullTimeTag } from "@/types/osc"
 import { delay } from "@/shared/helpers/time"
 import { UDPPort, UDPPortInstance, OptionalMessage, Message } from "./osc"
 import { v4 as uuidv4 } from "uuid"
+import getPort from "get-port"
 
 export type ConnectParams = { mixerIp: string; debug?: boolean }
 
@@ -71,7 +72,7 @@ export default class X32 {
   }
 
   connect(params: ConnectParams) {
-    return new Promise<false | Info>((resolve) => {
+    return new Promise<false | Info>(async (resolve) => {
       const { mixerIp, debug } = params
       // Make sure we don't re-open on top
       this.disconnect()
@@ -80,7 +81,8 @@ export default class X32 {
       try {
         this.udpPort = new UDPPort({
           localAddress: "0.0.0.0",
-          localPort: this.localPort,
+          // localPort: this.localPort,
+          localPort: await getPort(),
           metadata: true,
           remoteAddress: mixerIp,
           remotePort: 10023,
@@ -88,7 +90,8 @@ export default class X32 {
         }) as any
         this.udpPortX = new UDPPort({
           localAddress: "0.0.0.0",
-          localPort: this.localPortX,
+          // localPort: this.localPortX,
+          localPort: await getPort(),
           metadata: true,
           remoteAddress: mixerIp,
           remotePort: 10023,
@@ -120,7 +123,7 @@ export default class X32 {
 
       // Do the last part here async
       // We are considered connected when ready and we get the console info
-      (async () => {
+      ;(async () => {
         const isReady = await this.ready()
         console.log("isReady", isReady)
         if (isReady === true) {
