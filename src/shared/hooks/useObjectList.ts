@@ -29,6 +29,23 @@ export const useObjectList = <T>(
     await setList(getList().filter((value, itemIndex) => index !== itemIndex))
   }
 
+  // Find an item at a key location and update it
+  const updateWhereObjectHasKeyValue = (
+    key: keyof T,
+    matchValue: any,
+    newValue: T
+  ) => {
+    const strValue = JSON.stringify(matchValue)
+    return setList(
+      getList().map((item) => {
+        if (JSON.stringify(item[key]) === strValue) {
+          return newValue
+        }
+        return item
+      })
+    )
+  }
+
   // Find and object in the list that has a key with a value
   const getObjectByKeyValue = (key: keyof T, value: any) => {
     const strValue = JSON.stringify(value)
@@ -46,10 +63,11 @@ export const useObjectList = <T>(
 
   return {
     list,
-    overrideList: async ( values: T[]) => {
+    overrideList: async (values: T[]) => {
       await setList(values)
     },
     updateAtIndex,
+    updateWhereObjectHasKeyValue,
     push,
     pushEnd,
     pushStart,

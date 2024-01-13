@@ -1,15 +1,14 @@
 import { FC, useEffect } from "react"
 import styled from "styled-components"
-import { colors } from "@/shared/styles"
 import { ConnectIpInput } from "@/shared/components/ConnectScreen/ConnectIpInput"
 import { StoreButton } from "@/shared/components/ConnectScreen/StoreButton"
 import { ConnectIpOptionList } from "@/shared/components/ConnectScreen/ConnectIpOptionList"
 import { ConnectButton } from "@/shared/components/ConnectScreen/ConnectButton"
 import { Nav, Input, Button } from "rsuite"
-import { useAsyncSetState } from "use-async-setstate"
 import { screenStyles } from "./screenStyles"
 import { useObjectList } from "@/shared/hooks/useObjectList"
 import { useLocalStorage } from "usehooks-ts"
+import { v4 as uuid } from "uuid"
 
 // Types
 type Props = NonNullable<unknown>
@@ -20,6 +19,7 @@ type ProjectItem = {
   lastOutput: string
   savedOuPut: string
   notes: string
+  uuid: string
 }
 
 const EMPTY_PROJECT_ITEM_FAB: ProjectItem = {
@@ -28,7 +28,10 @@ const EMPTY_PROJECT_ITEM_FAB: ProjectItem = {
   lastOutput: "[]",
   savedOuPut: "[]",
   notes: "",
+  uuid: "",
 }
+
+const INACTIVE_ID = "-1"
 
 // Styles
 const Container = styled.div`
@@ -56,14 +59,16 @@ export const Screen: FC<Props> = () => {
     "project-items",
     []
   )
-  const [activeItemIndex, setActiveItemIndex] = useLocalStorage<number>(
+  const [activeItemIndex, setActiveItemIndex] = useLocalStorage<string>(
     "active-item-index",
-    -1
+    INACTIVE_ID
   )
   const {
     list,
-    push: listPush,
+    pushStart: listPush,
     removeAtIndex: listRemoveAtIndex,
+    updateWhereObjectHasKeyValue: updateItem,
+    getObjectByKeyValue: getItem,
   } = useObjectList<ProjectItem>(storedList)
 
   // Effects
@@ -74,28 +79,36 @@ export const Screen: FC<Props> = () => {
   }, [list])
 
   // Functions
-  const setNew = () => {
-    setActiveItemIndex(-1)
-    setActiveItem({ ...EMPTY_PROJECT_ITEM_FAB })
+  const setNew = async () => {
+    await setActiveItemIndex(INACTIVE_ID)
+    await setActiveItem({ ...EMPTY_PROJECT_ITEM_FAB, uuid: INACTIVE_ID })
   }
 
-  const storeAs = () => {
-    setActiveItemIndex(list.length + 1)
-    listPush(activeItem)
+  const storeAs = async () => {
+    const newId = uuid()
+    await listPush({ ...activeItem, uuid: newId })
+    await recall(newId)
   }
 
-  const store = () => {
-    if (activeItemIndex !== -1) {
-      setActiveItemIndex(activeItemIndex)
-      listPush(activeItem)
+  const store = async () => {
+    if (activeItemIndex !== INACTIVE_ID) {
+      await setActiveItemIndex(activeItemIndex)
+      await updateItem("uuid", activeItemIndex, { ...activeItem })
     }
   }
 
-  const recall = (index: number) => {
-    if (list?.[index] !== undefined) {
-      setActiveItem(list[index])
-      setActiveItemIndex(index)
+  const recall = async (id: string) => {
+    const item = getItem("uuid", id)
+    if (item) {
+      await setActiveItem({ ...item })
+      await setActiveItemIndex(item.uuid)
     }
+  }
+
+  const deleteAtIndex = async (index: number) => {
+    // Set new so we don't end up with stale state
+    await setNew()
+    await listRemoveAtIndex(index)
   }
 
   // ..
@@ -156,13 +169,15 @@ export const Screen: FC<Props> = () => {
                       <Button
                         className="Button-grey"
                         type="button"
-                        onClick={() => recall(index)}
+                        onClick={() => recall(item.uuid)}
                       >
                         Recall
                       </Button>
-                      <Button className="Button-red" type="button">
-                        {/* TODO: Fix delete breaks active item here :( */}
-                        {/* onClick={() => listRemoveAtIndex(index)} */}
+                      <Button
+                        className="Button-red"
+                        type="button"
+                        onClick={() => deleteAtIndex(index)}
+                      >
                         Delete
                       </Button>
                     </div>
@@ -176,29 +191,27 @@ export const Screen: FC<Props> = () => {
       <div className="work">
         <div className="nav-container-sticky">
           <div className="wrapper">
-            <Button className="Button-green" type="button" onClick={setNew}>
-              New
-            </Button>
-            <Button className="Button-blue" type="button" onClick={storeAs}>
-              Store As
-            </Button>
-            <Button
-              className="Button-blue"
-              type="button"
-              onClick={store}
-              disabled={activeItemIndex === -1}
-            >
-              Store
-            </Button>
-            {/* <Nav
-              appearance="subtle"
-              className="topNav"
-              activeKey={flyOut}
-              onSelect={setFlyOut}
-            >
-              <Nav.Item eventKey="connect">Connect</Nav.Item>
-              <Nav.Item eventKey="project">Project</Nav.Item>
-            </Nav> */}
+            <div className="save-controls">
+              <Button className="Button-blue" type="button" onClick={setNew}>
+                New
+              </Button>
+              <Button className="Button-blue" type="button" onClick={storeAs}>
+                Store As
+              </Button>
+              <Button
+                className="Button-blue"
+                type="button"
+                onClick={store}
+                disabled={activeItemIndex === INACTIVE_ID}
+              >
+                Store
+              </Button>
+            </div>
+            <div className="send-controls">
+              <Button className="Button-green" type="button" onClick={setNew}>
+                Send
+              </Button>
+            </div>
           </div>
         </div>
         <label>Request</label>

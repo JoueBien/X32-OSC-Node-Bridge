@@ -87,6 +87,17 @@ export const screenStyles = css`
       top: 0px;
       background: ${colors.background};
       /* Overflow is bugged with nav stack? */
+      .wrapper {
+        display: flex;
+        justify-content: space-between;
+        /* gap: 0.6rem; */
+
+        .save-controls,
+        .send-controls {
+          display: flex;
+          gap: 0.3rem;
+        }
+      }
     }
 
     .in-out {
