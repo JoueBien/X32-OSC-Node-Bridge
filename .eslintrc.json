@@ -22,7 +22,7 @@
     "@typescript-eslint/no-empty-function": "off",
     "@typescript-eslint/no-unused-vars": [
       "warn",
-      { 
+      {
         "argsIgnorePattern": "^_",
         "varsIgnorePattern": "^_",
         "caughtErrorsIgnorePattern": "^_"
@@ -30,6 +30,7 @@
     ],
     "react-hooks/exhaustive-deps": "off",
     "import/no-named-as-default": "off",
-    "@typescript-eslint/ban-ts-comment": "off"
+    "@typescript-eslint/ban-ts-comment": "off",
+    "no-async-promise-executor": "off"
   }
 }

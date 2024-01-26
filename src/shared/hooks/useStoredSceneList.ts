@@ -1,5 +1,4 @@
 import { useLocalStorage } from "usehooks-ts"
-import { useObjectList } from "./useObjectList"
 import { useEffect } from "react"
 import { v4 as uuid } from "uuid"
 import {
@@ -48,7 +47,7 @@ export function useStoredSceneList<T>(params: {
     fullKey,
     {}
   )
-  const { list, map, setItem, updateItem, newItem, deleteItem } =
+  const { list, map, updateItem, newItem, deleteItem } =
     useIdRecordList<StorageItem<T>>(savedList)
 
   // Calc

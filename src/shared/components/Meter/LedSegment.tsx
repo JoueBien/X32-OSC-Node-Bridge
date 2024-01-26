@@ -18,6 +18,7 @@ type Props = {
     textSize?: string
     markerPadding?: string
     ledSegmentSpacing?: string
+    radius?: string
   }
 }
 
@@ -30,9 +31,9 @@ const Container = styled.div<StyleProps>`
   justify-content: space-between;
   align-items: center;
 
-  width: ${(props) => props?.size?.width || "40px"};
+  /* width: ${(props) => props?.size?.width || "40px"}; */
   height: ${(props) => props?.size?.height || "20px"};
-  background: #282c34;
+  /* background: #282c34; */
 
   & + .LedSegment {
     margin-top: ${(props) => props?.size?.ledSegmentSpacing || "5px"};
@@ -44,7 +45,7 @@ const Container = styled.div<StyleProps>`
     width: ${(props) => props?.size?.width || "40px"};
     height: ${(props) => props?.size?.height || "20px"};
 
-    border-radius: 6px;
+    border-radius: ${(props) => props?.size?.radius || "6px"};
     overflow: hidden;
 
     .reflector {
@@ -71,13 +72,12 @@ const Container = styled.div<StyleProps>`
     }
   }
 
-  span {
+  .label {
     display: inline-block;
     line-height: ${(props) => props?.size?.textSize || "20px"};
     color: white;
     font-size: ${(props) => props?.size?.textSize || "20px"};
     margin-left: ${(props) => props?.size?.markerPadding || "5px"};
-    /* markerPadding */
   }
 `
 
@@ -117,7 +117,7 @@ export const LedSegment: FC<Props> = (props) => {
     // Figure out the linear % between each
     const percent = percentBetween(min as number, max as number)
     // from 100% go to 1
-    const opacity = percent(arg as number) / 100
+    const opacity = percent(arg as number) / -100
 
     if (opacity > 1) {
       return 1
@@ -138,7 +138,7 @@ export const LedSegment: FC<Props> = (props) => {
           }}
         />
       </div>
-      <span>{label}</span>
+      <div className="label">{label}</div>
     </Container>
   )
 }

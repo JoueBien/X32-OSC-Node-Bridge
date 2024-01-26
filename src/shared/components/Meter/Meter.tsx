@@ -1,5 +1,5 @@
 // Libs
-import { FC } from "react"
+import { FC, Fragment } from "react"
 import styled from "styled-components"
 import { LedSegment } from "./LedSegment" // Meter
 // Comps
@@ -11,17 +11,18 @@ const Container = styled.div<{ size: Size }>`
   flex-direction: column;
   align-items: center;
   align-items: self-start;
-  width: fit-content;
+  /* width: fit-content; */
 
   padding-left: ${(props) => props.size.paddingLeft || "4px"};
   padding-right: ${(props) => props.size.paddingRight || "4px"};
-  label {
+
+  .Meter-label {
     text-align: center;
     width: 100%;
     display: block;
     padding-bottom: 9px;
     font-weight: 600;
-    font-size: 13px;
+    font-size: ${(props) => props.size.textSize || "20px"};
   }
 `
 
@@ -34,7 +35,9 @@ type Size = {
   paddingLeft?: string
   paddingRight?: string
   ledSegmentSpacing?: string
+  radius?: string
 }
+
 type Props = {
   arg?: number
   points?: MeterPoints
@@ -58,7 +61,7 @@ export const Meter: FC<Props> = (props) => {
     <Container className="Meter" size={ledSize}>
       {label && (
         <>
-          <label>{label}</label>
+          <div className="Meter-label">{label}</div>
         </>
       )}
       <LedSegment
@@ -69,8 +72,10 @@ export const Meter: FC<Props> = (props) => {
       />
       {thePoints.map((point, index) => {
         if (point.fs === -Infinity || point.fs === 0) {
-          return null
+          return <Fragment key={point.fs} />
         }
+        // Min is the next smallest segment.
+        // Remember render order starts a the peak (0).
         const min = thePoints[index + 1].arg
         const max = thePoints[index].arg
         return (
@@ -80,13 +85,7 @@ export const Meter: FC<Props> = (props) => {
             arg={arg}
             min={min}
             max={max}
-            size={{
-              width: ledSize?.width,
-              height: ledSize?.height,
-              textSize: ledSize?.textSize,
-              markerPadding: ledSize?.markerPadding,
-              ledSegmentSpacing: ledSize?.ledSegmentSpacing,
-            }}
+            size={ledSize}
             color={point.fs <= -18 ? "green" : "#FFBF00"}
           />
         )

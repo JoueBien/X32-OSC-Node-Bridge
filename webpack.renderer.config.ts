@@ -1,12 +1,12 @@
-import type { Configuration } from 'webpack';
+import type { Configuration } from "webpack"
 import path from "node:path"
-import { rules } from './webpack.rules';
-import { plugins } from './webpack.plugins';
+import { rules } from "./webpack.rules"
+import { plugins } from "./webpack.plugins"
 
 rules.push({
   test: /\.css$/,
-  use: [{ loader: 'style-loader' }, { loader: 'css-loader' }],
-});
+  use: [{ loader: "style-loader" }, { loader: "css-loader" }],
+})
 
 export const rendererConfig: Configuration = {
   module: {
@@ -14,10 +14,11 @@ export const rendererConfig: Configuration = {
   },
   plugins,
   resolve: {
-    extensions: ['.js', '.ts', '.jsx', '.tsx', '.css'],
+    extensions: [".js", ".ts", ".jsx", ".tsx", ".css"],
     alias: {
-      "@": path.resolve(__dirname, 'src'),
-      "~": path.resolve(__dirname, 'src/electron'),
+      "@/applications": path.resolve(__dirname, "src/applications"),
+      "@": path.resolve(__dirname, "src"),
+      "~": path.resolve(__dirname, "src/electron"),
     },
   },
-};
+}

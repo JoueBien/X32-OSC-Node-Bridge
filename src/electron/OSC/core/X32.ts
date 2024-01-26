@@ -123,28 +123,28 @@ export default class X32 {
 
       // Do the last part here async
       // We are considered connected when ready and we get the console info
-      ;(async () => {
-        const isReady = await this.ready()
-        console.log("isReady", isReady)
-        if (isReady === true) {
-          const info = await this.requestAndReply({
-            address: "/info",
-            args: [],
+      // ;(async () => {
+      const isReady = await this.ready()
+      console.log("isReady", isReady)
+      if (isReady === true) {
+        const info = await this.requestAndReply({
+          address: "/info",
+          args: [],
+        })
+        if (info !== undefined) {
+          this.connected = true
+          resolve({
+            serverVersion: info?.args?.[0].value || "",
+            serverName: info?.args?.[1].value || "",
+            console: info?.args?.[2].value || "",
+            version: info?.args?.[3].value || "",
           })
-          if (info !== undefined) {
-            this.connected = true
-            resolve({
-              serverVersion: info?.args?.[0].value || "",
-              serverName: info?.args?.[1].value || "",
-              console: info?.args?.[2].value || "",
-              version: info?.args?.[3].value || "",
-            })
-            return
-          }
+          return
         }
-        this.connected = false
-        resolve(false)
-      })()
+      }
+      this.connected = false
+      resolve(false)
+      // })()
     })
   }
 

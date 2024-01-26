@@ -17,6 +17,7 @@
     "noFallthroughCasesInSwitch": true,
     "paths": {
       "*": ["node_modules/*"],
+      "@/applications/*": ["./src/applications/*"],
       "@/*": ["./src/*"],
       "~/*": ["./src/electron/*"]
     }

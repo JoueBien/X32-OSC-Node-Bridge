@@ -28,7 +28,7 @@ export function useIdRecordList<I>(
   // Set an item - if no ID one is provided
   const setItem = async (params: { id?: string | undefined; value: I }) => {
     const { id: existingId, value } = params
-    let newId = existingId || uuid()
+    const newId = existingId || uuid()
     await setMap({
       ...getMap(),
       [newId]: value,
