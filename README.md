@@ -8,7 +8,7 @@ The non-web libraries are now using the contextBridge which means the code base 
 
 The code base is based on [Electron Forge](https://www.electronforge.io/guides/framework-integration/react-with-typescript).
 
-Last installed with node `v18.17.0`. Requires python 3.6.0 and C/C++ compiler (Windows build tools or xCode) as there are packages that need to be recompiled with node-gyp. The project should auto compile native modules with the right headers when `npm install` is run.
+Last installed with node `v20.11.0`. Requires python 3.6.0 and C/C++ compiler (Windows build tools or xCode) as there are packages that need to be recompiled with node-gyp. The project should auto compile native modules with the right headers when `npm install` is run.
 
 Older revisions were based on [React-TypeScript-Electron sample with Create React App and Electron Builder](https://github.com/yhirose/react-typescript-electron-sample-with-create-react-app-and-electron-builder). and ran with node `16.17.0`
 

@@ -11,8 +11,8 @@
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx .",
     "fix": "eslint --fix --ext .tsx,.ts .",
-    "installNode": "nvm install 18.17.0",
-    "swapNode": "nvm use 18.17.0"
+    "installNode": "nvm install 20.11.0",
+    "swapNode": "nvm use 20.11.0"
   },
   "keywords": [],
   "author": {
