@@ -5,71 +5,37 @@
  * https://github.com/colinbdclark/osc.js/issues/145
  */
 // Libs
-import { ArgumentWithMetadataShape, FullTimeTag } from "@/types/osc"
 import { delay } from "@/shared/helpers/time"
-import { UDPPort, UDPPortInstance, OptionalMessage, Message } from "./osc"
+import {
+  MessageArg,
+  MessageArgString,
+  OnListenerMessage,
+  ResponseMessage,
+  UDPPort,
+} from "osc"
 import { v4 as uuidv4 } from "uuid"
 import getPort from "get-port"
+import { FixedArray } from "@/types/args"
 
-export type ConnectParams = { mixerIp: string; debug?: boolean }
-
-export type RequestFuncParams =
-  | OptionalMessage<ArgumentWithMetadataShape<any>>
-  | Message<ArgumentWithMetadataShape<any>>
-export type Arg = ArgumentWithMetadataShape<any>
-export type RequestFunc = ({ address, args }: RequestFuncParams) => void
-
-export type UnSubscribeFunc = () => void
-export type IntervalReference = {
-  interval?: NodeJS.Timer
-  onMessage?: any
-}
-
-export type OnMessageFunc = (
-  message: Message<ArgumentWithMetadataShape<any>>,
-  timeTag: FullTimeTag,
-  info: any
-) => void
-
-export type SubscribeFuncParams = RequestFuncParams & {
-  onMessage: OnMessageFunc
-  frequency: number
-}
-export type SubscribeFunc = ({
-  address,
-  args,
-  onMessage,
-  frequency,
-}: SubscribeFuncParams) => Promise<IntervalReference | undefined>
-
-export type RequestThenReplyFuncParams = RequestFuncParams // & {}
-
-export type RequestThenReplyFunc = ({
-  address,
-  args,
-}: RequestThenReplyFuncParams) => Promise<
-  Message<ArgumentWithMetadataShape<any>> | undefined
->
-
-export type Info = {
-  serverVersion: string
-  serverName: string
-  console: string
-  version: string
-}
+import {
+  ConnectParams,
+  OnMessageFunc,
+  IntervalReference,
+  RequestThenReplyFuncParams,
+  SubscribeFuncParams,
+  RequestFuncParams,
+  BatchSubscribeFuncParams,
+  Arg,
+  FormatSubscribeFuncParams,
+  Info,
+} from "./X32.types"
 
 export default class X32 {
-  udpPort?: UDPPortInstance
-  udpPortX?: UDPPortInstance
+  udpPort?: UDPPort
+  udpPortX?: UDPPort
   connected = false
-  localPort: number
-  localPortX: number
 
-  // Set the reply port the mixer replies on init
-  constructor(localPort: number, localPortX: number) {
-    this.localPort = localPort
-    this.localPortX = localPortX
-  }
+  constructor() {}
 
   connect(params: ConnectParams) {
     return new Promise<false | Info>(async (resolve) => {
@@ -81,7 +47,6 @@ export default class X32 {
       try {
         this.udpPort = new UDPPort({
           localAddress: "0.0.0.0",
-          // localPort: this.localPort,
           localPort: await getPort(),
           metadata: true,
           remoteAddress: mixerIp,
@@ -90,7 +55,6 @@ export default class X32 {
         }) as any
         this.udpPortX = new UDPPort({
           localAddress: "0.0.0.0",
-          // localPort: this.localPortX,
           localPort: await getPort(),
           metadata: true,
           remoteAddress: mixerIp,
@@ -112,11 +76,11 @@ export default class X32 {
       if (debug === true) {
         // On error show track
         this.udpPort?.on("error", function (error: any) {
-          console.log("An error occurred: ", error?.message)
+          console.info("An error occurred: ", error?.message)
           console.trace(error)
         })
         this.udpPortX?.on("error", function (error: any) {
-          console.log("An error occurred X: ", error?.message)
+          console.info("An error occurred X: ", error?.message)
           console.trace(error)
         })
       }
@@ -125,20 +89,24 @@ export default class X32 {
       // We are considered connected when ready and we get the console info
       // ;(async () => {
       const isReady = await this.ready()
-      console.log("isReady", isReady)
+      console.info("isReady", isReady)
       if (isReady === true) {
-        const info = await this.requestAndReply({
+        const info = await this.requestAndReply<
+          FixedArray<MessageArgString | undefined, 4>
+        >({
           address: "/info",
           args: [],
         })
         if (info !== undefined) {
           this.connected = true
-          resolve({
+          const x32Info = {
             serverVersion: info?.args?.[0].value || "",
             serverName: info?.args?.[1].value || "",
             console: info?.args?.[2].value || "",
             version: info?.args?.[3].value || "",
-          })
+          }
+          console.log("@X32->connect mixer info", x32Info)
+          resolve(x32Info)
           return
         }
       }
@@ -239,37 +207,38 @@ export default class X32 {
     return this.onMessagesX([address], onMessage)
   }
 
-  async requestAndReply({ address, args }: RequestThenReplyFuncParams) {
+  async requestAndReply<ARG_T = MessageArg[]>({
+    address,
+    args,
+  }: RequestThenReplyFuncParams) {
     let isResolved = false
-    return new Promise<Message<ArgumentWithMetadataShape<any>> | undefined>(
-      (resolve) => {
-        // When done we return the message & Clean up
-        const onDone: OnMessageFunc = (oscMsg, _timeTag, _info) => {
-          if (oscMsg.address === address) {
-            // console.log('oscMsg', oscMsg)
-            isResolved = true
-            this.udpPort?.off("message", onDone)
-            resolve(oscMsg)
-          }
+    return new Promise<ResponseMessage<ARG_T> | undefined>((resolve) => {
+      // When done we return the message & Clean up
+      const onDone: OnListenerMessage<ARG_T> = (oscMsg, _timeTag, _info) => {
+        if (oscMsg.address === address) {
+          // console.log('oscMsg', oscMsg)
+          isResolved = true
+          this.udpPort?.off("message", onDone)
+          resolve(oscMsg)
         }
-
-        this.udpPort?.on("message", onDone as any)
-
-        this.request({
-          address,
-          args,
-        })
-
-        // If we never got a response we need to clean up
-        delay(1000).then(() => {
-          if (isResolved === false) {
-            this.udpPort?.off("message", onDone)
-            console.warn(`@requestAndReply->too slow to reply on ${address}`)
-            resolve(undefined)
-          }
-        })
       }
-    )
+
+      this.udpPort?.on("message", onDone)
+
+      this.request({
+        address,
+        args,
+      })
+
+      // If we never got a response we need to clean up
+      delay(1000).then(() => {
+        if (isResolved === false) {
+          this.udpPort?.off("message", onDone)
+          console.warn(`@requestAndReply->too slow to reply on ${address}`)
+          resolve(undefined)
+        }
+      })
+    })
   }
 
   async subscribe({ address, args, onMessage }: SubscribeFuncParams) {
@@ -323,7 +292,11 @@ export default class X32 {
     return {} as IntervalReference
   }
 
-  async batchSubscribe({ args, onMessage, frequency }: SubscribeFuncParams) {
+  async batchSubscribe({
+    args,
+    onMessage,
+    frequency,
+  }: BatchSubscribeFuncParams) {
     if (this.connected) {
       const address = `/${uuidv4()}`
       const requestArgs: Arg[] = [
@@ -361,7 +334,11 @@ export default class X32 {
     return {} as IntervalReference
   }
 
-  async formatSubscribe({ args, onMessage, frequency }: SubscribeFuncParams) {
+  async formatSubscribe({
+    args,
+    onMessage,
+    frequency,
+  }: FormatSubscribeFuncParams) {
     if (this.connected) {
       const address = `/${uuidv4()}`
       const requestArgs: Arg[] = [
@@ -422,14 +399,14 @@ export default class X32 {
 
   // Send message to server
   request({ address, args }: RequestFuncParams) {
-    console.log("@X32->request", address, args)
+    console.info("@X32->request using:(address, args)", address, args)
     this.udpPort?.send({
       address,
       args: args || [],
     })
   }
   requestX({ address, args }: RequestFuncParams) {
-    console.log("@X32->request", address, args)
+    console.info("@X32->requestX using:(address, args)", address, args)
     this.udpPortX?.send({
       address,
       args: args || [],

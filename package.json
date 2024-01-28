@@ -10,7 +10,9 @@
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx .",
-    "fix": "eslint --fix --ext .tsx,.ts ."
+    "fix": "eslint --fix --ext .tsx,.ts .",
+    "installNode": "nvm install 18.17.0",
+    "swapNode": "nvm use 18.17.0"
   },
   "keywords": [],
   "author": {

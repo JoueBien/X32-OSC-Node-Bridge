@@ -2,7 +2,7 @@
 import { useAsyncSetState, useGetState } from "use-async-setstate"
 import { createContext, FC, PropsWithChildren } from "react"
 // Comps
-import { ConnectParams } from "@/electron/OSC/core/X32"
+import { ConnectParams } from "~/OSC/core/X32.types"
 import {
   WindowMixerShared,
   WindowMixerSharedKey,

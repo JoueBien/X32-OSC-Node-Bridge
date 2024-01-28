@@ -78,6 +78,7 @@ const Container = styled.div<StyleProps>`
     color: white;
     font-size: ${(props) => props?.size?.textSize || "20px"};
     margin-left: ${(props) => props?.size?.markerPadding || "5px"};
+    width: ${(props) => props?.size?.width || "40px"};
   }
 `
 
@@ -117,7 +118,7 @@ export const LedSegment: FC<Props> = (props) => {
     // Figure out the linear % between each
     const percent = percentBetween(min as number, max as number)
     // from 100% go to 1
-    const opacity = percent(arg as number) / -100
+    const opacity = percent(arg as number) / 100
 
     if (opacity > 1) {
       return 1

@@ -8,7 +8,7 @@ import {
 import { MixerContext } from "@/shared/contexts/MixerContext"
 import { MuteMapperContext } from "./MuteMapperContext"
 import { useAsyncSetState, useGetState } from "use-async-setstate"
-import type { IntervalReference } from "@/electron/OSC/core/X32"
+import type { IntervalReference } from "~/OSC/core/X32.types"
 import { useAsyncState } from "@/shared/hooks/useAsyncState"
 
 // Types

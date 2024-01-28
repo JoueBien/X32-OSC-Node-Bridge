@@ -1,12 +1,6 @@
 import { FC } from "react"
 import { Meter } from "@/shared/components/Meter/Meter"
-import {
-  MBM7CL_POINTS,
-  SL3_POINTS,
-  X32_FULL_POINTS,
-  X32_SHORT_POINTS,
-  CUSTOM_POINTS,
-} from "@/shared/helpers/meterPoints"
+import { CUSTOM_POINTS } from "@/shared/helpers/meterPoints"
 
 export const MeterScreen: FC<any> = () => {
   return (
@@ -22,60 +16,60 @@ export const MeterScreen: FC<any> = () => {
             height: "20px",
             textSize: "10px",
             markerPadding: "8px",
-            ledSegmentSpacing: "1px",
+            ledSegmentSpacing: "2px",
             radius: "4px",
           }}
         />
         <Meter
           arg={0.5}
-          points={MBM7CL_POINTS}
+          points={CUSTOM_POINTS}
           label="123456789012"
           ledSize={{
             width: "30px",
             height: "20px",
             textSize: "10px",
             markerPadding: "8px",
-            ledSegmentSpacing: "1px",
-            radius: "1px",
+            ledSegmentSpacing: "2px",
+            radius: "4px",
           }}
         />
         <Meter
           arg={0.5}
-          points={SL3_POINTS}
+          points={CUSTOM_POINTS}
           label="123456789012"
           ledSize={{
             width: "30px",
             height: "20px",
             textSize: "10px",
             markerPadding: "8px",
-            ledSegmentSpacing: "1px",
-            radius: "1px",
+            ledSegmentSpacing: "2px",
+            radius: "4px",
           }}
         />
         <Meter
           arg={0.5}
-          points={X32_FULL_POINTS}
+          points={CUSTOM_POINTS}
           label="123456789012"
           ledSize={{
             width: "30px",
             height: "20px",
             textSize: "10px",
             markerPadding: "8px",
-            ledSegmentSpacing: "1px",
-            radius: "1px",
+            ledSegmentSpacing: "2px",
+            radius: "4px",
           }}
         />
         <Meter
           arg={0.5}
-          points={X32_SHORT_POINTS}
+          points={CUSTOM_POINTS}
           label="123456789012"
           ledSize={{
             width: "30px",
             height: "20px",
             textSize: "10px",
             markerPadding: "8px",
-            ledSegmentSpacing: "1px",
-            radius: "1px",
+            ledSegmentSpacing: "2px",
+            radius: "4px",
           }}
         />
       </div>

@@ -1,5 +1,7 @@
 import { contextBridge } from "electron"
-import X32, {
+import X32 from "~/OSC/core/X32"
+
+import {
   ConnectParams,
   Info,
   RequestFuncParams,
@@ -7,12 +9,12 @@ import X32, {
   RequestThenReplyFuncParams,
   SubscribeFuncParams,
   OnMessageFunc,
-} from "./core/X32"
+} from "~/OSC/core/X32.types"
 
 // We can't expose X32 directly so
 // we use the bridge to use OSC/Node in the render
-const shared = (localPort: number, localPortX: number) => {
-  const OscMixer = new X32(localPort, localPortX)
+const shared = () => {
+  const OscMixer = new X32()
   return {
     // Connect & Disconnect
     connect: (params: ConnectParams): Promise<boolean | Info> =>
@@ -43,7 +45,7 @@ const shared = (localPort: number, localPortX: number) => {
       OscMixer.onMessages(addresses, onMessage),
     onMessage: (addresses: string, onMessage: OnMessageFunc) =>
       OscMixer.onMessage(addresses, onMessage),
-    
+
     // For use with X
     onAnyMessageX: (onMessage: OnMessageFunc) =>
       OscMixer.onAnyMessageX(onMessage),
@@ -55,9 +57,9 @@ const shared = (localPort: number, localPortX: number) => {
 }
 export function initAppMixerEventListenersBridge() {
   return {
-    Mixer: contextBridge.exposeInMainWorld("Mixer", shared(57121, 57122)),
-    MixerA: contextBridge.exposeInMainWorld("MixerA", shared(57123, 57124)),
-    MixerB: contextBridge.exposeInMainWorld("MixerB", shared(57125, 57126)),
+    Mixer: contextBridge.exposeInMainWorld("Mixer", shared()),
+    MixerA: contextBridge.exposeInMainWorld("MixerA", shared()),
+    MixerB: contextBridge.exposeInMainWorld("MixerB", shared()),
   }
 }
 

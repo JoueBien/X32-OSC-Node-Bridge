@@ -20,7 +20,7 @@ const Container = styled.div<{ size: Size }>`
     text-align: center;
     width: 100%;
     display: block;
-    padding-bottom: 9px;
+    padding-top: 9px;
     font-weight: 600;
     font-size: ${(props) => props.size.textSize || "20px"};
   }
@@ -59,11 +59,6 @@ export const Meter: FC<Props> = (props) => {
   // ..
   return (
     <Container className="Meter" size={ledSize}>
-      {label && (
-        <>
-          <div className="Meter-label">{label}</div>
-        </>
-      )}
       <LedSegment
         label="Clip"
         color="red"
@@ -90,12 +85,18 @@ export const Meter: FC<Props> = (props) => {
           />
         )
       })}
-      <LedSegment
+      {/* Real meters don't have ∞ */}
+      {/* <LedSegment
         label="∞"
         color="green"
         size={ledSize}
         isOn={(arg || 0) > 0}
-      />
+      /> */}
+      {label && (
+        <>
+          <div className="Meter-label">{label}</div>
+        </>
+      )}
     </Container>
   )
 }
