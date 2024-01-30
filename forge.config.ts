@@ -26,6 +26,7 @@ const config: ForgeConfig = {
       mainConfig,
       renderer: {
         config: rendererConfig,
+        nodeIntegration: true,
         entryPoints: [
           {
             html: "./src/electron/index.html",
