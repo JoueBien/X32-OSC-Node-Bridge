@@ -17,7 +17,15 @@ export const MeterScreen: FC<any> = () => {
         <Meter
           arg={allMeterValues[0][0]}
           points={CUSTOM_POINTS}
-          label="Post G/T"
+          label={
+            <>
+              GAIN/TRIM
+              <br />
+              CH1
+              <br />
+              123456789012
+            </>
+          }
           ledSize={{
             width: "30px",
             height: "20px",
@@ -30,7 +38,15 @@ export const MeterScreen: FC<any> = () => {
         <Reduction
           arg={allMeterValues[0][1]}
           points={CUSTOM_POINTS}
-          label="GATE"
+          label={
+            <>
+              GATE(GR)
+              <br />
+              CH1
+              <br />
+              123456789012
+            </>
+          }
           ledSize={{
             width: "30px",
             height: "20px",
@@ -43,7 +59,15 @@ export const MeterScreen: FC<any> = () => {
         <Reduction
           arg={allMeterValues[0][2]}
           points={CUSTOM_POINTS_REDUCTION}
-          label="COMP"
+          label={
+            <>
+              COMP(GR)
+              <br />
+              CH1
+              <br />
+              123456789012
+            </>
+          }
           ledSize={{
             width: "30px",
             height: "20px",
@@ -56,7 +80,15 @@ export const MeterScreen: FC<any> = () => {
         <Meter
           arg={allMeterValues[0][3]}
           points={CUSTOM_POINTS}
-          label="Post Fader"
+          label={
+            <>
+              Post Fader
+              <br />
+              CH1
+              <br />
+              123456789012
+            </>
+          }
           ledSize={{
             width: "30px",
             height: "20px",

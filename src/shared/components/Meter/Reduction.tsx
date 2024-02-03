@@ -1,5 +1,5 @@
 // Libs
-import { FC, Fragment } from "react"
+import { FC, Fragment, ReactNode } from "react"
 import styled from "styled-components"
 import { LedSegment, MeterSegmentColor } from "./LedSegment" // Meter
 // Comps
@@ -17,13 +17,15 @@ const Container = styled.div<{ size: Size }>`
   padding-left: ${(props) => props.size.paddingLeft || "4px"};
   padding-right: ${(props) => props.size.paddingRight || "4px"};
 
-  .Meter-label {
-    text-align: center;
+  .Reduction-label {
+    /* text-align: center; */
     width: 100%;
     display: block;
     padding-top: 9px;
     font-weight: 600;
     font-size: ${(props) => props.size.textSize || "20px"};
+    letter-spacing: 0.05rem;
+    text-transform: uppercase;
   }
 `
 
@@ -42,7 +44,7 @@ type Size = {
 type Props = {
   arg?: number
   points?: MeterPoints
-  label?: string
+  label?: string | ReactNode
   hidden?: boolean
   ledSize?: Size
   ledColor?: (fs: number) => MeterSegmentColor
@@ -90,7 +92,7 @@ export const Reduction: FC<Props> = (props) => {
       })}
       {label && (
         <>
-          <div className="Meter-label">{label}</div>
+          <div className="Reduction-label">{label}</div>
         </>
       )}
     </Container>
