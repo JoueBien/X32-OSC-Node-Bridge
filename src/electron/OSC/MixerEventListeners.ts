@@ -9,6 +9,7 @@ import {
   RequestThenReplyFuncParams,
   SubscribeFuncParams,
   OnMessageFunc,
+  BatchSubscribeFuncParams,
 } from "~/OSC/core/X32.types"
 
 // We can't expose X32 directly so
@@ -32,7 +33,7 @@ const shared = () => {
     // Get Updates a number of times 10 seconds
     xSubscribe: () => OscMixer.xSubscribe(),
     subscribe: (params: SubscribeFuncParams) => OscMixer.subscribe(params),
-    batchSubscribe: (params: SubscribeFuncParams) =>
+    batchSubscribe: (params: BatchSubscribeFuncParams) =>
       OscMixer.batchSubscribe(params),
     formatSubscribe: (params: SubscribeFuncParams) =>
       OscMixer.formatSubscribe(params),

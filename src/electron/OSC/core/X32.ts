@@ -375,7 +375,8 @@ export default class X32 {
     return {} as IntervalReference
   }
 
-  unsubscribe({ interval, onMessage }: IntervalReference) {
+  unsubscribe(params?: IntervalReference) {
+    const { interval, onMessage } = params || {}
     if (interval) {
       clearInterval(interval)
     }

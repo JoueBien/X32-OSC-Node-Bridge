@@ -45,11 +45,8 @@ const createWindow = (): void => {
 
     webPreferences: {
       backgroundThrottling: false,
-      // contextIsolation: false,
       contextIsolation: true,
       nodeIntegration: true,
-      // @ts-ignore
-      // enableRemoteModule: true,
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
     },
   })

@@ -5,6 +5,8 @@ import { useAsyncSetState } from "use-async-setstate"
 
 // import { SetUpScreen } from "./screens/SetUpScreen"
 import { MeterScreen } from "@/applications/MeterBridge/screens/MeterScreen"
+import { MeterContextProvider } from "./contexts/MeterContext"
+import { SetUpScreen } from "./screens/SetUpScreen"
 
 export const MeterBridge = () => {
   // Local State
@@ -26,14 +28,22 @@ export const MeterBridge = () => {
       {/* Components that talk to the mixer */}
       <MixerContextProvider>
         <ConnectFormContextProvider>
-          {/* {activeKey === "setup" && (
+          <MeterContextProvider>
             <>
               <SetUpScreen />
+              <MeterScreen />
             </>
-          )}
-          {activeKey === "controls" && ( */}
-          <MeterScreen />
-          {/* )} */}
+            {/* {activeKey === "setup" && (
+              <> */}
+
+            {/* </>
+            )}
+            {activeKey === "controls" && (
+              <> */}
+
+            {/* </> */}
+            {/* )} */}
+          </MeterContextProvider>
         </ConnectFormContextProvider>
       </MixerContextProvider>
     </>

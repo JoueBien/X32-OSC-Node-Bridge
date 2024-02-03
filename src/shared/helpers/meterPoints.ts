@@ -123,6 +123,41 @@ export const CUSTOM_POINTS: MeterPoints = [
   },
 ].reverse()
 
+export const CUSTOM_POINTS_REDUCTION: MeterPoints = [
+  {
+    fs: -Infinity,
+    arg: 0,
+  },
+  {
+    fs: -24,
+    arg: 0.06309573444801933,
+  },
+  {
+    fs: -18,
+    arg: 0.12589254117941673,
+  },
+  {
+    fs: -15,
+    arg: 0.17782794100389226,
+  },
+  {
+    fs: -12,
+    arg: 0.251188643150958,
+  },
+  {
+    fs: -5,
+    arg: 0.5623413251903491,
+  },
+  {
+    fs: -2,
+    arg: 0.7943282347242815,
+  },
+  {
+    fs: 0,
+    arg: 1,
+  },
+].reverse()
+
 // SL3
 // -65, -48, -36, -24, -12, -10, -2 peak
 export const SL3_FS = [

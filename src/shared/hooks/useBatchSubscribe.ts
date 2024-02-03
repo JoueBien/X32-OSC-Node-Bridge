@@ -1,15 +1,14 @@
-import X32 from "~/OSC/core/X32"
 import { Arg, IntervalReference, OnMessageFunc } from "~/OSC/core/X32.types"
 import { useAsyncState } from "./useAsyncState"
 import { ARG_Fixed, FixedArray } from "@/types/args"
 import { FrequencyFactor } from "@/types/frequencyFactor"
-import { useState } from "react"
 import { uint8ArrayToFloat32Array } from "../helpers/cast"
 import { useGetState } from "use-async-setstate"
 import { MessageArgBytes } from "osc"
+import { Mixer } from "@/electron/OSC/MixerEventListeners"
 
 export const useBatchSubscribe = (
-  mixer: X32,
+  mixer: Mixer,
   params: {
     meterCommand:
       | "/meters/1"
@@ -47,14 +46,18 @@ export const useBatchSubscribe = (
   >(undefined)
 
   // Static functions
-  const [onMessage] = useState<OnMessageFunc<FixedArray<MessageArgBytes, 1>>>(
-    async ({ args }) => {
-      if (args[0] && args[0]?.value) {
-        const newValues = uint8ArrayToFloat32Array<4>(args[0].value)
-        setMeterData(newValues)
-      }
+  const onMessage: OnMessageFunc<FixedArray<MessageArgBytes, 1>> = async (
+    message
+  ) => {
+    if (!message || message?.args?.length !== 1) {
+      return
     }
-  )
+    const { args } = message
+    if (args[0] && args[0]?.value) {
+      const newValues = uint8ArrayToFloat32Array<4>(args[0].value)
+      setMeterData(newValues)
+    }
+  }
 
   const start = async () => {
     mixer.unsubscribe(intervalReference)
@@ -80,7 +83,7 @@ export const useBatchSubscribe = (
   return {
     start,
     stop,
-    meterData,
     getMeterData,
+    meterData,
   }
 }

@@ -1,9 +1,10 @@
 // Libs
 import { FC, Fragment } from "react"
 import styled from "styled-components"
-import { LedSegment } from "./LedSegment" // Meter
+import { LedSegment, MeterSegmentColor } from "./LedSegment" // Meter
 // Comps
 import { MeterPoints } from "@/shared/helpers/meterPoints"
+import { LedSegmentInverted } from "./LedSegmentInverted"
 
 // Styles
 const Container = styled.div<{ size: Size }>`
@@ -44,12 +45,18 @@ type Props = {
   label?: string
   hidden?: boolean
   ledSize?: Size
+  ledColor?: (fs: number) => MeterSegmentColor
 }
 
-export const Meter: FC<Props> = (props) => {
+function fallBackColor(fs: number) {
+  return fs >= -12 ? "#FFBF00" : "red"
+}
+
+export const Reduction: FC<Props> = (props) => {
   // Props
-  const { arg, points, ledSize, label, hidden } = props
+  const { arg, points, ledSize, label, hidden, ledColor } = props
   const thePoints = points || []
+  const color = ledColor || fallBackColor
 
   // Dirty way of hiding this
   if (hidden) {
@@ -58,13 +65,9 @@ export const Meter: FC<Props> = (props) => {
 
   // ..
   return (
-    <Container className="Meter" size={ledSize}>
-      <LedSegment
-        label="Clip"
-        color="red"
-        isOn={(arg || 0) === 1}
-        size={ledSize}
-      />
+    <Container className="Reduction" size={ledSize}>
+      <LedSegment label="GR" color="red" isOn={true} size={ledSize} />
+
       {thePoints.map((point, index) => {
         if (point.fs === -Infinity || point.fs === 0) {
           return <Fragment key={point.fs} />
@@ -74,14 +77,14 @@ export const Meter: FC<Props> = (props) => {
         const min = thePoints[index + 1].arg
         const max = thePoints[index].arg
         return (
-          <LedSegment
+          <LedSegmentInverted
             key={point.fs}
             label={`${point.fs}`}
             arg={arg}
             min={min}
             max={max}
             size={ledSize}
-            color={point.fs <= -18 ? "green" : "#FFBF00"}
+            color={color(point.fs)}
           />
         )
       })}

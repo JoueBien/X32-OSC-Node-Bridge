@@ -1,16 +1,49 @@
-import { FC } from "react"
+import { FC, useContext } from "react"
 import { Meter } from "@/shared/components/Meter/Meter"
-import { CUSTOM_POINTS } from "@/shared/helpers/meterPoints"
+import {
+  CUSTOM_POINTS,
+  CUSTOM_POINTS_REDUCTION,
+} from "@/shared/helpers/meterPoints"
+import { MeterContext } from "../contexts/MeterContext"
+import { Reduction } from "@/shared/components/Meter/Reduction"
 
 export const MeterScreen: FC<any> = () => {
+  const { allMeterValues } = useContext(MeterContext)
+
   return (
     <div>
       <div style={{ display: "flex" }}>
         {/* 0.12589254 */}
         <Meter
-          arg={0.13}
+          arg={allMeterValues[0][0]}
           points={CUSTOM_POINTS}
-          label="123456789012"
+          label="Post G/T"
+          ledSize={{
+            width: "30px",
+            height: "20px",
+            textSize: "10px",
+            markerPadding: "8px",
+            ledSegmentSpacing: "2px",
+            radius: "4px",
+          }}
+        />
+        <Reduction
+          arg={allMeterValues[0][1]}
+          points={CUSTOM_POINTS}
+          label="GATE"
+          ledSize={{
+            width: "30px",
+            height: "20px",
+            textSize: "10px",
+            markerPadding: "8px",
+            ledSegmentSpacing: "2px",
+            radius: "4px",
+          }}
+        />
+        <Reduction
+          arg={allMeterValues[0][2]}
+          points={CUSTOM_POINTS_REDUCTION}
+          label="COMP"
           ledSize={{
             width: "30px",
             height: "20px",
@@ -21,35 +54,9 @@ export const MeterScreen: FC<any> = () => {
           }}
         />
         <Meter
-          arg={0.5}
+          arg={allMeterValues[0][3]}
           points={CUSTOM_POINTS}
-          label="123456789012"
-          ledSize={{
-            width: "30px",
-            height: "20px",
-            textSize: "10px",
-            markerPadding: "8px",
-            ledSegmentSpacing: "2px",
-            radius: "4px",
-          }}
-        />
-        <Meter
-          arg={0.5}
-          points={CUSTOM_POINTS}
-          label="123456789012"
-          ledSize={{
-            width: "30px",
-            height: "20px",
-            textSize: "10px",
-            markerPadding: "8px",
-            ledSegmentSpacing: "2px",
-            radius: "4px",
-          }}
-        />
-        <Meter
-          arg={0.5}
-          points={CUSTOM_POINTS}
-          label="123456789012"
+          label="Post Fader"
           ledSize={{
             width: "30px",
             height: "20px",

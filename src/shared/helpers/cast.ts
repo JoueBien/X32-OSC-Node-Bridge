@@ -24,9 +24,9 @@ export function uint8ArrayToFloat32Array<Size extends number>(
     uint8array.buffer,
     uint8array.byteOffset,
     uint8array.byteLength / 4
-  )
+  ) //.slice(4)
   // Note we are dirty casting here - you should check length after this
-  return Array.from(floats) as ARG_Fixed<Size>
+  return Array.from(floats).slice(1) as ARG_Fixed<Size>
 }
 
 // Pull the number of returned values off the front so we get correct values

@@ -1,6 +1,4 @@
 import { IntervalReference } from "@/electron/OSC/core/X32.types"
-import { useEffect } from "react"
-import { useAsyncSetState } from "use-async-setstate"
 
 export function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms))
@@ -18,6 +16,6 @@ export function subscribeFixedTick(
   }
 }
 
-export function unsubscribeFixedTick(reference: IntervalReference) {
-  clearInterval(reference.interval)
+export function unsubscribeFixedTick(reference?: IntervalReference) {
+  clearInterval(reference?.interval)
 }

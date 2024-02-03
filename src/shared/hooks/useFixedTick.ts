@@ -1,4 +1,4 @@
-import { useAsyncSetState } from "use-async-setstate"
+import { useAsyncSetState, useGetState } from "use-async-setstate"
 import { subscribeFixedTick, unsubscribeFixedTick } from "../helpers/time"
 import { useEffect } from "react"
 import { IntervalReference } from "@/electron/OSC/core/X32.types"
@@ -12,41 +12,33 @@ export function useFixedTick(
     autoStart?: boolean
   }
 ) {
-  const { interval, autoStart } = options
+  const { autoStart, interval } = options
 
   // Local State
   const [running, setRunning] = useAsyncSetState<boolean>(autoStart || false)
   // Set state if auto started
   const [tick, setTick] = useAsyncSetState<IntervalReference>({})
+  const getTick = useGetState(tick)
 
   // Functions
+  /** You must call start after you set onUpdate/options otherwise the tick will not update */
   const start = () => setRunning(true)
+  /** You must call sop before you set onUpdate/options otherwise the tick will not update */
   const stop = () => setRunning(false)
 
   // Effects
-  // On Mount start ticks
-  // On UnMount clean up
-  useEffect(() => {
-    setTick(autoStart ? subscribeFixedTick(onUpdate, interval) : {})
-    // Clean up on tare down.
-    return () => {
-      unsubscribeFixedTick(tick)
-    }
-  }, [])
-
   // On params or running change
   useEffect(() => {
+    unsubscribeFixedTick(getTick())
     if (running) {
-      // Cancel & start
-      unsubscribeFixedTick(tick)
       setTick(subscribeFixedTick(onUpdate, interval))
-    } else {
-      unsubscribeFixedTick(tick)
     }
-  }, [onUpdate, interval, running])
+  }, [running])
 
   return {
+    /** You must call start after you set onUpdate/options otherwise the tick will not update */
     start,
+    /** You must call sop before you set onUpdate/options otherwise the tick will not update */
     stop,
   }
 }
