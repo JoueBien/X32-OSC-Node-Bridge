@@ -8,7 +8,10 @@ import {
 import { CommandOption } from "@/shared/commandOptions/types"
 import { ListItem } from "@/shared/hooks/useIdRecordList"
 
-export type SharedMuteItem = { mixerA: CommandOption; mixerB: CommandOption }
+export type SharedMuteItem = {
+  mixerA: CommandOption<string>
+  mixerB: CommandOption<string>
+}
 
 export type MuteSceneStorageItem = StorageItem<{ value: SharedMuteItem[] }>
 

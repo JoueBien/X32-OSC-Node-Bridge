@@ -1,6 +1,6 @@
 import { CommandOption } from "./types"
 
-export const muteGroupOptions: CommandOption[] = [
+export const muteGroupOptions: CommandOption<string>[] = [
   { label: "Mute Group 1", value: "/config/mute/1" },
   { label: "Mute Group 2", value: "/config/mute/2" },
   { label: "Mute Group 3", value: "/config/mute/3" },
@@ -8,7 +8,7 @@ export const muteGroupOptions: CommandOption[] = [
   { label: "Mute Group 4", value: "/config/mute/5" },
 ]
 
-export const muteChannelOptions: CommandOption[] = [
+export const muteChannelOptions: CommandOption<string>[] = [
   // 1-10
   { label: "Mute Channel 1", value: "/ch/01/mix/on" },
   { label: "Mute Channel 2", value: "/ch/02/mix/on" },
@@ -48,7 +48,7 @@ export const muteChannelOptions: CommandOption[] = [
 ]
 
 // /bus/01/mix/on
-export const muteBusOptions: CommandOption[] = [
+export const muteBusOptions: CommandOption<string>[] = [
   { label: "Mute Bus 1", value: "/bus/01/mix/on" },
   { label: "Mute Bus 2", value: "/bus/02/mix/on" },
   { label: "Mute Bus 3", value: "/bus/03/mix/on" },
@@ -73,7 +73,7 @@ export const muteBusOptions: CommandOption[] = [
   { label: "Matrix 6", value: "/mtx/06/mix/on" },
 ]
 
-export const muteAuxOptions: CommandOption[] = [
+export const muteAuxOptions: CommandOption<string>[] = [
   { label: "Aux in 1", value: "/auxin/01/mix/on" },
   { label: "Aux in 2", value: "/auxin/02/mix/on" },
   { label: "Aux in 3", value: "/auxin/03/mix/on" },
@@ -84,7 +84,7 @@ export const muteAuxOptions: CommandOption[] = [
   { label: "Aux in 8", value: "/auxin/08/mix/on" },
 ]
 
-export const muteDCAOptions: CommandOption[] = [
+export const muteDCAOptions: CommandOption<string>[] = [
   { label: "DCA 1", value: "/dca/1/on" },
   { label: "DCA 2", value: "/dca/2/on" },
   { label: "DCA 3", value: "/dca/3/on" },
@@ -95,7 +95,7 @@ export const muteDCAOptions: CommandOption[] = [
   { label: "DCA 8", value: "/dca/8/on" },
 ]
 
-export const muteLRCOptions: CommandOption[] = [
+export const muteLRCOptions: CommandOption<string>[] = [
   { label: "Master Left/Right", value: "/main/st/mix/on" },
   { label: "Master Center/Mono", value: "/main/m/mix/on" },
 ]

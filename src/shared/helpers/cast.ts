@@ -8,6 +8,8 @@ import { ARG_Fixed } from "@/types/args"
 // const BASE_RANGE = range(0, 200)
 
 // Cast an array of 8 bytes into 32 bytes
+// Do not use directly - use argUint8ArrayToFloat32Array externally!
+// TODO: Fix the added slice
 export function uint8ArrayToFloat32Array<Size extends number>(
   uint8array: Uint8Array
 ): ARG_Fixed<Size> {
@@ -26,13 +28,15 @@ export function uint8ArrayToFloat32Array<Size extends number>(
     uint8array.byteLength / 4
   ) //.slice(4)
   // Note we are dirty casting here - you should check length after this
-  return Array.from(floats).slice(1) as ARG_Fixed<Size>
+  return Array.from(floats) as ARG_Fixed<Size>
 }
 
 // Pull the number of returned values off the front so we get correct values
-export function argUint8ArrayToFloat32Array(uint8array: Uint8Array): number[] {
+export function argUint8ArrayToFloat32Array<Size extends number>(
+  uint8array: Uint8Array
+): ARG_Fixed<Size> {
   // Remove the length number from the front
-  return uint8ArrayToFloat32Array(uint8array.slice(4))
+  return uint8ArrayToFloat32Array<Size>(uint8array).slice(1) as ARG_Fixed<Size>
 }
 
 export function uint8ArrayToInt32Array(uint8array: Uint8Array): number[] {

@@ -10,7 +10,7 @@ import { SetUpScreen } from "./screens/SetUpScreen"
 
 export const MeterBridge = () => {
   // Local State
-  const [activeKey, setActiveKey] = useAsyncSetState<string>("setup")
+  const [activeKey, setActiveKey] = useAsyncSetState<string>("controls")
 
   // ..
   return (
@@ -29,20 +29,16 @@ export const MeterBridge = () => {
       <MixerContextProvider>
         <ConnectFormContextProvider>
           <MeterContextProvider>
-            <>
-              <SetUpScreen />
-              <MeterScreen />
-            </>
             {/* {activeKey === "setup" && (
               <> */}
-
+            <SetUpScreen />
             {/* </>
             )}
             {activeKey === "controls" && (
               <> */}
-
-            {/* </> */}
-            {/* )} */}
+            <MeterScreen />
+            {/* </>
+            )} */}
           </MeterContextProvider>
         </ConnectFormContextProvider>
       </MixerContextProvider>

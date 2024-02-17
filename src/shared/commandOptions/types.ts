@@ -1,1 +1,1 @@
-export type CommandOption = { label: string; value: string }
+export type CommandOption<T> = { label: string; value: T }

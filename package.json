@@ -19,7 +19,7 @@
     "name": "Zach Radloff",
     "email": "ZCR2244@live.com"
   },
-  "license": "MIT",
+  "license": "Apache License Version 2.0",
   "devDependencies": {
     "@electron-forge/cli": "7.2.0",
     "@electron-forge/maker-deb": "7.2.0",
@@ -59,7 +59,7 @@
     "px-par": "^0.2.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "rsuite": "^5.37.1",
+    "rsuite": "^5.53.0",
     "serialport": "^11.0.0",
     "styled-components": "^6.0.4",
     "use-async-setstate": "^0.1.1",
