@@ -53,7 +53,6 @@ export const IsIndexREduction = [
 
 export type MeterLayoutItem =
   | {
-      // TODO: remove source as number type
       source: Source
       /** The index of the channel/bus/aux */
       from: number

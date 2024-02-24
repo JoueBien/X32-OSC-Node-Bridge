@@ -8,7 +8,7 @@ import {
 
 export function useLayoutSettings() {
   const [selectedMeterPosition, setSelectedPosition] =
-    useAsyncSetState<SelectedMeterPosition>([0, 0])
+    useAsyncSetState<SelectedMeterPosition>("off")
 
   const [meterLayout, setMeterLayout] = useAsyncSetState<MeterLayout>([
     [
@@ -63,7 +63,11 @@ export function useLayoutSettings() {
   }
 
   const selectMeterValueToEdit = (position: SelectedMeterPosition) => {
-    setSelectedPosition(position)
+    if (JSON.stringify(position) === JSON.stringify(selectedMeterPosition)) {
+      setSelectedPosition("off")
+    } else {
+      setSelectedPosition(position)
+    }
   }
 
   return {

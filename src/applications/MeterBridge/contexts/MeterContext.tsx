@@ -1,6 +1,9 @@
 import { MixerContext } from "@/shared/contexts/MixerContext"
 import { filledArray } from "@/shared/helpers/filledArray"
-import { useBatchSubscribeMeter1 } from "@/shared/hooks/useBatchSubscribe"
+import {
+  useBatchSubscribeMeter1,
+  useBatchSubscribeMeter2,
+} from "@/shared/hooks/useBatchSubscribe"
 import { useFixedTick } from "@/shared/hooks/useFixedTick"
 import { FixedArray } from "@/types/args"
 import {
@@ -20,9 +23,17 @@ import {
 } from "../hooks/useLayoutSettings.types"
 
 type AllMeterValues = [
+  // Meter 1
   FixedArray<number, 32>,
   FixedArray<number, 32>,
   FixedArray<number, 32>,
+  // Meter 2
+  FixedArray<number, 16>,
+  FixedArray<number, 6>,
+  FixedArray<number, 3>,
+  FixedArray<number, 16>,
+  FixedArray<number, 6>,
+  FixedArray<number, 2>,
 ]
 
 export type Value = {
@@ -56,9 +67,17 @@ export const MeterContextProvider: FC<PropsWithChildren> = ({ children }) => {
   const { Mixer } = mixers
 
   const [allMeterValues, setAllMeterValues] = useAsyncSetState<AllMeterValues>([
+    // Meter 1
     filledArray<32, number>(32, 0),
     filledArray<32, number>(32, 0),
     filledArray<32, number>(32, 0),
+    // Meter 2
+    filledArray<16, number>(16, 0),
+    filledArray<6, number>(6, 0),
+    filledArray<3, number>(3, 0),
+    filledArray<16, number>(16, 0),
+    filledArray<6, number>(6, 0),
+    filledArray<2, number>(2, 0),
   ])
 
   const {
@@ -79,14 +98,39 @@ export const MeterContextProvider: FC<PropsWithChildren> = ({ children }) => {
     frequency: 1,
   })
 
+  const {
+    start: start2,
+    stop: stop2,
+    getMeterData: getMeterData2,
+  } = useBatchSubscribeMeter2({
+    mixer: Mixer,
+    frequency: 1,
+  })
+
   // On screen update copy over the current value in the state
   const { start: startTick, stop: stopTick } = useFixedTick(
     async () => {
       const meter1Data = getMeterData1()
+      const meter2Data = getMeterData2()
+
       const newValues: AllMeterValues = [
+        // Meter 1
         meter1Data.slice(0, 0 + 32) as FixedArray<number, 32>,
         meter1Data.slice(32, 32 + 32) as FixedArray<number, 32>,
         meter1Data.slice(32 + 32, 32 + 32 + 32) as FixedArray<number, 32>,
+        // Meter 2
+        meter2Data.slice(0, 0 + 16) as FixedArray<number, 16>,
+        meter2Data.slice(16, 16 + 6) as FixedArray<number, 6>,
+        meter2Data.slice(16 + 6, 16 + 6 + 3) as FixedArray<number, 3>,
+        meter2Data.slice(16 + 6 + 3, 16 + 6 + 3 + 16) as FixedArray<number, 16>,
+        meter2Data.slice(16 + 6 + 3 + 16, 16 + 6 + 3 + 16 + 6) as FixedArray<
+          number,
+          6
+        >,
+        meter2Data.slice(
+          16 + 6 + 3 + 16 + 6,
+          16 + 6 + 3 + 16 + 6 + 2
+        ) as FixedArray<number, 2>,
       ]
       setAllMeterValues(newValues)
     },
@@ -96,10 +140,12 @@ export const MeterContextProvider: FC<PropsWithChildren> = ({ children }) => {
   useEffect(() => {
     if (connected) {
       start1()
+      start2()
       // start1()
       startTick()
     } else {
       stop1()
+      stop2()
       // stop1()
       stopTick()
     }

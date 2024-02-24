@@ -43,6 +43,15 @@ export const useBatchSubscribeMeter1: UseBatchSubscribeBase<96, undefined> = (
     defaultMeterData: filledArray<96, 1>(96, 1),
   })
 
+export const useBatchSubscribeMeter2: UseBatchSubscribeBase<49, undefined> = (
+  params
+) =>
+  useBatchSubscribe<"/meters/2", 49, undefined>({
+    ...params,
+    meterCommand: "/meters/2",
+    defaultMeterData: filledArray<49, 1>(49, 1),
+  })
+
 /** The base for meter commands 0-14.
  *  Do not export create an exported wrapper above.
  */

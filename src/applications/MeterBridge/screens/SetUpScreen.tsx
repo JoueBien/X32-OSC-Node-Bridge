@@ -5,9 +5,14 @@ import { ConnectIpInput } from "@/shared/components/ConnectScreen/ConnectIpInput
 import { StoreButton } from "@/shared/components/ConnectScreen/StoreButton"
 import { ConnectIpOptionList } from "@/shared/components/ConnectScreen/ConnectIpOptionList"
 import { ConnectButton } from "@/shared/components/ConnectScreen/ConnectButton"
+import { FlyOutModal } from "@/shared/components/Modal/FlyOutModal"
+import { screenContainerStyles } from "@/shared/styles/screenContainerStyles"
 
 // Types
-type Props = NonNullable<unknown>
+type Props = {
+  isOpen: boolean
+  onClose: () => void
+}
 
 // Styles
 const Container = styled.div`
@@ -16,9 +21,6 @@ const Container = styled.div`
 
   flex-direction: row;
   justify-content: flex-start;
-
-  padding: 0.6rem;
-  padding-top: 0px;
 
   .connect-controls {
     & + .connect-controls {
@@ -50,39 +52,46 @@ const Container = styled.div`
   }
 `
 
-export const SetUpScreen: FC<Props> = () => {
+export const SetUpScreen: FC<Props> = ({ isOpen, onClose }) => {
   // ..
   return (
-    <Container>
-      {/* Connect to Mixer */}
-      <div className="connect-controls">
-        <div className="connect-group">
-          <ConnectIpInput
-            mixerKey="Mixer"
-            title={false}
-            label={
-              <>
-                <b>Set IP Address for Mixer</b>
-              </>
-            }
-          />
-          <div>
-            {/* <ConnectButton mixerKey="MixerA" /> */}
-            <StoreButton mixerKey="Mixer" />
+    <FlyOutModal
+      isOpen={isOpen}
+      openWidth="calc(420px + 2.1rem)"
+      closeOnEscape
+      onClose={onClose}
+    >
+      <Container>
+        {/* Connect to Mixer */}
+        <div className="connect-controls">
+          <div className="connect-group">
+            <ConnectIpInput
+              mixerKey="Mixer"
+              title={false}
+              label={
+                <>
+                  <b>Set IP Address for Mixer</b>
+                </>
+              }
+            />
+            <div>
+              {/* <ConnectButton mixerKey="MixerA" /> */}
+              <StoreButton mixerKey="Mixer" />
+            </div>
+            <br />
+            <p>
+              <b>Start connection with Mixers</b>
+            </p>
+            <ConnectButton mixerKey="Mixer" />
           </div>
-          <br />
-          <p>
-            <b>Start connection with Mixers</b>
-          </p>
-          <ConnectButton mixerKey="Mixer" />
         </div>
-      </div>
-      {/* Recall and IP that is stored */}
-      <div className="connect-controls">
-        <div className="connect-group">
-          <ConnectIpOptionList mixerKeys={["Mixer"]} />
+        {/* Recall and IP that is stored */}
+        <div className="connect-controls">
+          <div className="connect-group">
+            <ConnectIpOptionList mixerKeys={["Mixer"]} />
+          </div>
         </div>
-      </div>
-    </Container>
+      </Container>
+    </FlyOutModal>
   )
 }

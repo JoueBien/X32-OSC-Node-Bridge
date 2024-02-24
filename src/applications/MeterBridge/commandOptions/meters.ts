@@ -7,6 +7,11 @@ import {
 } from "@/applications/MeterBridge/hooks/useLayoutSettings.types"
 
 export const MeterLayoutItemOptions: CommandOption<MeterLayoutItem>[] = [
+  {
+    label: `OFF/Blank`,
+    value: "off",
+    role: "Blank",
+  },
   // Meter 1
   ...filledArray<32, CommandOption<MeterLayoutItem>>(32, (index) => {
     return {
@@ -65,7 +70,7 @@ export const MeterLayoutItemOptions: CommandOption<MeterLayoutItem>[] = [
     return {
       label: `${SourceLabelsMasterLevel[index]} LEVEL`,
       value: {
-        source: Source.BusMasterLevel,
+        source: Source.BussLRCLevel,
         from: index,
       },
       role: "LRC",
@@ -94,11 +99,11 @@ export const MeterLayoutItemOptions: CommandOption<MeterLayoutItem>[] = [
     }
   }),
 
-  ...filledArray<3, CommandOption<MeterLayoutItem>>(3, (index) => {
+  ...filledArray<2, CommandOption<MeterLayoutItem>>(2, (index) => {
     return {
-      label: `${SourceLabelsMasterLevel[index]} COMP`,
+      label: `${index === 0 ? "LEFT/RIGHT" : "CENTER"} COMP`,
       value: {
-        source: Source.BusMasterComp,
+        source: Source.BussLRCComp,
         from: index,
       },
       role: "LRC",
