@@ -4,6 +4,8 @@ An electron framework to communicate with an X32. The project exists as a mono r
 
 The non-web libraries are now using the contextBridge which means the code base should somewhat be suitable for production builds.
 
+The task board for the project can be found [here](https://dazzling-jasmine-294.notion.site/1496df652b4b48b6a85d09b902da99c5?v=c961ddf131f3470d8420d907fedd0987).
+
 # About the electron template used.
 
 The code base is based on [Electron Forge](https://www.electronforge.io/guides/framework-integration/react-with-typescript).
