@@ -8,18 +8,22 @@ import { MeterScreen } from "@/applications/MeterBridge/screens/MeterScreen"
 import { MeterContextProvider } from "./contexts/MeterContext"
 import { SetUpScreen } from "./screens/SetUpScreen"
 import { MeterSettingsFlyOutModal } from "./screens/MeterSettingsFlyOutModal"
+import { LayoutSettingsFlyOutModal } from "./screens/LayoutSettingsFlyOutModal"
 
 export const MeterBridge = () => {
   // Local State
-  // TODO: Replace settings with a cog in the corner & remove the tab system.
   const [activeKey, setActiveKey] = useAsyncSetState<string>("setup")
 
-  const toggleActiveKey = () => {
-    console.log("activeKey", activeKey === "setup" ? "closed" : "setup")
-    setActiveKey(activeKey === "setup" ? "closed" : "setup")
+  // Functions
+  const toggleActiveKey = (newKey: string) => {
+    if (newKey === activeKey) {
+      setActiveKey("closed")
+    } else {
+      setActiveKey(newKey)
+    }
   }
 
-  const closeSetUp = () => {
+  const closeAll = () => {
     setActiveKey("closed")
   }
 
@@ -34,17 +38,22 @@ export const MeterBridge = () => {
         onSelect={toggleActiveKey}
       >
         <Nav.Item eventKey="setup">Setup</Nav.Item>
+        <Nav.Item eventKey="layout">Layout</Nav.Item>
       </Nav>
       {/* Components that talk to the mixer */}
       <MixerContextProvider>
         <ConnectFormContextProvider>
-          {<SetUpScreen isOpen={activeKey === "setup"} onClose={closeSetUp} />}
+          {<SetUpScreen isOpen={activeKey === "setup"} onClose={closeAll} />}
         </ConnectFormContextProvider>
 
         <MeterContextProvider>
+          <LayoutSettingsFlyOutModal
+            isOpen={activeKey === "layout"}
+            onClose={closeAll}
+          />
           {/* A cheap way to make sure setup and meter settings can't open at the same time. */}
           <>
-            {activeKey !== "setup" && (
+            {activeKey === "closed" && (
               <>
                 <MeterSettingsFlyOutModal />
               </>
