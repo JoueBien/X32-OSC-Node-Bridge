@@ -6,7 +6,7 @@ import {
   Source,
 } from "./../useLayoutSettings.types"
 import { FixedArray } from "@/types/args"
-import { filledArray } from "@/shared/helpers/filledArray"
+import { filledArray } from "@/shared/utils/filledArray"
 
 function generateDefaultLayoutColumns(): FixedArray<MeterLayoutItem, 96> {
   return filledArray<96, MeterLayoutItem>(96, () => ({

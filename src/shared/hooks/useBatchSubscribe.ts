@@ -2,11 +2,11 @@ import { Arg, IntervalReference, OnMessageFunc } from "~/OSC/core/X32.types"
 import { useAsyncState } from "./useAsyncState"
 import { ARG_Fixed, FixedArray } from "@/types/args"
 import { FrequencyFactor } from "@/types/frequencyFactor"
-import { argUint8ArrayToFloat32Array } from "../helpers/cast"
+import { argUint8ArrayToFloat32Array } from "@/shared/cast/uint8ArrayTo"
 import { useGetState } from "use-async-setstate"
-import { MessageArgBytes, MessageArgInt } from "osc"
+import type { MessageArgBytes, MessageArgInt } from "osc"
 import { Mixer } from "@/electron/OSC/MixerEventListeners"
-import { filledArray } from "../helpers/filledArray"
+import { filledArray } from "../utils/filledArray"
 
 export type UseBatchSubscribeBase<
   MeterDataSize extends number,

@@ -1,9 +1,9 @@
-import { x32GainPoints } from "./x32GainPoints"
+import { X32GainPoint, x32GainPoints } from "@/shared/constraints/x32GainPoints"
 
 /** Given a float between 0 & 1 find the closest fader value. Note there is no input validation. */
 export function findClosestX32GainPoint(
   /** The number you want to find the closest to in smallestSubIndex array. */ input: number
-) {
+): X32GainPoint {
   return _findClosestX32GainPoint({
     input,
     startIndex: 0,
@@ -21,7 +21,7 @@ function _findClosestX32GainPoint(params: {
   endIndex: number
   /** The recursion cycle to stop at if too much recursion. */
   depth: number
-}) {
+}): X32GainPoint {
   const { depth, input, startIndex, endIndex } = params
 
   // Depth Stop

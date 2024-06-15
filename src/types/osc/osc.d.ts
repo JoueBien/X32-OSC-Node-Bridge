@@ -1,5 +1,5 @@
 // Right types
-export type UDPPortOptions = {
+type UDPPortOptions = {
   localPort?: number
   localAddress?: string
   remotePort?: number
@@ -12,51 +12,51 @@ export type UDPPortOptions = {
   metadata?: boolean
 }
 
-export type MessageArgFloat = {
+type MessageArgFloat = {
   type: "f"
   value: number
 }
 
-export type MessageArgInt = {
+type MessageArgInt = {
   type: "i"
   value: number
 }
 
-export type MessageArgString = {
+type MessageArgString = {
   type: "s"
   value: string
 }
 
-export type MessageArgBytes = {
+type MessageArgBytes = {
   type: "s"
   value: Uint8Array
 }
 
-export type MessageArg =
+type MessageArg =
   | MessageArgFloat
   | MessageArgString
   | MessageArgInt
   | MessageArgBytes
 
-export type SendMessage<ARG_A = MessageArg[]> = {
+type SendMessage<ARG_A = MessageArg[]> = {
   address: string
   args?: ARG_A
 }
 
-export type ResponseMessage<ARG_A = MessageArg[]> = {
+type ResponseMessage<ARG_A = MessageArg[]> = {
   address: string
   args: ARG_A
 }
 
-export type OnListenerReady = () => void
-export type OnListenerMessage<ARG_T = MessageArg[]> = (
+type OnListenerReady = () => void
+type OnListenerMessage<ARG_T = MessageArg[]> = (
   message: ResponseMessage<ARG_T>,
   timeTag: FullTimeTag,
   info: any
 ) => void
 
-export type OnListenerError = (error: any) => void
-export type OnListeners = OnListenerReady | OnListenerMessage | OnListenerError
+type OnListenerError = (error: any) => void
+type OnListeners = OnListenerReady | OnListenerMessage | OnListenerError
 
 declare class OscBase {
   open(): void
@@ -91,16 +91,30 @@ declare class OscEventsAndBase extends OscBase {
   ): void
 }
 
-export class UDPPort extends OscEventsAndBase {
+class UDPPort extends OscEventsAndBase {
   constructor(options?: UDPPortOptions)
 }
 
 declare module "osc" {
   // eslint-disable-next-line  @typescript-eslint/no-unused-vars
-  import osc from "osc"
-  import { UDPPort } from "./osc"
+  // import osc from "osc"
+  // import { UDPPort } from "./osc"
 
-  export = {
-    UDPPort: UDPPort,
+  export {
+    UDPPort,
+    UDPPortOptions,
+    MessageArgFloat,
+    MessageArgInt,
+    MessageArgString,
+    MessageArgBytes,
+    Uint8Array,
+    MessageArg,
+    SendMessage,
+    ResponseMessage,
+    OnListenerReady,
+    OnListenerError,
+    OscBase,
+    OscEventsAndBase,
+    OnListenerMessage,
   }
 }

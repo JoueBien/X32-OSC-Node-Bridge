@@ -1,9 +1,12 @@
-import { x32FaderPoints } from "./x32FaderPoints"
+import {
+  X32FaderPoint,
+  x32FaderPoints,
+} from "@/shared/constraints/x32FaderPoints"
 
 /** Given a float between 0 & 1 find the closest fader value. Note there is no input validation. */
 export function findClosestX32FaderPoint(
   /** The number you want to find the closest to in smallestSubIndex array. */ input: number
-) {
+): X32FaderPoint {
   return _findClosestX32FaderPoint({
     input,
     startIndex: 0,
@@ -21,7 +24,7 @@ function _findClosestX32FaderPoint(params: {
   endIndex: number
   /** The recursion cycle to stop at if too much recursion. */
   depth: number
-}) {
+}): X32FaderPoint {
   const { depth, input, startIndex, endIndex } = params
 
   // Depth Stop

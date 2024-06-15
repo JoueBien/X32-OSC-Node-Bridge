@@ -42,7 +42,7 @@ export const MuteMapperScreen: FC<NonNullable<unknown>> = () => {
 
   // Local State
   const { list: dataOptions, getObjectByKeyValue: getListByKeyValue } =
-    useObjectList<CommandOption>(allMuteOptions)
+    useObjectList<CommandOption<any>>(allMuteOptions)
   const [formState, setFormState] = useAsyncSetState<Partial<SharedMuteItem>>(
     {}
   )

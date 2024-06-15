@@ -1,5 +1,5 @@
 import { useAsyncSetState, useGetState } from "use-async-setstate"
-import { subscribeFixedTick, unsubscribeFixedTick } from "../helpers/time"
+import { subscribeFixedTick, unsubscribeFixedTick } from "../utils/time"
 import { useEffect } from "react"
 import { IntervalReference } from "@/electron/OSC/core/X32.types"
 

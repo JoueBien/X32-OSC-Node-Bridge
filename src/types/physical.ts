@@ -1,5 +1,5 @@
 // Libs
-import { paddedNumber } from "@/shared/helpers/oscCast"
+import { paddedNumber } from "@/shared/cast/paddedNumber"
 
 /**
  * /-stat/solosw may not be correct

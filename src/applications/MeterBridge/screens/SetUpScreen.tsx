@@ -6,7 +6,6 @@ import { StoreButton } from "@/shared/components/ConnectScreen/StoreButton"
 import { ConnectIpOptionList } from "@/shared/components/ConnectScreen/ConnectIpOptionList"
 import { ConnectButton } from "@/shared/components/ConnectScreen/ConnectButton"
 import { FlyOutModal } from "@/shared/components/Modal/FlyOutModal"
-import { screenContainerStyles } from "@/shared/styles/screenContainerStyles"
 
 // Types
 type Props = {

@@ -23,5 +23,6 @@
       "~/*": ["./src/electron/*"]
     }
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
+  "exclude": ["src/types/legacy/**"]
 }

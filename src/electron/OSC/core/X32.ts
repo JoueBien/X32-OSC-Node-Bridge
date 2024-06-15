@@ -5,7 +5,7 @@
  * https://github.com/colinbdclark/osc.js/issues/145
  */
 // Libs
-import { delay } from "@/shared/helpers/time"
+import { delay } from "@/shared/utils/time"
 import {
   MessageArg,
   MessageArgString,

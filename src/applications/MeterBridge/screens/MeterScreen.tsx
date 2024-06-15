@@ -1,9 +1,9 @@
-import { FC, useContext, useMemo, useRef } from "react"
+import { FC, useContext } from "react"
 import { Meter } from "@/shared/components/Meter/Meter"
 import {
   CUSTOM_POINTS,
   CUSTOM_POINTS_REDUCTION,
-} from "@/shared/helpers/meterPoints"
+} from "@/shared/constraints/meterPoints"
 import { MeterContext } from "../contexts/MeterContext"
 import { Reduction } from "@/shared/components/Meter/Reduction"
 import {

@@ -3,7 +3,7 @@ import { FC, Fragment, ReactNode } from "react"
 import styled from "styled-components"
 import { LedSegment } from "./LedSegment" // Meter
 // Comps
-import { MeterPoints } from "@/shared/helpers/meterPoints"
+import { MeterPoints } from "@/shared/constraints/meterPoints"
 
 // Styles
 const Container = styled.div<{ size: Size }>`

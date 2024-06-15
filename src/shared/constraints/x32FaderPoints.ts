@@ -1,4 +1,4 @@
-import { FixedArray } from "../args"
+import { FixedArray } from "@/types/args"
 
 export type X32FaderPoint = {
   index: number

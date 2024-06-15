@@ -1,5 +1,5 @@
 import { MixerContext } from "@/shared/contexts/MixerContext"
-import { filledArray } from "@/shared/helpers/filledArray"
+import { filledArray } from "@/shared/utils/filledArray"
 import {
   useBatchSubscribeMeter1,
   useBatchSubscribeMeter2,

@@ -3,7 +3,7 @@ import { FC, Fragment, ReactNode } from "react"
 import styled from "styled-components"
 import { LedSegment, MeterSegmentColor } from "./LedSegment" // Meter
 // Comps
-import { MeterPoints } from "@/shared/helpers/meterPoints"
+import { MeterPoints } from "@/shared/constraints/meterPoints"
 import { LedSegmentInverted } from "./LedSegmentInverted"
 
 // Styles
