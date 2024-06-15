@@ -1,7 +1,7 @@
 import { useAsyncSetState, useGetState } from "use-async-setstate"
-import { subscribeFixedTick, unsubscribeFixedTick } from "../utils/time"
 import { useEffect } from "react"
-import { IntervalReference } from "@/electron/OSC/core/X32.types"
+import { FixedTickReference } from "@/shared/utils/fixedTick"
+import { subscribeFixedTick, unsubscribeFixedTick } from "../utils/fixedTick"
 
 // A function that runs on a fixed update.
 // Usually to copy values across so we don't update the screen too often.across
@@ -17,7 +17,9 @@ export function useFixedTick(
   // Local State
   const [running, setRunning] = useAsyncSetState<boolean>(autoStart || false)
   // Set state if auto started
-  const [tick, setTick] = useAsyncSetState<IntervalReference>({})
+  const [tick, setTick] = useAsyncSetState<FixedTickReference | undefined>(
+    undefined
+  )
   const getTick = useGetState(tick)
 
   // Functions
