@@ -42,7 +42,7 @@ export function useLayoutSettings() {
       { source: Source.ChannelGain, from: 0 },
       { source: Source.ChannelComp, from: 0 },
     ],
-  ])
+  ] as any)
 
   const selectedMeterValue =
     selectedMeterPosition !== "off"

@@ -61,4 +61,4 @@ export type MeterLayoutItem =
 // [ROW][column]
 
 export type SelectedMeterPosition = [number, number] | "off"
-export type MeterLayout = FixedArray<FixedArray<MeterLayoutItem, 8>, 3>
+export type MeterLayout = FixedArray<FixedArray<MeterLayoutItem, 96>, 8>
